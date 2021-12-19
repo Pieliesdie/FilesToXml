@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Convertor": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\test.xlsx -e 1251  -o D:\\test.xml -s true"
+    }
+  }
+}

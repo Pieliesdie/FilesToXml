@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Description>Convert files of types:
+xls , xlsx, txt, csv, doc, docx, rtf, odt , ods</Description>
+    <Company>Infostandart</Company>
+    <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <NeutralLanguage />
+    <RepositoryUrl>https://github.com/Pieliesdie/OfficeToXml</RepositoryUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConverterToXml\ConverterToXml.csproj" />
+  </ItemGroup>
+
+</Project>
