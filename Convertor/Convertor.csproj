@@ -11,7 +11,8 @@ xls , xlsx, txt, csv, doc, docx, rtf, odt , ods</Description>
     <NeutralLanguage />
     <RepositoryUrl>https://github.com/Pieliesdie/OfficeToXml</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

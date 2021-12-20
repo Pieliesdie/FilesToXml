@@ -55,7 +55,7 @@ namespace b2xtranslator.OfficeDrawing
                         }
                     }
 
-                    throw e;
+                    throw;
                 }
             }
         }

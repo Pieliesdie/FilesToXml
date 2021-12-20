@@ -88,7 +88,7 @@ namespace ConverterToXml.Converters
 
         private void CopyFont(IFont toFront, IFont fontFrom)
         {
-            toFront.Boldweight = fontFrom.Boldweight;
+            toFront.IsBold = fontFrom.IsBold;
             toFront.Charset = fontFrom.Charset;
             toFront.Color = fontFrom.Color;
             toFront.FontHeightInPoints = fontFrom.FontHeightInPoints;

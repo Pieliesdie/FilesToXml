@@ -25,7 +25,7 @@ namespace ConverterToXml.Test
         }
 
         [Fact]
-        public void XlsxConverterTestXlsx2()
+        public void XlsxConverterTestReadSomeData()
         {
             XlsxToXml converter = new XlsxToXml();
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -39,7 +39,29 @@ namespace ConverterToXml.Test
                 var isSecondTableValid = result.Elements("TABLE").ElementAt(1).Attribute("name").Value == "АСУ ТП"
                     && result.Elements("TABLE").ElementAt(1).Elements("R").Where(x => x.Attribute("id").Value == "13").First().Attribute("C1").Value == "18021:Волги";
                 var isThirdTableValid = result.Elements("TABLE").ElementAt(2).Attribute("name").Value == "Исходные данные - выгрузка"
-                    && result.Elements("TABLE").ElementAt(1).Elements("R").Where(x => x.Attribute("id").Value == "494").First().Attribute("C1").Value == "17171:Сибири";
+                    && result.Elements("TABLE").ElementAt(2).Elements("R").Where(x => x.Attribute("id").Value == "494").First().Attribute("C1").Value == "17158:Волги";
+
+                Assert.True(isThirdTableValid && isSecondTableValid && isThirdTableValid);
+            }
+        }
+
+
+        [Fact]
+        public void XlsxConverterTestLastRowId()
+        {
+            XlsxToXml converter = new XlsxToXml();
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xlsx2.xlsx";
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                var result = converter.Convert(fs).Root;
+                var isFirstTableValid = result.Elements("TABLE").ElementAt(0).Attribute("name").Value == "Инструкция"
+                    && result.Elements("TABLE").ElementAt(0).Elements("R").Last().Attribute("id").Value == "16";
+                var isSecondTableValid = result.Elements("TABLE").ElementAt(1).Attribute("name").Value == "АСУ ТП"
+                    && result.Elements("TABLE").ElementAt(1).Elements("R").Last().Attribute("id").Value == "17763";
+                var isThirdTableValid = result.Elements("TABLE").ElementAt(2).Attribute("name").Value == "Исходные данные - выгрузка"
+                    && result.Elements("TABLE").ElementAt(2).Elements("R").Last().Attribute("id").Value == "10006";
 
                 Assert.True(isThirdTableValid && isSecondTableValid && isThirdTableValid);
             }
