@@ -9,6 +9,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Tuple = System.Tuple;
 
 namespace ConverterToXml.Converters
 {
@@ -31,30 +32,15 @@ namespace ConverterToXml.Converters
         {
             using SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
             memStream.Position = 0;
-            // Read shared strings
-            var sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ToImmutableArray();
+            var sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ToImmutableArray(); 
             var stylesheet = doc.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.Cast<CellFormat>().ToImmutableArray();
             var sheetModel = doc.WorkbookPart.Workbook.Descendants<Sheet>().Select((sheet, index) => new _Sheet(index, sheet.Name, ((WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id))));
             var sheets = sheetModel
-                .Select(sheet => WorkSheetProcess(sheet.SheetData, sheet.Name, sharedStringTable, stylesheet, sheet.Id))
+                .Select(sheet => WorkSheetProcess(sheet.SheetData, sheet.Name, sheet.Id, sharedStringTable, stylesheet))
                 .Where(sheet => sheet is not null);
-            return sheets.Any() ? new XDocument(new XElement("DATASET", sheets)) : null;
+            return new XDocument(new XElement("DATASET", sheets));
         }
-        private IEnumerable<Row> ReadRows(WorksheetPart worksheetPart)
-        {
-            OpenXmlReader reader = OpenXmlReader.Create(worksheetPart);
-            //row counter
-            while (reader.Read())
-            {
-                if (reader.ElementType == typeof(Row))
-                {
-                    yield return (Row)reader.LoadCurrentElement();
-                }
-
-            }
-        }
-        private XElement WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet,
-            int sheetIndex)
+        private XElement WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, int sheetIndex, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
             var rows = ReadRows(worksheetPart)
                 .Select(row => RowProcess(row, sharedStringTable, stylesheet))
@@ -63,8 +49,7 @@ namespace ConverterToXml.Converters
         }
         private XElement RowProcess(Row row, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
-            var cells = row
-                .Elements<Cell>()
+            var cells = ReadCells(row)
                 .Select(cell => CellProcess(cell, sharedStringTable, stylesheet))
                 .Where(cell => cell is not null);
             return cells.Any() ? new XElement("R", new XAttribute("id", row.RowIndex), cells) : null;
@@ -102,6 +87,29 @@ namespace ConverterToXml.Converters
         private static bool isNumFmtDate(UInt32Value numFtd)
         {
             return numFtd >= 14 && numFtd <= 22;
+        }
+
+        private IEnumerable<Row> ReadRows(WorksheetPart worksheetPart)
+        {
+            var reader = OpenXmlReader.Create(worksheetPart);
+            while (reader.Read())
+            {
+                if (reader.ElementType == typeof(Row))
+                {
+                    yield return (Row)reader.LoadCurrentElement();
+                }
+            }
+        }
+        private IEnumerable<Cell> ReadCells(Row row)
+        {
+            var reader = OpenXmlReader.Create(row);
+            while (reader.Read())
+            {
+                if (reader.ElementType == typeof(Cell))
+                {
+                    yield return (Cell)reader.LoadCurrentElement();
+                }
+            }
         }
     }
 
