@@ -2,14 +2,12 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Tuple = System.Tuple;
 
 namespace ConverterToXml.Converters
 {
