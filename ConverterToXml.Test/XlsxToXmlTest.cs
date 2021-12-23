@@ -41,7 +41,7 @@ namespace ConverterToXml.Test
                 var isThirdTableValid = result.Elements("TABLE").ElementAt(2).Attribute("name").Value == "Исходные данные - выгрузка"
                     && result.Elements("TABLE").ElementAt(2).Elements("R").Where(x => x.Attribute("id").Value == "494").First().Attribute("C1").Value == "17158:Волги";
 
-                Assert.True(isThirdTableValid && isSecondTableValid && isThirdTableValid);
+                Assert.True(isFirstTableValid && isSecondTableValid && isThirdTableValid);
             }
         }
 
@@ -63,7 +63,7 @@ namespace ConverterToXml.Test
                 var isThirdTableValid = result.Elements("TABLE").ElementAt(2).Attribute("name").Value == "Исходные данные - выгрузка"
                     && result.Elements("TABLE").ElementAt(2).Elements("R").Last().Attribute("id").Value == "10006";
 
-                Assert.True(isThirdTableValid && isSecondTableValid && isThirdTableValid);
+                Assert.True(isFirstTableValid && isSecondTableValid && isThirdTableValid);
             }
         }
     }
