@@ -57,7 +57,8 @@ namespace ConverterToXml.Converters
         {
             /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
              * Значение свойства DataType равно NULL для числовых типов и дат.
-             https://docs.microsoft.com/ru-ru/office/open-xml/how-to-retrieve-the-values-of-cells-in-a-spreadsheet#accessing-the-cell*/
+             https://docs.microsoft.com/ru-ru/office/open-xml/how-to-retrieve-the-values-of-cells-in-a-spreadsheet#accessing-the-cell
+            */
             string FormatNullTypeCell(string cellValue, uint numFmt)
             {
                 if (Decimal.TryParse(cellValue , NumberStyles.Float, CultureInfo.InvariantCulture, out var Number))
@@ -93,7 +94,7 @@ namespace ConverterToXml.Converters
 
         private IEnumerable<Row> ReadRows(WorksheetPart worksheetPart)
         {
-            var reader = OpenXmlReader.Create(worksheetPart);
+            using var reader = OpenXmlReader.Create(worksheetPart);
             while (reader.Read())
             {
                 if (reader.ElementType == typeof(Row))
@@ -104,7 +105,7 @@ namespace ConverterToXml.Converters
         }
         private IEnumerable<Cell> ReadCells(Row row)
         {
-            var reader = OpenXmlReader.Create(row);
+            using var reader = OpenXmlReader.Create(row);
             while (reader.Read())
             {
                 if (reader.ElementType == typeof(Cell))
