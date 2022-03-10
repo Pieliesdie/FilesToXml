@@ -45,6 +45,35 @@ namespace ConverterToXml.Test
             }
         }
 
+        [Fact]
+        public void XlsxConverterTestReadLongNumber()
+        {
+            XlsxToXml converter = new XlsxToXml();
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xlsx3.xlsx";
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                var result = converter.Convert(fs).Root;
+                var isNumberValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C145")?.Value == "-0.0019999999894935172";
+                Assert.True(isNumberValid);
+            }
+        }
+
+        [Fact]
+        public void XlsxConverterTestReadBoolean()
+        {
+            XlsxToXml converter = new XlsxToXml();
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xlsx3.xlsx";
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                var result = converter.Convert(fs).Root;
+                var isBoolValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C148")?.Value == "True";
+                Assert.True(isBoolValid);
+            }
+        }
 
         [Fact]
         public void XlsxConverterTestLastRowId()

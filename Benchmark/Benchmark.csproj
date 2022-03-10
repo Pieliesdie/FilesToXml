@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="History\" />
+    <Compile Remove="History\**" />
+    <EmbeddedResource Remove="History\**" />
+    <None Remove="History\**" />
   </ItemGroup>
 
   <ItemGroup>

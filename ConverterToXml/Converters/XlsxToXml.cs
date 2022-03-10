@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace ConverterToXml.Converters
 {
-    public class XlsxToXml : IConvertable
+    public partial class XlsxToXml : IConvertable
     {
         private record _Sheet(int Id, string Name, WorksheetPart SheetData);
         public XDocument Convert(Stream memStream) => SpreadsheetProcess(memStream);
@@ -30,7 +31,7 @@ namespace ConverterToXml.Converters
         {
             using SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
             memStream.Position = 0;
-            var sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ToImmutableArray(); 
+            var sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ToImmutableArray();
             var stylesheet = doc.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.Cast<CellFormat>().ToImmutableArray();
             var sheetModel = doc.WorkbookPart.Workbook.Descendants<Sheet>().Select((sheet, index) => new _Sheet(index, sheet.Name, ((WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id))));
             var sheets = sheetModel
@@ -54,32 +55,35 @@ namespace ConverterToXml.Converters
         }
         private XAttribute CellProcess(Cell cell, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
-            string cellValue;
-            if (cell.CellFormula != null)
+            /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
+             * Значение свойства DataType равно NULL для числовых типов и дат.
+             https://docs.microsoft.com/ru-ru/office/open-xml/how-to-retrieve-the-values-of-cells-in-a-spreadsheet#accessing-the-cell*/
+            string FormatNullTypeCell(string cellValue, uint numFmt)
             {
-                cellValue = (cell.CellValue?.InnerText) ?? cell.CellFormula.InnerText;
-            }
-            else
-            {
-                cellValue = cell.InnerText;
-                if (cell.DataType != null && cell.DataType == CellValues.SharedString)
+                if (Decimal.TryParse(cellValue , NumberStyles.Float, CultureInfo.InvariantCulture, out var Number))
                 {
-                    cellValue = sharedStringTable[int.Parse(cellValue)].InnerText;
+                    if (isNumFmtDate(numFmt))
+                    {
+                        return DateTime.FromOADate((double)Number).ToString("s");
+                    }
+                    else
+                    {
+                        return Number.ToString(CultureInfo.InvariantCulture);
+                    }
                 }
+                return cellValue;
             }
+            string cellValue = cell.CellFormula == null? cell.InnerText : (cell.CellValue?.InnerText) ?? cell.CellFormula.InnerText;
             var DataType = cell.DataType?.Value;
-            if (cell.StyleIndex != null && cell.StyleIndex.HasValue && (DataType == null || DataType == CellValues.Date))
+
+            cellValue = DataType switch
             {
-                var numFmt = stylesheet[(int)cell.StyleIndex.Value].NumberFormatId;
-                if (isNumFmtDate(numFmt) && Double.TryParse(cellValue, out var AODate))
-                {
-                    cellValue = DateTime.FromOADate(AODate).ToString("s");
-                }
-            }
-            if (DataType == CellValues.Boolean)
-            {
-                cellValue = cellValue == "0" ? "False" : "True";
-            }
+                CellValues.SharedString => sharedStringTable[int.Parse(cellValue)].InnerText,
+                CellValues.Boolean => cellValue == "0" ? "False" : "True",
+                null when cell.StyleIndex != null && cell.StyleIndex.HasValue => FormatNullTypeCell(cellValue, stylesheet[(int)cell.StyleIndex.Value].NumberFormatId),
+                _ => cellValue,
+            };
+
             return string.IsNullOrEmpty(cellValue).Not() ? new XAttribute($"C{Extensions.ColumnIndex(cell.CellReference)}", cellValue) : null;
         }
         private static bool isNumFmtDate(UInt32Value numFtd)
