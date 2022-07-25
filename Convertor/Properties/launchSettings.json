@@ -2,7 +2,7 @@
   "profiles": {
     "Convertor": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\xlsx2.xlsx -e 1251  -o D:\\test.xml -s true"
+      "commandLineArgs": "--help -i D:\\event_data_train.csv -e 1251  -o D:\\test.xml -s true"
     }
   }
 }
