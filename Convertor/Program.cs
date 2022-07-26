@@ -41,7 +41,7 @@ partial class Program
                 IDelimiterConvertable c when file.Delimiter == "auto" => c.ConvertByFile(file.Path, file.searchingDelimiters, file.Encoding),
                 IDelimiterConvertable c => c.ConvertByFile(file.Path, file.Delimiter, file.Encoding),
                 IEncodingConvertable c => c.ConvertByFile(file.Path, file.Encoding),
-                IConvertable c => c.ConvertByFile(file.Path)
+                { } c => c.ConvertByFile(file.Path)
             };
             xml.Root.Add(new XAttribute("ext", file.Type));
             xml.Root.Add(new XAttribute("path", file.Path));
@@ -86,9 +86,6 @@ partial class Program
                     return;
                 }
 
-                var XDoc = new XDocument(new XElement("DATA"));
-                XDoc.Declaration = new XDeclaration("1.0", Encoding.GetEncoding(args.OutputEncoding).WebName, null);
-
                 Queue<string> delimeters = new(args.Delimiters);
                 var files = args.Input.Select((filePath, index) => new ParsedFile(
                     Path: filePath,
@@ -98,17 +95,22 @@ partial class Program
                     Delimiter: filePath.GetDelimiter(delimeters),
                     searchingDelimiters: args.SearchingDelimiters?.ToArray()
                 ));
-                XDoc.Root.Add(files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)));
+                
+                var xDoc = new XDocument(new XElement("DATA"))
+                {
+                    Declaration = new("1.0", Encoding.GetEncoding(args.OutputEncoding).WebName, null)
+                };
+                xDoc.Root?.Add(files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)));
                 try
                 {
                     if (args.Output == null)
                     {
-                        XDoc.Save(Console.Out);
+                        xDoc.Save(Console.Out);
                     }
                     else
                     {
                         using var sw = new StreamWriter(args.Output, false, Encoding.GetEncoding(args.OutputEncoding));
-                        XDoc.Save(sw);
+                        xDoc.Save(sw);
                         Console.WriteLine($"Convert succesful all files to {args.Output}");
                     }
                 }

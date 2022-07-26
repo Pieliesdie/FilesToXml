@@ -52,7 +52,7 @@ namespace ConverterToXml.Converters
         {
             ArgumentNullException.ThrowIfNull(searchingDelimiters);
             using var sr = new StreamReader(stream);
-            var lines = sr.ReadAllLines().ToArray();
+            var lines = sr.ReadAllLines().Take(100).ToArray();
             var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
             sr.DiscardBufferedData();
             sr.BaseStream.Seek(0, SeekOrigin.Begin);
