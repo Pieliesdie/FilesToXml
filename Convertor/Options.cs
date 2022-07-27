@@ -33,6 +33,9 @@ namespace Convertor
             [Option('l', "labels", Required = false, HelpText = @"Set labels for input files, count must match the count of input files ")]
             public IEnumerable<string> Labels { get; set; }
 
+            [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Format output xml")]
+            public bool DisableFormat { get; set; }
+
             [Option("support", Required = false, HelpText = "Display supported types")]
             public string Support { get; set; }
         }

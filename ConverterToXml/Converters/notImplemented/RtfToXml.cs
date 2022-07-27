@@ -10,7 +10,7 @@ namespace ConverterToXml.Converters
 {
     public class RtfToXml : IConvertable
     {
-        public XDocument Convert(Stream stream)
+        public XElement Convert(Stream stream)
         {
 
             stream.Position = 0;
@@ -25,10 +25,10 @@ namespace ConverterToXml.Converters
             // С помощью либы RtfPipe создаем html
             var html = Rtf.ToHtml(rtf);
             // очищаем html от лишних тегов и атрибутов, возвращем готовую xml
-            return XDocument.Parse(ClearHtml(html));
+            return XElement.Parse(ClearHtml(html));
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             if (!Path.IsPathFullyQualified(path))
             {

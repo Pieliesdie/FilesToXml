@@ -12,7 +12,7 @@ namespace ConverterToXml.Converters
 {
     public class CsvToXml : IDelimiterConvertable
     {
-        public XDocument Convert(Stream stream, string delimiter, Encoding encoding)
+        public XElement Convert(Stream stream, string delimiter, Encoding encoding)
         {
             using var csvParser = new TextFieldParser(stream, encoding)
             {
@@ -35,7 +35,7 @@ namespace ConverterToXml.Converters
                 sheetElement.Add(new XElement("R", new XAttribute("id", currentLineNumber), attrs));
             }
             var root = new XElement("DATASET", sheetElement);
-            return new XDocument(root);
+            return root;
         }
 
         public static char DetectSeparator(string[] lines, char[] separatorChars)
@@ -48,9 +48,11 @@ namespace ConverterToXml.Converters
             return q.Separator;
         }
 
-        public XDocument Convert(Stream stream, char[] searchingDelimiters, Encoding encoding)
+        public XElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding)
         {
             ArgumentNullException.ThrowIfNull(searchingDelimiters);
+            ArgumentNullException.ThrowIfNull(stream);
+
             using var sr = new StreamReader(stream);
             var lines = sr.ReadAllLines().Take(100).ToArray();
             var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
@@ -59,28 +61,28 @@ namespace ConverterToXml.Converters
             return Convert(stream, delimiter, encoding);
         }
 
-        public XDocument Convert(Stream stream, string delimiter) => Convert(stream, delimiter, Encoding.UTF8);
+        public XElement Convert(Stream stream, string delimiter) => Convert(stream, delimiter, Encoding.UTF8);
 
-        public XDocument Convert(Stream stream) => Convert(stream, ";");
+        public XElement Convert(Stream stream) => Convert(stream, ";");
 
-        public XDocument Convert(Stream stream, Encoding encoding) => Convert(stream, ";", encoding);
+        public XElement Convert(Stream stream, Encoding encoding) => Convert(stream, ";", encoding);
 
-        public XDocument ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding)
+        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding)
         {
             using var fs = File.OpenRead(path);
             return Convert(fs, searchingDelimiters, encoding);
         }
 
-        public XDocument ConvertByFile(string path, string delimiter, Encoding encoding)
+        public XElement ConvertByFile(string path, string delimiter, Encoding encoding)
         {
             using var fs = File.OpenRead(path);
             return Convert(fs, delimiter, encoding);
         }
 
-        public XDocument ConvertByFile(string path, string delimiter) => ConvertByFile(path, delimiter, Encoding.UTF8);
+        public XElement ConvertByFile(string path, string delimiter) => ConvertByFile(path, delimiter, Encoding.UTF8);
 
-        public XDocument ConvertByFile(string path) => ConvertByFile(path, ";");
+        public XElement ConvertByFile(string path) => ConvertByFile(path, ";");
 
-        public XDocument ConvertByFile(string path, Encoding encoding) => ConvertByFile(path, ";", encoding);
+        public XElement ConvertByFile(string path, Encoding encoding) => ConvertByFile(path, ";", encoding);
     }
 }

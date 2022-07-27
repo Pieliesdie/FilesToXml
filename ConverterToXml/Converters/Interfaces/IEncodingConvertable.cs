@@ -10,8 +10,8 @@ namespace ConverterToXml.Converters
 {
     public interface IEncodingConvertable : IConvertable
     {
-        public XDocument Convert(Stream stream, Encoding encoding);
+        public XElement Convert(Stream stream, Encoding encoding);
 
-        public XDocument ConvertByFile(string path, Encoding encoding);
+        public XElement ConvertByFile(string path, Encoding encoding);
     }
 }

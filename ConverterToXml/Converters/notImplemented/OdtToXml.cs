@@ -11,16 +11,16 @@ namespace ConverterToXML
 {
     public class OdtToXml : IConvertable
     {
-        public XDocument Convert(Stream memStream)
+        public XElement Convert(Stream memStream)
         {
             var content = Unzip(memStream);
             using (Stream stream = new MemoryStream(content))
             {
-                return XDocument.Parse(ClearXml(stream));
+                return XElement.Parse(ClearXml(stream));
             }
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             using (FileStream fs = File.OpenRead(path))
             {

@@ -33,7 +33,7 @@ namespace ConverterToXml.Test
 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
-                var result = converter.Convert(fs).Root;
+                var result = converter.Convert(fs);
                 var isFirstTableValid = result.Elements("TABLE").ElementAt(0).Attribute("name").Value == "Инструкция"
                     && result.Elements("TABLE").ElementAt(0).Elements("R").Where(x => x.Attribute("id").Value == "16").First().Attribute("C1").Value == "Если есть вопросы - пожалуйста, обращайтесь к Е. Гостевой (29-33)";
                 var isSecondTableValid = result.Elements("TABLE").ElementAt(1).Attribute("name").Value == "АСУ ТП"
@@ -54,7 +54,7 @@ namespace ConverterToXml.Test
 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
-                var result = converter.Convert(fs).Root;
+                var result = converter.Convert(fs);
                 var isNumberValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C145")?.Value == "-0.0019999999894935172";
                 Assert.True(isNumberValid);
             }
@@ -69,7 +69,7 @@ namespace ConverterToXml.Test
 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
-                var result = converter.Convert(fs).Root;
+                var result = converter.Convert(fs);
                 var isBoolValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C148")?.Value == "True";
                 Assert.True(isBoolValid);
             }
@@ -84,7 +84,7 @@ namespace ConverterToXml.Test
 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
-                var result = converter.Convert(fs).Root;
+                var result = converter.Convert(fs);
                 var isFirstTableValid = result.Elements("TABLE").ElementAt(0).Attribute("name").Value == "Инструкция"
                     && result.Elements("TABLE").ElementAt(0).Elements("R").Last().Attribute("id").Value == "16";
                 var isSecondTableValid = result.Elements("TABLE").ElementAt(1).Attribute("name").Value == "АСУ ТП"

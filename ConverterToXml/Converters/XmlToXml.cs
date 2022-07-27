@@ -10,14 +10,14 @@ namespace ConverterToXml.Converters
 {
     public class XmlToXml : IConvertable
     {
-        public XDocument Convert(Stream stream)
+        public XElement Convert(Stream stream)
         {
             var srcDoc = XDocument.Load(stream);
             var root = new XElement("DATASET", srcDoc.Root);
-            return new XDocument(root);
+            return root;
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             if (!Path.IsPathFullyQualified(path))
             {

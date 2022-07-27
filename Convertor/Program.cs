@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Convertor;
 
-public record ParsedFile(string Path, string Label, Encoding Encoding, SupportedFileExt? Type, string Delimiter, char[] searchingDelimiters);
+public record ParsedFile(string Path, string Label, Encoding Encoding, SupportedFileExt? Type, string Delimiter, char[] SearchingDelimiters);
 partial class Program
 {
     private static XElement ProcessFile(ParsedFile file, TextWriter ErrorOut = null, TextWriter LogOut = null, bool isLog = false)
@@ -38,22 +38,22 @@ partial class Program
             };
             var xml = convertor switch
             {
-                IDelimiterConvertable c when file.Delimiter == "auto" => c.ConvertByFile(file.Path, file.searchingDelimiters, file.Encoding),
+                IDelimiterConvertable c when file.Delimiter == "auto" => c.ConvertByFile(file.Path, file.SearchingDelimiters, file.Encoding),
                 IDelimiterConvertable c => c.ConvertByFile(file.Path, file.Delimiter, file.Encoding),
                 IEncodingConvertable c => c.ConvertByFile(file.Path, file.Encoding),
                 { } c => c.ConvertByFile(file.Path)
             };
-            xml.Root.Add(new XAttribute("ext", file.Type));
-            xml.Root.Add(new XAttribute("path", file.Path));
+            xml.Add(new XAttribute("ext", file.Type));
+            xml.Add(new XAttribute("path", file.Path));
             if (file.Label is not null)
             {
-                xml.Root.Add(new XAttribute("label", file.Label));
+                xml.Add(new XAttribute("label", file.Label));
             }
             if (isLog)
             {
                 LogOut?.WriteLine($"Succesful convert file: {file.Path}");
             }
-            return xml.Root;
+            return xml;
         }
         catch (Exception e)
         {
@@ -72,52 +72,50 @@ partial class Program
             return;
         }
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        Parser.Default.ParseArguments<Options>(args)
-            .WithParsed(args =>
+        Parser.Default.ParseArguments<Options>(args).WithParsed(args =>
+        {
+            if (args.Labels.Any() && args.Input.Count() != args.Labels.Count())
             {
-                if (args.Labels.Any() && args.Input.Count() != args.Labels.Count())
-                {
-                    Console.Error.WriteLine("Label count doesn't match the count of input files");
-                    return;
-                }
-                if (args.Output != null && args.ForceSave.Not() && File.Exists(args.Output))
-                {
-                    Console.Error.WriteLine("Output file already exist and ForceSave is false");
-                    return;
-                }
+                Console.Error.WriteLine("Label count doesn't match the count of input files");
+                return;
+            }
+            if (args.Output != null && args.ForceSave.Not() && File.Exists(args.Output))
+            {
+                Console.Error.WriteLine("Output file already exist and ForceSave is false");
+                return;
+            }
 
-                Queue<string> delimeters = new(args.Delimiters);
-                var files = args.Input.Select((filePath, index) => new ParsedFile(
-                    Path: filePath,
-                    Label: args.Labels.Any() ? args.Labels.ElementAt(index) : null,
-                    Encoding: Encoding.GetEncoding(index > args.InputEncoding.Count() - 1 ? args.InputEncoding.Last() : args.InputEncoding.ElementAt(index)),
-                    Type: filePath.GetExtFromPath(),
-                    Delimiter: filePath.GetDelimiter(delimeters),
-                    searchingDelimiters: args.SearchingDelimiters?.ToArray()
-                ));
-                
-                var xDoc = new XDocument(new XElement("DATA"))
+            Queue<string> delimeters = new(args.Delimiters);
+            var files = args.Input.Select((filePath, index) => new ParsedFile(
+                Path: filePath,
+                Label: args.Labels.Any() ? args.Labels.ElementAt(index) : null,
+                Encoding: Encoding.GetEncoding(index > args.InputEncoding.Count() - 1 ? args.InputEncoding.Last() : args.InputEncoding.ElementAt(index)),
+                Type: filePath.GetExtFromPath(),
+                Delimiter: filePath.GetDelimiter(delimeters),
+                SearchingDelimiters: args.SearchingDelimiters?.ToArray()
+            ));
+            var datasets = files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)).ToArray();
+            var xDoc = new XDocument(new XElement("DATA", datasets))
+            {
+                Declaration = new("1.0", Encoding.GetEncoding(args.OutputEncoding).WebName, null)
+            };
+            try
+            {
+                if (args.Output == null)
                 {
-                    Declaration = new("1.0", Encoding.GetEncoding(args.OutputEncoding).WebName, null)
-                };
-                xDoc.Root?.Add(files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)));
-                try
-                {
-                    if (args.Output == null)
-                    {
-                        xDoc.Save(Console.Out);
-                    }
-                    else
-                    {
-                        using var sw = new StreamWriter(args.Output, false, Encoding.GetEncoding(args.OutputEncoding));
-                        xDoc.Save(sw);
-                        Console.WriteLine($"Convert succesful all files to {args.Output}");
-                    }
+                    xDoc.Save(Console.Out, args.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.Error.WriteLine(e.Message);
+                    using var sw = new StreamWriter(args.Output, false, Encoding.GetEncoding(args.OutputEncoding));
+                    xDoc.Save(sw, args.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
+                    Console.WriteLine($"Convert succesful all files to {args.Output}");
                 }
-            });
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+            }
+        });
     }
 }

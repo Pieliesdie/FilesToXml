@@ -8,14 +8,14 @@ namespace ConverterToXml.Converters
 {
     public class XlsToXml : IConvertable
     {
-        public XDocument Convert(Stream stream)
+        public XElement Convert(Stream stream)
         {
             var str = new XlsToXlsx().Convert(stream);
             using var ms = new MemoryStream(str.ToArray());
             return new XlsxToXml().Convert(ms);
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             using var fs = File.OpenRead(path);
             return Convert(fs);

@@ -30,7 +30,7 @@ namespace ConverterToXml.Test
 
             using FileStream fs = new FileStream(path, FileMode.Open);
             var result = converter.Convert(fs, encoding: Encoding.GetEncoding(1251) );
-            Assert.Equal("первый", result.Root.Elements().First().Elements().First().Attribute("C1").Value);
+            Assert.Equal("первый", result.Elements().First().Elements().First().Attribute("C1").Value);
         }
         
         [Fact]
@@ -43,7 +43,7 @@ namespace ConverterToXml.Test
 
             using FileStream fs = new FileStream(path, FileMode.Open);
             var result = converter.Convert(fs, new[] {';', '|', '\t', ','} ,encoding: Encoding.GetEncoding(1251) );
-            Assert.Equal("step_id", result.Root.Elements().First().Elements().First().Attribute("C1").Value);
+            Assert.Equal("step_id", result.Elements().First().Elements().First().Attribute("C1").Value);
         }
         
         [Fact]
@@ -56,7 +56,7 @@ namespace ConverterToXml.Test
 
             using FileStream fs = new FileStream(path, FileMode.Open);
             var result = converter.Convert(fs, new[] {';', '|', '\t', ','}, encoding: Encoding.GetEncoding(1251) );
-            Assert.Equal("18526", result.Root.Elements().First().Elements().Last().Attribute("C4").Value);
+            Assert.Equal("18526", result.Elements().First().Elements().Last().Attribute("C4").Value);
         }
     }
 }

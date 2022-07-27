@@ -10,18 +10,18 @@ namespace ConverterToXml.Converters
 {
     public class TxtToXml : IEncodingConvertable
     {
-        public XDocument Convert(Stream stream) => this.Convert(stream, Encoding.UTF8);
+        public XElement Convert(Stream stream) => this.Convert(stream, Encoding.UTF8);
 
-        public XDocument Convert(Stream stream, Encoding encoding)
+        public XElement Convert(Stream stream, Encoding encoding)
         {
             using var sr = new StreamReader(stream, encoding);
             var root = new XElement("DATASET", new XElement("TEXT", sr.ReadToEnd()));
-            return new XDocument(root);
+            return root;
         }
 
-        public XDocument ConvertByFile(string path) => this.ConvertByFile(path, Encoding.UTF8);
+        public XElement ConvertByFile(string path) => this.ConvertByFile(path, Encoding.UTF8);
 
-        public XDocument ConvertByFile(string path, Encoding encoding)
+        public XElement ConvertByFile(string path, Encoding encoding)
         {
             if (!Path.IsPathFullyQualified(path))
             {

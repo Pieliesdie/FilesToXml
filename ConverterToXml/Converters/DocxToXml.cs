@@ -61,7 +61,7 @@ namespace ConverterToXml.Converters
             }
             sb.Add(root);
         }
-        public XDocument Convert(Stream memStream)
+        public XElement Convert(Stream memStream)
         {
             Dictionary<int, string> listEl = new Dictionary<int, string>();
             memStream.Position = 0;
@@ -108,10 +108,10 @@ namespace ConverterToXml.Converters
                     continue;
                 }
             }
-            return new XDocument(root);
+            return root;
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             if (!Path.IsPathFullyQualified(path))
             {

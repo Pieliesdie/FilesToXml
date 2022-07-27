@@ -8,7 +8,7 @@ namespace ConverterToXml.Converters
 {
     public class DocToXml : IConvertable
     {
-        public XDocument Convert(Stream stream)
+        public XElement Convert(Stream stream)
         {
             DocToDocx docToDocx = new DocToDocx();
             MemoryStream ms = docToDocx.ConvertFromStreamToDocxMemoryStream(stream);
@@ -16,7 +16,7 @@ namespace ConverterToXml.Converters
             return (docxToXml.Convert(ms));
         }
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             if (!Path.IsPathFullyQualified(path))
             {

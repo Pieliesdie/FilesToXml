@@ -15,9 +15,9 @@ namespace ConverterToXml.Converters
     public partial class XlsxToXml : IConvertable
     {
         private record _Sheet(int Id, string Name, WorksheetPart SheetData);
-        public XDocument Convert(Stream memStream) => SpreadsheetProcess(memStream);
+        public XElement Convert(Stream memStream) => SpreadsheetProcess(memStream);
 
-        public XDocument ConvertByFile(string path)
+        public XElement ConvertByFile(string path)
         {
             using FileStream fs = File.Open(path, FileMode.Open);
             return Convert(fs);
@@ -27,7 +27,7 @@ namespace ConverterToXml.Converters
         /// </summary>
         /// <param name="memStream"></param>
         /// <returns></returns>
-        private XDocument SpreadsheetProcess(Stream memStream)
+        private XElement SpreadsheetProcess(Stream memStream)
         {
             using SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
             memStream.Position = 0;
@@ -37,7 +37,7 @@ namespace ConverterToXml.Converters
             var sheets = sheetModel
                 .Select(sheet => WorkSheetProcess(sheet.SheetData, sheet.Name, sheet.Id, sharedStringTable, stylesheet))
                 .Where(sheet => sheet is not null);
-            return new XDocument(new XElement("DATASET", sheets));
+            return new XElement("DATASET", sheets);
         }
         private XElement WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, int sheetIndex, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
