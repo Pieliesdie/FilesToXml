@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml.Math;
 using Microsoft.VisualBasic.FileIO;
 
 namespace ConverterToXml.Converters
@@ -21,19 +20,27 @@ namespace ConverterToXml.Converters
                 HasFieldsEnclosedInQuotes = true
             };
             var sheetElement = new XElement("TABLE", new XAttribute("id", 0));
+            long maxLineNumber = 0;
+            long maxColumnNumber = 0;
             while (!csvParser.EndOfData)
             {
                 var currentLineNumber = csvParser.LineNumber;
                 string[] fields = csvParser.ReadFields();
-                if (fields is null)
-                {
-                    continue;
-                }
+                if (fields is null) { continue; }
+
+                maxColumnNumber = Math.Max(maxColumnNumber, fields.Length);
+                maxLineNumber = currentLineNumber;
+
                 var attrs = fields
                     .Select((column, index) => new XAttribute($"C{index + 1}", column))
                     .Where(x => string.IsNullOrEmpty(x.Value).Not());
-                sheetElement.Add(new XElement("R", new XAttribute("id", currentLineNumber), attrs));
+                var row = new XElement("R", new XAttribute("id", currentLineNumber), attrs);
+                sheetElement.Add(row);
             }
+
+            sheetElement.Add(new XAttribute("columns", maxColumnNumber));
+            sheetElement.Add(new XAttribute("rows", maxLineNumber));
+
             var root = new XElement("DATASET", sheetElement);
             return root;
         }
@@ -43,9 +50,24 @@ namespace ConverterToXml.Converters
             var q = separatorChars.Select(sep => new
             { Separator = sep, Found = lines.GroupBy(line => line.Count(ch => ch == sep)) })
                 .OrderByDescending(res => res.Found.Count(grp => grp.Key > 0))
-                .ThenBy(res => res.Found.Count())
-                .First();
-            return q.Separator;
+                .ThenBy(res => res.Found.Count());
+            using var stream = new StringReader(string.Join(Environment.NewLine, lines));
+
+            foreach (var sep in q.Select(x => x.Separator))
+            {
+                using var csvParser = new TextFieldParser(stream)
+                {
+                    CommentTokens = new[] { "#" },
+                    Delimiters = new[] { sep.ToString() },
+                    HasFieldsEnclosedInQuotes = true
+                };
+                if (csvParser.EndOfData.Not() && csvParser.ReadFields().Length > 1)
+                {
+                    return sep;
+                }
+            }
+
+            return q.First().Separator;
         }
 
         public XElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding)

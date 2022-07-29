@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using NPOI.SS.Formula.Functions;
 
 namespace ConverterToXml
 {
@@ -27,13 +28,25 @@ namespace ConverterToXml
                 ci = (ci * 26) + ((int)reference[ix] - 64);
             return ci;
         }
-        
+
+        public static int RowIndex(string reference)
+{
+            int startIndex = reference.IndexOfAny("0123456789".ToCharArray());
+            _ = int.TryParse(reference.AsSpan(startIndex), out var row);
+            return row;
+        }
+
         public static IEnumerable<string> ReadAllLines(this StreamReader reader)
         {
             while (reader.ReadLine() is { } line)
             {
                 yield return line;
             }
+        }
+
+        public static MemoryStream ToStream(this string value)
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(value ?? ""));
         }
     }
 }

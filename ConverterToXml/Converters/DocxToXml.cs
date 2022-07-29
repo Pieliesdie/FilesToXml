@@ -55,10 +55,16 @@ namespace ConverterToXml.Converters
         {
             var root = new XElement("TABLE", new XAttribute("id", index));
             var rowIndex = 1;
+            long maxColumnNumber = 0;
             foreach (var r in table.Elements<TableRow>())
             {
-                root.Add(GetNewRow(rowIndex++, r.Elements<TableCell>().Select(x => x.InnerText).ToArray()));
+                var cells = r.Elements<TableCell>().Select(x => x.InnerText).ToArray();
+                var row = GetNewRow(rowIndex++, cells);
+                maxColumnNumber = Math.Max(maxColumnNumber, cells.Length);
+                root.Add(row);
             }
+            root.Add(new XAttribute("columns", maxColumnNumber));
+            root.Add(new XAttribute("rows", rowIndex));
             sb.Add(root);
         }
         public XElement Convert(Stream memStream)

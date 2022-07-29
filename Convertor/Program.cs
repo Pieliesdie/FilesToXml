@@ -95,10 +95,7 @@ partial class Program
                 SearchingDelimiters: args.SearchingDelimiters?.ToArray()
             ));
             var datasets = files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)).ToArray();
-            var xDoc = new XDocument(new XElement("DATA", datasets))
-            {
-                Declaration = new("1.0", Encoding.GetEncoding(args.OutputEncoding).WebName, null)
-            };
+            var xDoc = new XElement("DATA", datasets);
             try
             {
                 if (args.Output == null)
