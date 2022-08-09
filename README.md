@@ -12,7 +12,11 @@ Supported types for now:
   <li>xml</li>
 </ul>
 <br />
-usage:
+console usage:
+<pre>
+./Convertor.exe -i xlsx.xlsx -o xlsx.xml -e 1251 -s
+</pre>
+library usage:
 <pre>
 using ConverterToXml.Converters;
 
