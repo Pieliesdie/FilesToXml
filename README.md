@@ -34,3 +34,68 @@ var xml = convertor switch
     { } c => c.ConvertByFile(file.Path)
 };
 </pre>
+
+# Result structure
+## xlsx/xls
+* **DATA**:
+    + **DATASET**:
+    +  *ext*
+    +  *label*
+    +  *path*
+        + **TABLE**:
+        +  *name*
+        +  *id*
+        +  *columns*
+        +  *rows*
+            + **R** :
+            + *id*
+            + *C{N}*
+## csv
+* **DATA**:
+    + **DATASET**:
+    +  *ext*
+    +  *path*
+    +   *label*
+        + **TABLE**:
+        +  *id*
+        +  *columns*
+        +  *rows*
+            + **R** :
+            + *id*
+            + *C{N}*
+## xml
+* **DATA**:
+    + **DATASET**:
+    +  *label*
+    +  *ext*
+    +  *path*
+        + **{SourceXML}**
+
+## text
+* **DATA**:
+    + **DATASET**:
+    +  *ext*
+    +  *path*
+    +  *label*
+        + **TEXT**
+        + *{PlainText}*
+
+## docx/doc
+* **DATA**:
+    + **DATASET**:
+    +  *ext*
+    +  *path*
+    +   *label*
+        + **TEXT**:
+        + *id*
+            + **R** :
+            + *level* 
+            + *id*
+            + *C{N}*
+        + **TABLE**:
+        +  *id*
+        +  *columns*
+        +  *rows*
+            + **R** :
+            + *id*
+            + *C{N}*
