@@ -94,6 +94,7 @@ partial class Program
                 Delimiter: filePath.GetDelimiter(delimeters),
                 SearchingDelimiters: args.SearchingDelimiters?.ToArray()
             ));
+
             var datasets = files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)).ToArray();
             var xDoc = new XElement("DATA", datasets);
             try
