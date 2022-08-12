@@ -11,11 +11,11 @@ namespace ConverterToXml.Converters
         /// <summary>
         /// Convert some data from Stream
         /// </summary>
-        XElement Convert(Stream stream);
+        XStreamingElement Convert(Stream stream, params object?[] rootContent);       
         /// <summary>
         /// Convert some data from file
         /// </summary>
-        XElement ConvertByFile(String path);
+        XElement ConvertByFile(String path, params object?[] rootContent);
 
     }
 }

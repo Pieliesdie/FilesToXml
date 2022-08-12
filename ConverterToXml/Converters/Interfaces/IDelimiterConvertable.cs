@@ -7,15 +7,15 @@ namespace ConverterToXml.Converters
 {
     public interface IDelimiterConvertable : IConvertable, IEncodingConvertable
     {
-        public XElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding);
+        public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent);
 
-        public XElement Convert(Stream stream, string delimiter, Encoding encoding);
+        public XStreamingElement Convert(Stream stream, string delimiter, Encoding encoding, params object?[] rootContent);
 
-        public XElement Convert(Stream stream, string delimiter);
-        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding);
+        public XStreamingElement Convert(Stream stream, string delimiter, params object?[] rootContent);
+        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent);
 
-        public XElement ConvertByFile(string path, string delimiter, Encoding encoding);
+        public XElement ConvertByFile(string path, string delimiter, Encoding encoding, params object?[] rootContent);
 
-        public XElement ConvertByFile(string path, string delimiter);
+        public XElement ConvertByFile(string path, string delimiter, params object?[] rootContent);
     }
 }

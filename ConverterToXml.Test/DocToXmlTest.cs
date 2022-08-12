@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ConverterToXml.Test
 {
-    
+
     public class DocToXmlTest
     {
         [Fact]
@@ -14,11 +14,8 @@ namespace ConverterToXml.Test
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\doc1.doc";
 
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                string result = converter.ConvertByFile(path).ToString();
-                Assert.NotNull(result);
-            }
+            string result = converter.ConvertByFile(path).ToString();
+            Assert.NotNull(result);
         }
     }
 }

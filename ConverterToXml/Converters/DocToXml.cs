@@ -8,22 +8,22 @@ namespace ConverterToXml.Converters
 {
     public class DocToXml : IConvertable
     {
-        public XElement Convert(Stream stream)
+        public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
             DocToDocx docToDocx = new DocToDocx();
             MemoryStream ms = docToDocx.ConvertFromStreamToDocxMemoryStream(stream);
             var docxToXml = new DocxToXml();
-            return (docxToXml.Convert(ms));
+            return (docxToXml.Convert(ms, rootContent));
         }
 
-        public XElement ConvertByFile(string path)
+        public XElement ConvertByFile(string path, params object?[] rootContent)
         {
             if (!Path.IsPathFullyQualified(path))
             {
                 path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             }
-            using FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return Convert(fs);
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return new XElement(Convert(fs, rootContent));
         }
     }
 }

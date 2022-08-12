@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,21 +10,25 @@ namespace ConverterToXml.Converters
 {
     public class CsvToXml : IDelimiterConvertable
     {
-        public XElement Convert(Stream stream, string delimiter, Encoding encoding)
+        public XStreamingElement Convert(Stream stream, string delimiter, Encoding encoding, params object?[] rootContent)
         {
-            using var csvParser = new TextFieldParser(stream, encoding)
+            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TABLE", new XAttribute("id", 0), ReadLines(stream, delimiter, encoding)));
+        }
+
+        private static IEnumerable<XStreamingElement> ReadLines(Stream stream, string delimiter, Encoding encoding)
+        {
+            var csvParser = new TextFieldParser(stream, encoding)
             {
                 CommentTokens = new[] { "#" },
                 Delimiters = new[] { delimiter },
                 HasFieldsEnclosedInQuotes = true
             };
-            var sheetElement = new XElement("TABLE", new XAttribute("id", 0));
             long maxLineNumber = 0;
             long maxColumnNumber = 0;
             while (!csvParser.EndOfData)
             {
                 var currentLineNumber = csvParser.LineNumber;
-                string[] fields = csvParser.ReadFields();
+                string[]? fields = csvParser.ReadFields();
                 if (fields is null) { continue; }
 
                 maxColumnNumber = Math.Max(maxColumnNumber, fields.Length);
@@ -32,15 +37,10 @@ namespace ConverterToXml.Converters
                 var attrs = fields
                     .Select((column, index) => new XAttribute($"C{index + 1}", column))
                     .Where(x => string.IsNullOrEmpty(x.Value).Not());
-                var row = new XElement("R", new XAttribute("id", currentLineNumber), attrs);
-                sheetElement.Add(row);
+                var row = new XStreamingElement("R", new XAttribute("id", currentLineNumber), attrs);
+                yield return row;
             }
-
-            sheetElement.Add(new XAttribute("columns", maxColumnNumber));
-            sheetElement.Add(new XAttribute("rows", maxLineNumber));
-
-            var root = new XElement("DATASET", sheetElement);
-            return root;
+            yield return new XStreamingElement("METADATA", new XAttribute("columns", maxColumnNumber), new XAttribute("rows", maxLineNumber));
         }
 
         public static char DetectSeparator(string[] lines, char[] separatorChars)
@@ -68,41 +68,40 @@ namespace ConverterToXml.Converters
             return q.First().Separator;
         }
 
-        public XElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding)
+        public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
         {
             ArgumentNullException.ThrowIfNull(searchingDelimiters);
             ArgumentNullException.ThrowIfNull(stream);
-
-            using var sr = new StreamReader(stream);
+            var sr = new StreamReader(stream);
             var lines = sr.ReadAllLines().Take(100).ToArray();
             var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
             sr.DiscardBufferedData();
             sr.BaseStream.Seek(0, SeekOrigin.Begin);
-            return Convert(stream, delimiter, encoding);
+            return Convert(stream, delimiter, encoding, rootContent);
         }
 
-        public XElement Convert(Stream stream, string delimiter) => Convert(stream, delimiter, Encoding.UTF8);
+        public XStreamingElement Convert(Stream stream, string delimiter, params object?[] rootContent) => Convert(stream, delimiter, Encoding.UTF8, rootContent);
 
-        public XElement Convert(Stream stream) => Convert(stream, ";");
+        public XStreamingElement Convert(Stream stream, params object?[] rootContent) => Convert(stream, ";", rootContent);
 
-        public XElement Convert(Stream stream, Encoding encoding) => Convert(stream, ";", encoding);
+        public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent) => Convert(stream, ";", encoding, rootContent);
 
-        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding)
+        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
         {
             using var fs = File.OpenRead(path);
-            return Convert(fs, searchingDelimiters, encoding);
+            return new XElement(Convert(fs, searchingDelimiters, encoding, rootContent));
         }
 
-        public XElement ConvertByFile(string path, string delimiter, Encoding encoding)
+        public XElement ConvertByFile(string path, string delimiter, Encoding encoding, params object?[] rootContent)
         {
             using var fs = File.OpenRead(path);
-            return Convert(fs, delimiter, encoding);
+            return new XElement(Convert(fs, delimiter, encoding, rootContent));
         }
 
-        public XElement ConvertByFile(string path, string delimiter) => ConvertByFile(path, delimiter, Encoding.UTF8);
+        public XElement ConvertByFile(string path, string delimiter, params object?[] rootContent) => ConvertByFile(path, delimiter, Encoding.UTF8, rootContent);
 
-        public XElement ConvertByFile(string path) => ConvertByFile(path, ";");
+        public XElement ConvertByFile(string path, params object?[] rootContent) => ConvertByFile(path, ";", rootContent);
 
-        public XElement ConvertByFile(string path, Encoding encoding) => ConvertByFile(path, ";", encoding);
+        public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent) => ConvertByFile(path, ";", encoding, rootContent);
     }
 }

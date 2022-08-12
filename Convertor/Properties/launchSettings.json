@@ -2,7 +2,29 @@
   "profiles": {
     "Convertor": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\event_data_train.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\large.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+    "docx": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\git\\FilesToXml\\ConverterToXml.Test\\Files\\\\docx.docx -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+
+    "csv": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\git\\FilesToXml\\ConverterToXml.Test\\Files\\csv.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+
+    "xlsx": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\large.xlsx -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+    "txt": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\large.txt -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+    "xml": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\large.xml -e 1251 -E 1251 -o D:\\test.xml -s"
     }
   }
 }

@@ -15,54 +15,72 @@ namespace ConverterToXml.Converters
     public partial class XlsxToXml : IConvertable
     {
         private record SheetModel(int Id, string Name, WorksheetPart SheetData);
-        public XElement Convert(Stream memStream) => SpreadsheetProcess(memStream);
+        public XStreamingElement Convert(Stream memStream, params object?[] rootContent) => SpreadsheetProcess(memStream, rootContent);
 
-        public XElement ConvertByFile(string path)
+        public XElement ConvertByFile(string path, params object?[] rootContent)
         {
             using FileStream fs = File.Open(path, FileMode.Open);
-            return Convert(fs);
+            return new XElement(Convert(fs, rootContent));
         }
+
         /// <summary>
         /// Method of processing xlsx document
         /// </summary>
         /// <param name="memStream"></param>
         /// <returns></returns>
-        private static XElement SpreadsheetProcess(Stream memStream)
+        private static XStreamingElement SpreadsheetProcess(Stream memStream, params object?[] rootContent)
         {
-            using SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
+            SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
             memStream.Position = 0;
             var sharedStringTable = doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ToImmutableArray();
             var stylesheet = doc.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.Cast<CellFormat>().ToImmutableArray();
-            var sheetModel = doc.WorkbookPart.Workbook.Descendants<Sheet>().Select((sheet, index) => new SheetModel(index, sheet.Name, ((WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id))));
+            var sheetModel = doc.WorkbookPart
+                .Workbook
+                .Descendants<Sheet>()
+                .Select((sheet, index) => new SheetModel(index, sheet.Name, ((WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id))));
             var sheets = sheetModel
                 .Select(sheet => WorkSheetProcess(sheet.SheetData, sheet.Name, sheet.Id, sharedStringTable, stylesheet))
                 .Where(sheet => sheet is not null);
-            return new XElement("DATASET", sheets);
+            return new XStreamingElement("DATASET", rootContent, sheets);
         }
-        private static XElement WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, int sheetIndex, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
+        private static XStreamingElement? WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, int sheetIndex, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
-            var rows = ReadRows(worksheetPart)
+            /*var rows = Read(worksheetPart)
                 .Select(row => RowProcess(row, sharedStringTable, stylesheet))
                 .Where(row => row is not null);
-
-            XAttribute[] demension = Array.Empty<XAttribute>();
-            if (worksheetPart.Worksheet.SheetDimension.Reference.Value is { } demensionReference)
+             XAttribute[] demension = Array.Empty<XAttribute>();
+            if (worksheetPart.Worksheet.SheetDimension?.Reference?.Value is { } demensionReference)
             {
-                var endDemension = demensionReference.Substring(Math.Max(0, demensionReference.IndexOf(":"))).Replace(":","");
+                var endDemension = demensionReference.Substring(Math.Max(0, demensionReference.IndexOf(":"))).Replace(":", "");
                 var rowIndex = Extensions.RowIndex(endDemension);
                 var columnIndex = Extensions.ColumnIndex(endDemension);
                 demension = new XAttribute[] { new XAttribute("columns", columnIndex), new XAttribute("rows", rowIndex) };
-            }
-            return rows.Any() ? new XElement("TABLE", new XAttribute("name", sheetName), new XAttribute("id", sheetIndex), demension, rows) : null;
+            }*/
+            var rows = ReadRows(worksheetPart, sharedStringTable, stylesheet);
+            return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheetName), new XAttribute("id", sheetIndex), rows) : null;
         }
-        private static XElement RowProcess(Row row, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
+        private static IEnumerable<XElement?> ReadRows(WorksheetPart worksheetPart, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
-            var cells = ReadCells(row)
+            var rowCount = 0;
+            var cellCount = 0;
+            var rows = Read(worksheetPart).Select(row => RowProcess(row, sharedStringTable, stylesheet)).Where(row => row is not null);
+            foreach (var row in rows)
+            {
+                rowCount++;
+                cellCount = Math.Max(cellCount, row.Attributes().Count() - 1);
+                yield return row;
+            }
+            yield return new XElement("METADATA", new XAttribute("columns", cellCount), new XAttribute("rows", rowCount));
+        }
+
+        private static XElement? RowProcess(Row row, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
+        {
+            var cells = Read(row)
                 .Select(cell => CellProcess(cell, sharedStringTable, stylesheet))
                 .Where(cell => cell is not null);
             return cells.Any() ? new XElement("R", new XAttribute("id", row.RowIndex), cells) : null;
         }
-        private static XAttribute CellProcess(Cell cell, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
+        private static XAttribute? CellProcess(Cell cell, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
             /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
              * Значение свойства DataType равно NULL для числовых типов и дат.
@@ -90,7 +108,7 @@ namespace ConverterToXml.Converters
             {
                 CellValues.SharedString => sharedStringTable[int.Parse(cellValue)].InnerText,
                 CellValues.Boolean => cellValue == "0" ? "False" : "True",
-                null when cell.StyleIndex != null && cell.StyleIndex.HasValue => FormatNullTypeCell(cellValue, stylesheet[(int)cell.StyleIndex.Value].NumberFormatId),
+                null when cell.StyleIndex is not null && cell.StyleIndex.HasValue => FormatNullTypeCell(cellValue, stylesheet[(int)cell.StyleIndex.Value].NumberFormatId),
                 _ => cellValue,
             };
 
@@ -101,25 +119,25 @@ namespace ConverterToXml.Converters
             return numFtd >= 14 && numFtd <= 22;
         }
 
-        private static IEnumerable<Row> ReadRows(WorksheetPart worksheetPart)
+        private static IEnumerable<Row?> Read(WorksheetPart worksheetPart)
         {
             using var reader = OpenXmlReader.Create(worksheetPart);
             while (reader.Read())
             {
                 if (reader.ElementType == typeof(Row))
                 {
-                    yield return (Row)reader.LoadCurrentElement();
+                    yield return reader.LoadCurrentElement() as Row;
                 }
             }
         }
-        private static IEnumerable<Cell> ReadCells(Row row)
+        private static IEnumerable<Cell?> Read(Row row)
         {
             using var reader = OpenXmlReader.Create(row);
             while (reader.Read())
             {
                 if (reader.ElementType == typeof(Cell))
                 {
-                    yield return (Cell)reader.LoadCurrentElement();
+                    yield return reader.LoadCurrentElement() as Cell;
                 }
             }
         }

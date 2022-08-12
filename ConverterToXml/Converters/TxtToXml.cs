@@ -10,25 +10,24 @@ namespace ConverterToXml.Converters
 {
     public class TxtToXml : IEncodingConvertable
     {
-        public XElement Convert(Stream stream) => this.Convert(stream, Encoding.UTF8);
+        public XStreamingElement Convert(Stream stream, params object?[] rootContent) => this.Convert(stream, Encoding.UTF8, rootContent);
 
-        public XElement Convert(Stream stream, Encoding encoding)
+        public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
         {
-            using var sr = new StreamReader(stream, encoding);
-            var root = new XElement("DATASET", new XElement("TEXT", sr.ReadToEnd()));
-            return root;
+            var sr = new StreamReader(stream, encoding);
+            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TEXT", sr.ReadAllLines().Select(x=> $"{x}\r\n")));
         }
 
-        public XElement ConvertByFile(string path) => this.ConvertByFile(path, Encoding.UTF8);
+        public XElement ConvertByFile(string path, params object?[] rootContent) => this.ConvertByFile(path, Encoding.UTF8, rootContent);
 
-        public XElement ConvertByFile(string path, Encoding encoding)
+        public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
         {
             if (!Path.IsPathFullyQualified(path))
             {
                 path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             }
-            using FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return Convert(fs, encoding);
+            using FileStream fs = File.OpenRead(path);
+            return new XElement(Convert(fs, encoding, rootContent));
         }
     }
 }

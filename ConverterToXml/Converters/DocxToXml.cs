@@ -11,7 +11,7 @@ namespace ConverterToXml.Converters
 {
     public class DocxToXml : IConvertable
     {
-        private XElement GetNewRow(int rowIndex, params object[] values)
+        private static XElement GetNewRow(int rowIndex, params object[] values)
         {
             var row = new XElement("R", new XAttribute("id", rowIndex));
             var index = 1;
@@ -28,14 +28,14 @@ namespace ConverterToXml.Converters
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="p"></param>
-        private void SimpleParagraph(XElement sb, Paragraph p, int rowIndex) => sb.Add(GetNewRow(rowIndex, p.InnerText));
+        private static XElement SimpleParagraph(Paragraph p, int rowIndex) => GetNewRow(rowIndex, p.InnerText);
 
         /// <summary>
         /// Обработка элементов списка
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="p"></param>
-        private void ListParagraph(XElement sb, Paragraph p, int rowIndex)
+        private static XElement ListParagraph(Paragraph p, int rowIndex)
         {
             // уровень списка
             var level = p.GetFirstChild<ParagraphProperties>().GetFirstChild<NumberingProperties>().GetFirstChild<NumberingLevelReference>().Val;
@@ -43,7 +43,7 @@ namespace ConverterToXml.Converters
             var id = p.GetFirstChild<ParagraphProperties>().GetFirstChild<NumberingProperties>().GetFirstChild<NumberingId>().Val;
             var row = GetNewRow(rowIndex, p.InnerText);
             row.Add(new XAttribute("li", id), new XAttribute("level", level));
-            sb.Add(row);
+            return row;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace ConverterToXml.Converters
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="table"></param>
-        private void Table(XElement sb, Table table, int index)
+        private static XElement Table(Table table, int index)
         {
             var root = new XElement("TABLE", new XAttribute("id", index));
             var rowIndex = 1;
@@ -65,66 +65,61 @@ namespace ConverterToXml.Converters
             }
             root.Add(new XAttribute("columns", maxColumnNumber));
             root.Add(new XAttribute("rows", rowIndex));
-            sb.Add(root);
+            return root;
         }
-        public XElement Convert(Stream memStream)
+        public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
         {
-            Dictionary<int, string> listEl = new Dictionary<int, string>();
             memStream.Position = 0;
-            using WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
-            Body docBody = doc.MainDocumentPart.Document.Body; // тело документа (размеченный текст без стилей)
-            var root = new XElement("DATASET");
-            XElement textNode = null;
+            WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
+            Body? docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
+            return new XStreamingElement("DATASET", rootContent, ReadLines(docBody));
+        }
+        private static IEnumerable<XElement> ReadLines(Body? docBody)
+        {
+            if(docBody == null) { yield break; }
+            XElement? textNode = null;
             var index = 0;
             var rowIndex = 1;
             foreach (var element in docBody.ChildElements)
             {
                 string type = element.GetType().ToString();
-                try
+
+                switch (type)
                 {
-                    switch (type)
-                    {
-                        case "DocumentFormat.OpenXml.Wordprocessing.Paragraph":
-                            if (textNode == null)
-                            {
-                                rowIndex = 1;
-                                textNode = new XElement("TEXT");
-                                textNode.Add(new XAttribute("id", index++));
-                                root.Add(textNode);
-                            }
-                            if (element.GetFirstChild<ParagraphProperties>() != null && element.GetFirstChild<ParagraphProperties>()
-                                .GetFirstChild<NumberingProperties>() != null) // список / не список
-                            {
-                                ListParagraph(textNode, (Paragraph)element, rowIndex++);
-                                continue;
-                            }
-                            else // не список
-                            {
-                                SimpleParagraph(textNode, (Paragraph)element, rowIndex++);
-                                continue;
-                            }
-                        case "DocumentFormat.OpenXml.Wordprocessing.Table":
-                            textNode = null;
-                            Table(root, (Table)element, index++);
+                    case "DocumentFormat.OpenXml.Wordprocessing.Paragraph":
+                        if (textNode == null)
+                        {
+                            rowIndex = 1;
+                            textNode = new XElement("TEXT");
+                            textNode.Add(new XAttribute("id", index++));
+                            yield return textNode;
+                        }
+                        if (element.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>() != null) // список / не список
+                        {
+                            textNode.Add(ListParagraph((Paragraph)element, rowIndex++));
                             continue;
-                    }
-                }
-                catch // В случае наличия в документе тегов отличных от нужных, они будут проигнорированы
-                {
-                    continue;
+                        }
+                        else // не список
+                        {
+                            textNode.Add(SimpleParagraph((Paragraph)element, rowIndex++));
+                            continue;
+                        }
+                    case "DocumentFormat.OpenXml.Wordprocessing.Table":
+                        textNode = null;
+                        yield return (Table((Table)element, index++));
+                        continue;
                 }
             }
-            return root;
         }
 
-        public XElement ConvertByFile(string path)
+        public XElement ConvertByFile(string path, params object?[] rootContent)
         {
             if (!Path.IsPathFullyQualified(path))
             {
                 path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             }
             using FileStream fs = File.OpenRead(path);
-            return Convert(fs);
+            return new XElement(Convert(fs, rootContent));
         }
     }
 }

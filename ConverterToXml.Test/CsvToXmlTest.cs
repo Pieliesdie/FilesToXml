@@ -15,8 +15,7 @@ namespace ConverterToXml.Test
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/csv.csv";
 
-            using FileStream fs = new FileStream(path, FileMode.Open);
-            string result = converter.Convert(fs).ToString();
+            string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
         }
 
@@ -28,8 +27,7 @@ namespace ConverterToXml.Test
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/csv.csv";
 
-            using FileStream fs = new FileStream(path, FileMode.Open);
-            var result = converter.Convert(fs, encoding: Encoding.GetEncoding(1251) );
+            var result = converter.ConvertByFile(path, encoding: Encoding.GetEncoding(1251) );
             Assert.Equal("первый", result.Elements().First().Elements().First().Attribute("C1").Value);
         }
         
@@ -41,8 +39,7 @@ namespace ConverterToXml.Test
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/csv2.csv";
 
-            using FileStream fs = new FileStream(path, FileMode.Open);
-            var result = converter.Convert(fs, new[] {';', '|', '\t', ','} ,encoding: Encoding.GetEncoding(1251) );
+            var result = converter.ConvertByFile(path, new[] {';', '|', '\t', ','} ,encoding: Encoding.GetEncoding(1251) );
             Assert.Equal("step_id", result.Elements().First().Elements().First().Attribute("C1").Value);
         }
         
@@ -54,9 +51,8 @@ namespace ConverterToXml.Test
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/csv2.csv";
 
-            using FileStream fs = new FileStream(path, FileMode.Open);
-            var result = converter.Convert(fs, new[] {';', '|', '\t', ','}, encoding: Encoding.GetEncoding(1251) );
-            Assert.Equal("18526", result.Elements().First().Elements().Last().Attribute("C4").Value);
+            var result = converter.ConvertByFile(path, new[] {';', '|', '\t', ','}, encoding: Encoding.GetEncoding(1251) );
+            Assert.Equal("18526", result.Elements().First().Elements("R").Last().Attribute("C4").Value);
         }
     }
 }
