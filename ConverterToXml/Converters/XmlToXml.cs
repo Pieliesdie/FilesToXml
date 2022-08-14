@@ -12,50 +12,38 @@ namespace ConverterToXml.Converters
     {
         public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
-            return new XStreamingElement("DATASET", rootContent, XElement.Load(stream));
+            return new XStreamingElement("DATASET", rootContent, ParseXML(XmlReader.Create(stream)));
         }
 
-        //static IEnumerable<XStreamingElement> ParseXML(Stream xmlContent)
-        //{
-        //    var reader = XmlReader.Create(xmlContent);
-        //    var rootNodes = new List<XStreamingElement>();
-        //    var nodeStack = new Stack<XStreamingElement>();
-        //    while (reader.Read())
-        //    {
-        //        switch (reader.NodeType)
-        //        {
-        //            case XmlNodeType.Element:
-        //                var node = new XStreamingElement(reader.Name);
-        //                if (reader.MoveToFirstAttribute())
-        //                {
-        //                    // Read the attributes
-        //                    do
-        //                    {
-        //                        node.Add(new XAttribute(reader.Name, reader.Value));
-        //                    }
-        //                    while (reader.MoveToNextAttribute());
-        //                    // Move back to element
-        //                    reader.MoveToElement();
-        //                }
-        //                if (nodeStack.Count > 0)
-        //                {
-        //                    nodeStack.Peek().Add(node);
-        //                }
-        //                else
-        //                {
-        //                    rootNodes.Add(node);
-        //                }
-        //                if (!reader.IsEmptyElement)
-        //                    nodeStack.Push(node);
-        //                break;
+        private static IEnumerable<XStreamingElement> ParseXML(XmlReader reader)
+        {
+            while (reader.Read())
+            { 
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        var rd = reader.ReadSubtree();
+                        rd.MoveToContent();
+                        yield return new XStreamingElement(reader.Name, ReadAttributes(reader).ToList(), ParseXML(rd));
+                        break;
+                }
+            }
+        }
 
-        //            case XmlNodeType.EndElement:
-        //                nodeStack.Pop();
-        //                break;
-        //        }
-        //    }
-        //    return rootNodes;
-        //}
+        private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
+        {
+            if (reader.MoveToFirstAttribute())
+            {
+                // Read the attributes
+                do
+                {
+                    yield return new XAttribute(reader.Name, reader.Value);
+                }
+                while (reader.MoveToNextAttribute());
+                // Move back to element
+                reader.MoveToElement();
+            }
+        }
 
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
