@@ -58,7 +58,14 @@ partial class Program
                 {
                     using var sw = new StreamWriter(args.Output, false, Encoding.GetEncoding(args.OutputEncoding));
                     xDoc.Save(sw, args.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
-                    Console.WriteLine($"Convert succesful all files to {args.Output}");
+                    if (datasets.Any(x => x is null))
+                    {
+                        Console.WriteLine($"Convert all files with some errors");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Convert succesful all files to {args.Output}");
+                    }
                 }
             }
             catch (Exception e)
@@ -97,7 +104,8 @@ partial class Program
             {
                 additionalInfo.Add(new XAttribute("label", file.Label));
             }
-            var stream = File.OpenRead(file.Path); // Do i need to dispose it, if faster just close application?
+            // Do i need to dispose it, if faster just close application?
+            var stream = File.OpenRead(file.Path);
             var xml = convertor switch
             {
                 IDelimiterConvertable c when file.Delimiter == "auto" => c.Convert(stream, file.SearchingDelimiters, file.Encoding, additionalInfo),

@@ -45,17 +45,6 @@ namespace ConverterToXml.Converters
         }
         private static XStreamingElement? WorkSheetProcess(WorksheetPart worksheetPart, StringValue sheetName, int sheetIndex, ImmutableArray<OpenXmlElement> sharedStringTable, ImmutableArray<CellFormat> stylesheet)
         {
-            /*var rows = Read(worksheetPart)
-                .Select(row => RowProcess(row, sharedStringTable, stylesheet))
-                .Where(row => row is not null);
-             XAttribute[] demension = Array.Empty<XAttribute>();
-            if (worksheetPart.Worksheet.SheetDimension?.Reference?.Value is { } demensionReference)
-            {
-                var endDemension = demensionReference.Substring(Math.Max(0, demensionReference.IndexOf(":"))).Replace(":", "");
-                var rowIndex = Extensions.RowIndex(endDemension);
-                var columnIndex = Extensions.ColumnIndex(endDemension);
-                demension = new XAttribute[] { new XAttribute("columns", columnIndex), new XAttribute("rows", rowIndex) };
-            }*/
             var rows = ReadRows(worksheetPart, sharedStringTable, stylesheet);
             return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheetName), new XAttribute("id", sheetIndex), rows) : null;
         }

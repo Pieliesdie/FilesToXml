@@ -15,7 +15,7 @@ namespace ConverterToXml.Converters
         public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
         {
             var sr = new StreamReader(stream, encoding);
-            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TEXT", sr.ReadAllLines().Select(x=> $"{x}\r\n")));
+            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TEXT", sr.ReadAllLinesWithNewLine()));
         }
 
         public XElement ConvertByFile(string path, params object?[] rootContent) => this.ConvertByFile(path, Encoding.UTF8, rootContent);

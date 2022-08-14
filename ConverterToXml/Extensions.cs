@@ -19,8 +19,6 @@ namespace ConverterToXml
         }
         public static bool Not(this bool boolean) => !boolean;
 
-        public static string PrepareXqueryValue(this string value) => value.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("\\n", "&#xa;");
-
         public static int ColumnIndex(string reference)
         {
             int ci = 0;
@@ -39,9 +37,19 @@ namespace ConverterToXml
 
         public static IEnumerable<string> ReadAllLines(this StreamReader reader)
         {
-            while (reader.ReadLine() is { } line)
+            while (!reader.EndOfStream)
+            {
+                // yield return AsyncHelpers.RunSync(() => reader.ReadLineAsync())!;
+                yield return reader.ReadLine()!;
+            }
+        }
+
+        public static IEnumerable<string> ReadAllLinesWithNewLine(this StreamReader reader)
+        {
+            foreach(var line in reader.ReadAllLines())
             {
                 yield return line;
+                yield return Environment.NewLine;
             }
         }
 
