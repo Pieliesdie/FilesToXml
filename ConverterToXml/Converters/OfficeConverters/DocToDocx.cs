@@ -12,14 +12,10 @@ namespace ConverterToXml.Converters
     {
         public void ConvertFromFileToDocxFile(string docPath, string docxPath)
         {
-            using (FileStream fs = new FileStream(docPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                MemoryStream docxMemoryStream = ConvertFromStreamToDocxMemoryStream(fs);
-                using (FileStream docxFileStream = new FileStream(docxPath, FileMode.OpenOrCreate))
-                {
-                    docxFileStream.Write(docxMemoryStream.ToArray());
-                }
-            }
+            using var fs = new FileStream(docPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            MemoryStream docxMemoryStream = ConvertFromStreamToDocxMemoryStream(fs);
+            using var docxFileStream = new FileStream(docxPath, FileMode.OpenOrCreate);
+            docxFileStream.Write(docxMemoryStream.ToArray());
         }
 
         public MemoryStream ConvertFromStreamToDocxMemoryStream(Stream stream)

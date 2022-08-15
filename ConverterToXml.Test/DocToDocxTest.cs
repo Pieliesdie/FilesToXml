@@ -3,6 +3,7 @@ using Xunit;
 
 namespace ConverterToXml.Test
 {
+    [Collection("DocToXml")]
     public class DocToDocxTest
     {
         [Fact]
@@ -14,5 +15,6 @@ namespace ConverterToXml.Test
             converter.ConvertFromFileToDocxFile(path, curDir + @"/Files/Result.docx");
             Assert.True(File.Exists(curDir + @"/Files/Result.docx"));
         }
+
     }
 }

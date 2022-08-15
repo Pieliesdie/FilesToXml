@@ -7,10 +7,11 @@ using Xunit;
 
 namespace ConverterToXml.Test
 {
+    [Collection("XlsToXml")]
     public class XlsToXlsxTest
     {
         [Fact]
-        public void XlsxConverterTestNotNull()
+        public void XlsToXlsxConverterTestNotNull()
         {
             XlsToXlsx converter = new XlsToXlsx();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);

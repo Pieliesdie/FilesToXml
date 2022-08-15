@@ -10,6 +10,7 @@ Supported types for now:
   <li>doc</li>
   <li>docx</li>
   <li>xml</li>
+  <li>json</li>
 </ul>
 <br />
 console usage:
@@ -49,11 +50,12 @@ var xml = convertor switch
         + **TABLE**:
         +  *name*
         +  *id*
-        +  *columns*
-        +  *rows*
             + **R** :
             + *id*
             + *C{N}*
+			+ **METADATA**:
+			+  *columns*
+			+  *rows*
 ## csv
 * **DATA**:
     + **DATASET**:
@@ -62,11 +64,12 @@ var xml = convertor switch
     +   *label*
         + **TABLE**:
         +  *id*
-        +  *columns*
-        +  *rows*
             + **R** :
             + *id*
             + *C{N}*
+            + **METADATA**:
+			+  *columns*
+			+  *rows*
 ## xml
 * **DATA**:
     + **DATASET**:
@@ -98,8 +101,9 @@ var xml = convertor switch
             + *C{N}*
         + **TABLE**:
         +  *id*
-        +  *columns*
-        +  *rows*
             + **R** :
             + *id*
             + *C{N}*
+			+ **METADATA**:
+			+  *columns*
+			+  *rows*

@@ -21,6 +21,16 @@ namespace ConverterToXml.Test
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void TxtConvertToXmlNotNull()
+        {
+            var converter = new Converters.TxtToXml();
+            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"\Files\txt.txt";
+            string result = converter.Convert(File.Open(path, FileMode.Open)).ToString();
+            Assert.NotNull(result);
+        }
     }
 
 }

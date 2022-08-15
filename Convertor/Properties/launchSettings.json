@@ -6,7 +6,7 @@
     },
     "docx": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\git\\FilesToXml\\ConverterToXml.Test\\Files\\\\docx.docx -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\docx.docx -e 1251 -E 1251 -o D:\\test.xml -s"
     },
 
     "csv": {
@@ -16,7 +16,7 @@
 
     "xlsx": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\large.xlsx -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\large.xls -e 1251 -E 1251 -o D:\\test.xml -s"
     },
     "txt": {
       "commandName": "Project",
@@ -24,7 +24,11 @@
     },
     "xml": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\large.xml -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\test2.xml -e 1251 -E 1251 -o D:\\test.xml -s"
+    },
+    "json": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\json2.json -o D:\\test.xml -s"
     }
   }
 }

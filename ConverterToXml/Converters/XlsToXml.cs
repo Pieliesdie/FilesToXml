@@ -11,7 +11,7 @@ namespace ConverterToXml.Converters
         public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
             var str = new XlsToXlsx().Convert(stream);
-            using var ms = new MemoryStream(str.ToArray());
+            var ms = new MemoryStream(str.ToArray());
             return new XlsxToXml().Convert(ms, rootContent);
         }
 

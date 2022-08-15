@@ -60,11 +60,11 @@ partial class Program
                     xDoc.Save(sw, args.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
                     if (datasets.Any(x => x is null))
                     {
-                        Console.WriteLine($"Convert all files with some errors");
+                        Console.WriteLine($"Converted all files with some errors");
                     }
                     else
                     {
-                        Console.WriteLine($"Convert succesful all files to {args.Output}");
+                        Console.WriteLine($"Converted succesful all files to {args.Output}");
                     }
                 }
             }
@@ -93,6 +93,7 @@ partial class Program
                 SupportedFileExt.docx => new DocxToXml(),
                 SupportedFileExt.doc => new DocToXml(),
                 SupportedFileExt.xml => new XmlToXml(),
+                SupportedFileExt.json => new JsonToXml(),
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/
@@ -115,7 +116,7 @@ partial class Program
             };
             if (showLog)
             {
-                logReader?.WriteLine($"Succesful convert file: {file.Path}");
+                logReader?.WriteLine($"Succesful start converting file: {file.Path}");
             }                   
             return xml;
         }

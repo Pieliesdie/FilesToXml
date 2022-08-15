@@ -11,38 +11,31 @@ namespace ConverterToXml.Converters
 {
     public class DocxToXml : IConvertable
     {
-        private static XElement GetNewRow(int rowIndex, params object[] values)
-        {
-            var row = new XElement("R", new XAttribute("id", rowIndex));
-            var index = 1;
-            foreach (var val in values)
-            {
-                row.Add(new XAttribute($"C{index++}", val));
-            }
-            row.Attributes().Where(x => string.IsNullOrEmpty(x.Value)).Remove();
-            return row;
-        }
+        private static XStreamingElement GetNewRow(int rowIndex, params object[] values) =>
+            new("R",
+                new XAttribute("id", rowIndex),
+                values.Select((x, index) => new XAttribute($"C{index + 1}", x)).Where(x => string.IsNullOrEmpty(x.Value).Not()));
 
         /// <summary>
         /// Расстановка простых параграфов
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="p"></param>
-        private static XElement SimpleParagraph(Paragraph p, int rowIndex) => GetNewRow(rowIndex, p.InnerText);
+        private static XStreamingElement SimpleParagraph(Paragraph p, int rowIndex) => GetNewRow(rowIndex, p.InnerText);
 
         /// <summary>
         /// Обработка элементов списка
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="p"></param>
-        private static XElement ListParagraph(Paragraph p, int rowIndex)
+        private static XStreamingElement ListParagraph(Paragraph p, int rowIndex)
         {
             // уровень списка
-            var level = p.GetFirstChild<ParagraphProperties>().GetFirstChild<NumberingProperties>().GetFirstChild<NumberingLevelReference>().Val;
+            var level = p.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>()?.GetFirstChild<NumberingLevelReference>()?.Val;
             // id списка
-            var id = p.GetFirstChild<ParagraphProperties>().GetFirstChild<NumberingProperties>().GetFirstChild<NumberingId>().Val;
+            var id = p.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>()?.GetFirstChild<NumberingId>()?.Val;
             var row = GetNewRow(rowIndex, p.InnerText);
-            row.Add(new XAttribute("li", id), new XAttribute("level", level));
+            row.Add(new XAttribute("li", id ?? 0), new XAttribute("level", level ?? 0));
             return row;
         }
 
@@ -63,8 +56,8 @@ namespace ConverterToXml.Converters
                 maxColumnNumber = Math.Max(maxColumnNumber, cells.Length);
                 root.Add(row);
             }
-            root.Add(new XAttribute("columns", maxColumnNumber));
-            root.Add(new XAttribute("rows", rowIndex));
+            var metadata = new XElement("METADATA", new XAttribute("columns", maxColumnNumber), new XAttribute("rows", rowIndex - 1));
+            root.Add(metadata);
             return root;
         }
         public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
@@ -72,11 +65,11 @@ namespace ConverterToXml.Converters
             memStream.Position = 0;
             WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
             Body? docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
-            return new XStreamingElement("DATASET", rootContent, ReadLines(docBody));
+            return new XStreamingElement("DATASET", rootContent, ReadLines(docBody).ToList());
         }
         private static IEnumerable<XElement> ReadLines(Body? docBody)
         {
-            if(docBody == null) { yield break; }
+            if (docBody == null) { yield break; }
             XElement? textNode = null;
             var index = 0;
             var rowIndex = 1;

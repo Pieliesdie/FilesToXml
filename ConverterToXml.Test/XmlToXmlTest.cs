@@ -21,5 +21,16 @@ namespace ConverterToXml.Test
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public void XmlToXmlConvertTestNotNull()
+        {
+            var converter = new XmlToXml();
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xml.xml";
+            using var fs = File.Open(path, FileMode.Open);
+            string result = converter.Convert(fs).ToString();
+            Assert.NotNull(result);
+        }
     }
 }

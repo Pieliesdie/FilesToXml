@@ -15,7 +15,7 @@ namespace ConverterToXml.Converters
             return new XStreamingElement("DATASET", rootContent, ParseXML(XmlReader.Create(stream)));
         }
 
-        private static IEnumerable<XStreamingElement> ParseXML(XmlReader reader)
+        private static IEnumerable<object> ParseXML(XmlReader reader)
         {
             while (reader.Read())
             { 
@@ -26,10 +26,26 @@ namespace ConverterToXml.Converters
                         rd.MoveToContent();
                         yield return new XStreamingElement(reader.Name, ReadAttributes(reader).ToList(), ParseXML(rd));
                         break;
+                    case XmlNodeType.Text:
+                        yield return new XText(reader.Value);
+                        break;
+                    case XmlNodeType.CDATA:
+                        yield return new XCData(reader.Value);
+                        break;
+                    case XmlNodeType.Comment:
+                        yield return new XComment(reader.Value);
+                        break;
+                    case XmlNodeType.Whitespace:
+                        yield return reader.Value;
+                        break;
+                    case XmlNodeType.SignificantWhitespace:
+                        yield return reader.Value;
+                        break;
+                    case XmlNodeType.EndElement:
+                        break;
                 }
             }
         }
-
         private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
         {
             if (reader.MoveToFirstAttribute())

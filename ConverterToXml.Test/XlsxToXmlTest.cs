@@ -21,6 +21,16 @@ namespace ConverterToXml.Test
             Assert.NotNull(result);
 
         }
+        [Fact]
+        public void XlsxConvertToXmlNotNull()
+        {
+            var converter = new Converters.XlsxToXml();
+            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xlsx.xlsx";
+            using var fs = File.Open(path, FileMode.Open);
+            string result = converter.Convert(fs).ToString();
+            Assert.NotNull(result);
+        }
 
         [Fact]
         public void XlsxConverterTestReadSomeData()
