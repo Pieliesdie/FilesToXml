@@ -17,6 +17,19 @@ console usage:
 <pre>
 ./Convertor.exe -i xlsx.xlsx -o xlsx.xml -e 1251 -s
 </pre>
+Short key|Long key|Description
+| --- | --- | --- |
+-i|-in|Required. Set paths to input files (Example: -i C:\1.txt C:\2.txt)
+-o|--out|Set path to output file, if path is empty print to console
+-s|--forceSave|(Default: false) Save output file even if exist
+-d|--delimiters|(Default: auto) Set delimiters for csv and txt files
+-D|--searchingDelimiters|(Default: ; \|    ,) Set delimiters for auto-search in csv and txt files
+-e|--inEncoding|(Default: 65001) Set int32 codepages for input files (Example: -i C:\1.txt C:\2.txt -e 1251 65001)
+-E|--outEncoding|(Default: 65001) Set int32 codepage for output file
+-l|--labels|Set labels for input files, count must match the count of input files
+-F|--disableFormat|(Default: false) Format output xml
+|--support|Display supported types
+
 library usage:
 <pre>
 using ConverterToXml.Converters;

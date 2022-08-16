@@ -17,6 +17,10 @@ namespace ConverterToXml.Converters
 
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
+            if (!Path.IsPathFullyQualified(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+            }
             using var fs = File.OpenRead(path);
             return new XElement(Convert(fs, rootContent));
         }

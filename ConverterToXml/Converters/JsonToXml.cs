@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -17,7 +19,7 @@ namespace ConverterToXml.Converters
         public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
             var reader = new JsonTextReader(new StreamReader(stream));
-            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("ROOT", ParseJSON(JToken.ReadFrom(reader))));
+            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(JToken.ReadFrom(reader))));
         }
 
         private static IEnumerable<object> ParseJSON(JToken reader)
@@ -36,52 +38,22 @@ namespace ConverterToXml.Converters
                     case JTokenType.TimeSpan:
                         if (token is JValue jValue && jValue.Value is not null && jValue.Parent is JProperty jProperty)
                         {
-                            yield return new XAttribute(jProperty.Name, jValue.Value);
+                            yield return new XAttribute(XmlConvert.EncodeName(jProperty.Name), jValue.Value);
                         }
                         break;
                     case JTokenType.Object:
-                        yield return ParseJSON(token);
+                        JToken? jToken = token.Parent;
+                        while (jToken is not JProperty property)
+                        {
+                            jToken = jToken?.Parent;
+                        }
+                        yield return new XStreamingElement(((JProperty)jToken).Name, ParseJSON(token).ToList());
                         break;
                     case JTokenType.Array:
-                        yield return ParseJSON(token);  
-                        //foreach(var arrayToken in token)
-                        //{
-                        //    yield return new XStreamingElement((token.Parent as JProperty).Name, ParseJSON(arrayToken));
-                        //}
-                        break;
-                    case JTokenType.Constructor:
+                        yield return ParseJSON(token).ToList();
                         break;
                     case JTokenType.Property:
-                        var prop = (token as JProperty)!;
-                        if (prop.Value?.Type == JTokenType.Array)
-                        {
-                            foreach (var jarray in prop.Value)
-                            {
-                                var body = ParseJSON(jarray);
-                                if (body.Any())
-                                {
-                                    yield return new XStreamingElement(prop.Name, body);
-                                }
-                            }
-                        }
-                        else if(prop.Value?.Type == JTokenType.Object)
-                        {
-                            var body = ParseJSON(token);
-                            if (body.Any())
-                            {
-                                yield return new XStreamingElement(prop.Name, (ParseJSON(token)));
-                            }
-                        }
-                        else
-                        {
-                            yield return ParseJSON(token).ToList();
-                        }
-                        break;
-                    case JTokenType.Undefined:
-                        break;
-                    case JTokenType.Raw:
-                        break;
-                    case JTokenType.Bytes:
+                        yield return ParseJSON(token).ToList();
                         break;
                 }
             }
@@ -89,7 +61,12 @@ namespace ConverterToXml.Converters
 
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
-            throw new NotImplementedException();
+            if (!Path.IsPathFullyQualified(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+            }
+            using FileStream fs = File.OpenRead(path);
+            return new XElement(Convert(fs,rootContent));
         }
     }
 }

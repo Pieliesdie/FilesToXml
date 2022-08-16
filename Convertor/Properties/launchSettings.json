@@ -28,7 +28,7 @@
     },
     "json": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\json2.json -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\json.json -o D:\\test.xml -s"
     }
   }
 }
