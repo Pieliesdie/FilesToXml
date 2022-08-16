@@ -19,7 +19,7 @@ namespace ConverterToXml.Converters
         public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
             var reader = new JsonTextReader(new StreamReader(stream));
-            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(JToken.ReadFrom(reader))));
+            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("ROOT", ParseJSON(JToken.ReadFrom(reader))));
         }
 
         private static IEnumerable<object> ParseJSON(JToken reader)
@@ -47,7 +47,7 @@ namespace ConverterToXml.Converters
                         {
                             jToken = jToken?.Parent;
                         }
-                        yield return new XStreamingElement(((JProperty)jToken).Name, ParseJSON(token).ToList());
+                        yield return new XElement(((JProperty)jToken).Name, ParseJSON(token).ToList());
                         break;
                     case JTokenType.Array:
                         yield return ParseJSON(token).ToList();
