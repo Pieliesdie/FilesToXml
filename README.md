@@ -27,7 +27,7 @@ Short key|Long key|Description
 -D|--searchingDelimiters &nbsp; &nbsp; &nbsp; &nbsp;|(Default: ; \|    ,) Set delimiters for auto-search in csv and txt files
 -e|--inEncoding|(Default: 65001) Set int32 codepages for input files (Example: -i C:\1.txt C:\2.txt -e 1251 65001)
 -E|--outEncoding|(Default: 65001) Set int32 codepage for output file
--l|--labels|Set labels for input files, count must match the count of input files
+-l|--labels|Set labels for input files
 -F|--disableFormat|(Default: false) Format output xml
  ||--support|Display supported types
 
