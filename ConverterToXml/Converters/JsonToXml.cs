@@ -11,6 +11,14 @@ namespace ConverterToXml.Converters
 {
     public class JsonToXml : IConvertable
     {
+        //How to read line by line if we can get json like this?
+        //  {
+        //      "atr1" : 123,
+        //      "field1" : {
+        //          "attr1" : 456
+        //      },
+        //      "atr2" : 456
+        //  }
         public XStreamingElement Convert(Stream stream, params object?[] rootContent)
         {
             var reader = new JsonTextReader(new StreamReader(stream));
