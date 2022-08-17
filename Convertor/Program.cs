@@ -41,7 +41,7 @@ partial class Program
                 SearchingDelimiters: args.SearchingDelimiters?.ToArray()
             ));
 
-            var datasets = files.AsParallel().AsUnordered().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null));
+            var datasets = files.AsParallel().AsUnordered().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)).ToList();
             var xDoc = new XStreamingElement("DATA", datasets);
             try
             {
