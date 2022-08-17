@@ -59,7 +59,7 @@ var xml = convertor switch
 * **DATA**:
     + **DATASET**:
     +  *ext*
-    +  *label*
+    +  *label*  (optional)
     +  *path*
         + **TABLE**:
         +  *name*
@@ -75,7 +75,7 @@ var xml = convertor switch
     + **DATASET**:
     +  *ext*
     +  *path*
-    +   *label*
+    +   *label*  (optional)
         + **TABLE**:
         +  *id*
             + **R** :
@@ -87,7 +87,7 @@ var xml = convertor switch
 ## xml
 * **DATA**:
     + **DATASET**:
-    +  *label*
+    +  *label*  (optional)
     +  *ext*
     +  *path*
         + **{SourceXML}**
@@ -97,7 +97,7 @@ var xml = convertor switch
     + **DATASET**:
     +  *ext*
     +  *path*
-    +  *label*
+    +  *label*  (optional)
         + **TEXT**
         + *{PlainText}*
 
@@ -106,7 +106,7 @@ var xml = convertor switch
     + **DATASET**:
     +  *ext*
     +  *path*
-    +   *label*
+    +   *label*  (optional)
         + **TEXT**:
         + *id*
             + **R** :
@@ -121,3 +121,10 @@ var xml = convertor switch
 			+ **METADATA**:
 			+  *columns*
 			+  *rows*
+## json
+* **DATA**:
+    + **DATASET**:
+    +  *label*  (optional)
+    +  *ext*
+    +  *path*
+        + **{Convert Json Objects/Arrays to xml nodes, fields to attributes}**
