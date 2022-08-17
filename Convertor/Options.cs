@@ -30,7 +30,7 @@ namespace Convertor
             [Option('E', "outEncoding", Required = false, Default = 65001, HelpText = "Set int32 codepage for output file")]
             public int OutputEncoding { get; set; }
 
-            [Option('l', "labels", Required = false, HelpText = @"Set labels for input files, count must match the count of input files ")]
+            [Option('l', "labels", Required = false, HelpText = @"Set labels for input files")]
             public IEnumerable<string> Labels { get; set; }
 
             [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Format output xml")]

@@ -2,7 +2,7 @@
   "profiles": {
     "Convertor": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\large.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\large.csv D:\\testFiles -e 1251 -E 1251 -o D:\\test.xml -s -l ds1 ds2 ds3"
     },
     "docx": {
       "commandName": "Project",

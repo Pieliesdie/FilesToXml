@@ -25,28 +25,23 @@ partial class Program
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         Parser.Default.ParseArguments<Options>(args).WithParsed(args =>
         {
-            if (args.Labels.Any() && args.Input.Count() != args.Labels.Count())
-            {
-                Console.Error.WriteLine("Label count doesn't match the count of input files");
-                return;
-            }
             if (args.Output != null && args.ForceSave.Not() && File.Exists(args.Output))
             {
                 Console.Error.WriteLine("Output file already exist and ForceSave is false");
                 return;
             }
-
+            args.Input = Extensions.UnpackFolders(args.Input).ToList();
             Queue<string> delimeters = new(args.Delimiters);
             var files = args.Input.Select((filePath, index) => new ParsedFile(
                 Path: filePath,
-                Label: args.Labels.Any() ? args.Labels.ElementAt(index) : null,
+                Label: args.Labels.Any() ? args.Labels.ElementAtOrDefault(index) : null,
                 Encoding: Encoding.GetEncoding(index > args.InputEncoding.Count() - 1 ? args.InputEncoding.Last() : args.InputEncoding.ElementAt(index)),
                 Type: filePath.GetExtFromPath(),
                 Delimiter: filePath.GetDelimiter(delimeters),
                 SearchingDelimiters: args.SearchingDelimiters?.ToArray()
             ));
 
-            var datasets = files.AsParallel().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null)).ToArray();
+            var datasets = files.AsParallel().AsUnordered().Select(file => ProcessFile(file, Console.Error, Console.Out, args.Output != null));
             var xDoc = new XStreamingElement("DATA", datasets);
             try
             {
@@ -105,7 +100,7 @@ partial class Program
             {
                 additionalInfo.Add(new XAttribute("label", file.Label));
             }
-            // Do i need to dispose it, if faster just close application?
+            // Do i need to dispose it, if simplier just close application?
             var stream = File.OpenRead(file.Path);
             var xml = convertor switch
             {

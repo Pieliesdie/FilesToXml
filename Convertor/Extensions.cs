@@ -37,5 +37,25 @@ namespace Convertor
         public static bool Not(this bool boolean) => !boolean;
 
         public static string CreateString(this IEnumerable<char> chars) => new string(chars.ToArray());
+
+        public static IEnumerable<string> UnpackFolders(IEnumerable<string> pathList)
+        {
+            foreach (string path in pathList)
+            {
+                var pathInfo = File.GetAttributes(path);
+                if (pathInfo.HasFlag(FileAttributes.Directory))
+                {
+                    var files = Directory.GetFiles(path);
+                    foreach (var file in files)
+                    {
+                        yield return file;
+                    }
+                }
+                else
+                {
+                    yield return path;
+                }
+            }
+        }
     }
 }
