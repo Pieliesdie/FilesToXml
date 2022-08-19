@@ -23,11 +23,11 @@ namespace ConverterToXml.Converters
         {
             var reader = new JsonTextReader(new StreamReader(stream));
             var ds = JToken.ReadFrom(reader);
-            return new XStreamingElement("DATASET", rootContent, new XStreamingElement("ROOT", ParseJSON(ds)));
+            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
         }
         private static IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
         {
-            foreach (var token in reader)
+            foreach (var token in reader.OrderByDescending(x=> x.Type))
             {
                 switch (token.Type)
                 {
@@ -41,11 +41,18 @@ namespace ConverterToXml.Converters
                     case JTokenType.TimeSpan:
                         if (token is JValue { Value: not null } jValue)
                         {
-                            yield return new XAttribute(XmlConvert.EncodeName(nodeName), jValue.Value);
+                            if (nodeName.Contains('$'))
+                            {
+                                yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
+                            }
+                            else
+                            {
+                                yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
+                            }
                         }
                         break;
                     case JTokenType.Object:
-                        yield return new XElement(nodeName, ParseJSON(token).ToList());
+                         yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
                         break;
                     case JTokenType.Array:
                         yield return ParseJSON(token, nodeName).ToList();
@@ -57,6 +64,8 @@ namespace ConverterToXml.Converters
             }
         }
 
+        private static string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
+
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
             if (!Path.IsPathFullyQualified(path))
@@ -64,7 +73,7 @@ namespace ConverterToXml.Converters
                 path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
             }
             using FileStream fs = File.OpenRead(path);
-            return new XElement(Convert(fs,rootContent));
+            return new XElement(Convert(fs, rootContent));
         }
     }
 }

@@ -41,8 +41,6 @@ namespace ConverterToXml.Converters
                     case XmlNodeType.SignificantWhitespace:
                         yield return reader.Value;
                         break;
-                    case XmlNodeType.EndElement:
-                        break;
                 }
             }
         }
@@ -50,13 +48,11 @@ namespace ConverterToXml.Converters
         {
             if (reader.MoveToFirstAttribute())
             {
-                // Read the attributes
                 do
                 {
                     yield return new XAttribute(reader.Name, reader.Value);
                 }
                 while (reader.MoveToNextAttribute());
-                // Move back to element
                 reader.MoveToElement();
             }
         }
