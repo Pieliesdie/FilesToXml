@@ -7,6 +7,8 @@ using CommandLine;
 using System.Xml.Linq;
 using ConverterToXml;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net;
 
 namespace Convertor;
 
@@ -29,7 +31,7 @@ partial class Program
             {
                 Console.Error.WriteLine("Output file already exist and ForceSave is false");
                 return;
-            }
+            }            
             args.Input = Extensions.UnpackFolders(args.Input).ToList();
             Queue<string> delimeters = new(args.Delimiters);
             var files = args.Input.Select((filePath, index) => new ParsedFile(

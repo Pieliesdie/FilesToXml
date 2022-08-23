@@ -25,6 +25,13 @@ namespace ConverterToXml.Converters
             var ds = JToken.ReadFrom(reader);
             return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
         }
+        public XElement ConvertByFile(string path, params object?[] rootContent)
+        {
+            path = path.RelativePathToAbsoluteIfNeed();
+            using FileStream fs = File.OpenRead(path);
+            return new XElement(Convert(fs, rootContent));
+        }
+
         private static IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
         {
             foreach (var token in reader.OrderByDescending(x=> x.Type))
@@ -65,15 +72,5 @@ namespace ConverterToXml.Converters
         }
 
         private static string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
-
-        public XElement ConvertByFile(string path, params object?[] rootContent)
-        {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
-            using FileStream fs = File.OpenRead(path);
-            return new XElement(Convert(fs, rootContent));
-        }
     }
 }

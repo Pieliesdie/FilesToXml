@@ -14,6 +14,12 @@ namespace ConverterToXml.Converters
         {
             return new XStreamingElement("DATASET", rootContent, ParseXML(XmlReader.Create(stream)));
         }
+        public XElement ConvertByFile(string path, params object?[] rootContent)
+        {
+            path = path.RelativePathToAbsoluteIfNeed();
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            return new XElement(Convert(fs, rootContent));
+        }
 
         private static IEnumerable<object> ParseXML(XmlReader reader)
         {
@@ -55,16 +61,6 @@ namespace ConverterToXml.Converters
                 while (reader.MoveToNextAttribute());
                 reader.MoveToElement();
             }
-        }
-
-        public XElement ConvertByFile(string path, params object?[] rootContent)
-        {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
-            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            return new XElement(Convert(fs, rootContent));
         }
     }
 }

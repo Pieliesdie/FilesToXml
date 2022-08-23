@@ -22,10 +22,7 @@ namespace ConverterToXml.Converters
 
         public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
         {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
+            path = path.RelativePathToAbsoluteIfNeed();
             using FileStream fs = File.OpenRead(path);
             return new XElement(Convert(fs, encoding, rootContent));
         }

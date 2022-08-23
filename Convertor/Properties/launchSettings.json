@@ -24,7 +24,7 @@
     },
     "xml": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\test2.xml -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\testFiles -e 1251 -E 1251 -o D:\\test.xml -s"
     },
     "json": {
       "commandName": "Project",

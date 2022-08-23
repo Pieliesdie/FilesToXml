@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConverterToXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +43,11 @@ namespace Convertor
         {
             foreach (string path in pathList)
             {
+                if (File.Exists(path).Not() && Directory.Exists(path).Not())
+                {
+                    yield return path;
+                    continue;
+                }
                 var pathInfo = File.GetAttributes(path);
                 if (pathInfo.HasFlag(FileAttributes.Directory))
                 {

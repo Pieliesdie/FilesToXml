@@ -15,6 +15,43 @@ namespace ConverterToXml.Converters
             return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TABLE", new XAttribute("id", 0), ReadLines(stream, delimiter, encoding)));
         }
 
+        public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
+        {
+            ArgumentNullException.ThrowIfNull(searchingDelimiters);
+            ArgumentNullException.ThrowIfNull(stream);
+            var sr = new StreamReader(stream);
+            var lines = sr.ReadAllLines().Take(100).ToArray();
+            var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
+            sr.DiscardBufferedData();
+            sr.BaseStream.Seek(0, SeekOrigin.Begin);
+            return Convert(stream, delimiter, encoding, rootContent);
+        }
+
+        public XStreamingElement Convert(Stream stream, string delimiter, params object?[] rootContent) => Convert(stream, delimiter, Encoding.UTF8, rootContent);
+
+        public XStreamingElement Convert(Stream stream, params object?[] rootContent) => Convert(stream, ";", rootContent);
+
+        public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent) => Convert(stream, ";", encoding, rootContent);
+
+        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
+        {
+            using var fs = File.OpenRead(path);
+            return new XElement(Convert(fs, searchingDelimiters, encoding, rootContent));
+        }
+
+        public XElement ConvertByFile(string path, string delimiter, Encoding encoding, params object?[] rootContent)
+        {
+            path = path.RelativePathToAbsoluteIfNeed();
+            using var fs = File.OpenRead(path);
+            return new XElement(Convert(fs, delimiter, encoding, rootContent));
+        }
+
+        public XElement ConvertByFile(string path, string delimiter, params object?[] rootContent) => ConvertByFile(path, delimiter, Encoding.UTF8, rootContent);
+
+        public XElement ConvertByFile(string path, params object?[] rootContent) => ConvertByFile(path, ";", rootContent);
+
+        public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent) => ConvertByFile(path, ";", encoding, rootContent);
+        
         private static IEnumerable<XStreamingElement> ReadLines(Stream stream, string delimiter, Encoding encoding)
         {
             var csvParser = new TextFieldParser(stream, encoding)
@@ -67,45 +104,5 @@ namespace ConverterToXml.Converters
 
             return q.First().Separator;
         }
-
-        public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
-        {
-            ArgumentNullException.ThrowIfNull(searchingDelimiters);
-            ArgumentNullException.ThrowIfNull(stream);
-            var sr = new StreamReader(stream);
-            var lines = sr.ReadAllLines().Take(100).ToArray();
-            var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
-            sr.DiscardBufferedData();
-            sr.BaseStream.Seek(0, SeekOrigin.Begin);
-            return Convert(stream, delimiter, encoding, rootContent);
-        }
-
-        public XStreamingElement Convert(Stream stream, string delimiter, params object?[] rootContent) => Convert(stream, delimiter, Encoding.UTF8, rootContent);
-
-        public XStreamingElement Convert(Stream stream, params object?[] rootContent) => Convert(stream, ";", rootContent);
-
-        public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent) => Convert(stream, ";", encoding, rootContent);
-
-        public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
-        {
-            using var fs = File.OpenRead(path);
-            return new XElement(Convert(fs, searchingDelimiters, encoding, rootContent));
-        }
-
-        public XElement ConvertByFile(string path, string delimiter, Encoding encoding, params object?[] rootContent)
-        {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
-            using var fs = File.OpenRead(path);
-            return new XElement(Convert(fs, delimiter, encoding, rootContent));
-        }
-
-        public XElement ConvertByFile(string path, string delimiter, params object?[] rootContent) => ConvertByFile(path, delimiter, Encoding.UTF8, rootContent);
-
-        public XElement ConvertByFile(string path, params object?[] rootContent) => ConvertByFile(path, ";", rootContent);
-
-        public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent) => ConvertByFile(path, ";", encoding, rootContent);
     }
 }

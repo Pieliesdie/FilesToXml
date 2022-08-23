@@ -57,5 +57,14 @@ namespace ConverterToXml
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(value ?? ""));
         }
+
+        public static string RelativePathToAbsoluteIfNeed(this string path)
+        {
+            if (!Path.IsPathFullyQualified(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+            }
+            return path;
+        }
     }
 }

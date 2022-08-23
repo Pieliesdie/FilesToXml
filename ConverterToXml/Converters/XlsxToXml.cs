@@ -14,19 +14,15 @@ namespace ConverterToXml.Converters
 {
     public partial class XlsxToXml : IConvertable
     {
-        private record SheetModel(int Id, string Name, WorksheetPart SheetData);
         public XStreamingElement Convert(Stream memStream, params object?[] rootContent) => SpreadsheetProcess(memStream, rootContent);
 
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
+            path = path.RelativePathToAbsoluteIfNeed();
             using FileStream fs = File.Open(path, FileMode.Open);
             return new XElement(Convert(fs, rootContent));
         }
-
+        private record SheetModel(int Id, string Name, WorksheetPart SheetData);
         /// <summary>
         /// Method of processing xlsx document
         /// </summary>

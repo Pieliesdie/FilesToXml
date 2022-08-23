@@ -11,6 +11,20 @@ namespace ConverterToXml.Converters
 {
     public class DocxToXml : IConvertable
     {
+        public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
+        {
+            memStream.Position = 0;
+            WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
+            Body? docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
+            return new XStreamingElement("DATASET", rootContent, ReadLines(docBody).ToList());
+        }
+        public XElement ConvertByFile(string path, params object?[] rootContent)
+        {
+            path = path.RelativePathToAbsoluteIfNeed();
+            using FileStream fs = File.OpenRead(path);
+            return new XElement(Convert(fs, rootContent));
+        }
+
         private static XStreamingElement GetNewRow(int rowIndex, params object[] values) =>
             new("R",
                 new XAttribute("id", rowIndex),
@@ -60,13 +74,6 @@ namespace ConverterToXml.Converters
             root.Add(metadata);
             return root;
         }
-        public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
-        {
-            memStream.Position = 0;
-            WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
-            Body? docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
-            return new XStreamingElement("DATASET", rootContent, ReadLines(docBody).ToList());
-        }
         private static IEnumerable<XElement> ReadLines(Body? docBody)
         {
             if (docBody == null) { yield break; }
@@ -103,16 +110,6 @@ namespace ConverterToXml.Converters
                         continue;
                 }
             }
-        }
-
-        public XElement ConvertByFile(string path, params object?[] rootContent)
-        {
-            if (!Path.IsPathFullyQualified(path))
-            {
-                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-            }
-            using FileStream fs = File.OpenRead(path);
-            return new XElement(Convert(fs, rootContent));
         }
     }
 }
