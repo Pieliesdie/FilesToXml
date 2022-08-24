@@ -11,6 +11,7 @@ Supported types for now:
   <li>docx</li>
   <li>xml</li>
   <li>json</li>
+  <li>tsv</li>
 </ul>
 <br />
 console usage:
@@ -70,7 +71,7 @@ var xml = convertor switch
 			+ **METADATA**:
 			+  *columns*
 			+  *rows*
-## csv
+## csv/tsv
 * **DATA**:
     + **DATASET**:
     +  *ext*
