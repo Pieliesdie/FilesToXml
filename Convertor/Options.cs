@@ -17,7 +17,7 @@ namespace Convertor
             [Option('s', "forceSave", Required = false, Default = false, HelpText = "Save output file even if exist")]
             public bool ForceSave { get; set; }
 
-            [Option('d', "delimiters", Required = false, Default = new[] { "auto" }, HelpText = "Set delimiters for csv and txt files")]
+            [Option('d', "delimiters", Required = false, Default = new[] { "auto" }, HelpText = "Set delimiters for csv files")]
             public IEnumerable<string> Delimiters { get; set; }
 
             [Option('D', "searchingDelimiters", Required = false, Default = new[] {';', '|', '\t', ','},
