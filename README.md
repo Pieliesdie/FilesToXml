@@ -24,12 +24,12 @@ Short key|Long key|Description
 -i|--in|Required. Set paths to input files (Example: -i C:\1.txt C:\2.txt)
 -o|--out|Set path to output file, if path is empty print to console
 -s|--forceSave|(Default: false) Save output file even if exist
--d|--delimiters|(Default: auto) Set delimiters for csv and txt files
+-d|--delimiters|(Default: auto) Set delimiters for csv files
 -D|--searchingDelimiters &nbsp; &nbsp; &nbsp; &nbsp;|(Default: ; \|    ,) Set delimiters for auto-search in csv files
 -e|--inEncoding|(Default: 65001) Set int32 codepages for input files (Example: -i C:\1.txt C:\2.txt -e 1251 65001)
 -E|--outEncoding|(Default: 65001) Set int32 codepage for output file
 -l|--labels|Set labels for input files
--F|--disableFormat|(Default: false) Format output xml
+-F|--disableFormat|(Default: false) Disable format output xml
  ||--support|Display supported types
 
 library usage:

@@ -21,7 +21,7 @@ namespace Convertor
             public IEnumerable<string> Delimiters { get; set; }
 
             [Option('D', "searchingDelimiters", Required = false, Default = new[] {';', '|', '\t', ','},
-                HelpText = "Set delimiters for auto-search in csv and txt files")]
+                HelpText = "Set delimiters for auto-search in csv files")]
             public IEnumerable<char> SearchingDelimiters { get; set; }
 
             [Option('e', "inEncoding", Required = false, Default = new[] { 65001 }, HelpText = @"Set int32 codepages for input files (Example: -i C:\1.txt C:\2.txt -e 1251 65001)")]
@@ -33,7 +33,7 @@ namespace Convertor
             [Option('l', "labels", Required = false, HelpText = @"Set labels for input files")]
             public IEnumerable<string> Labels { get; set; }
 
-            [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Format output xml")]
+            [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Disable format output xml")]
             public bool DisableFormat { get; set; }
 
             [Option("support", Required = false, HelpText = "Display supported types")]
