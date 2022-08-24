@@ -9,7 +9,8 @@
         doc = 5,
         docx = 6,
         xml = 7,
-        json = 8
+        json = 8,
+        tsv = 9
         /*    ,
         rtf = 8,
         ods = 9,

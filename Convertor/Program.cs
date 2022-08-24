@@ -91,6 +91,7 @@ partial class Program
                 SupportedFileExt.doc => new DocToXml(),
                 SupportedFileExt.xml => new XmlToXml(),
                 SupportedFileExt.json => new JsonToXml(),
+                SupportedFileExt.tsv => new TsvToXml(),
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/

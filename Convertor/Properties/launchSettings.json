@@ -20,15 +20,19 @@
     },
     "txt": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\large.txt -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\txt.txt -e 1251 -E 1251 -o D:\\test.xml -s"
     },
     "xml": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\testFiles -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i D:\\large.xml -e 1251 -E 1251 -o D:\\test.xml -s"
     },
     "json": {
       "commandName": "Project",
       "commandLineArgs": "-i D:\\json.json -o D:\\test.xml -s"
+    },
+    "tsv": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\tsv.tsv -o D:\\test.xml -s"
     }
   }
 }

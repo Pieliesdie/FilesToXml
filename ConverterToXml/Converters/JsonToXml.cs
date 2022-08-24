@@ -4,73 +4,79 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace ConverterToXml.Converters
+namespace ConverterToXml.Converters;
+public class JsonToXml : IEncodingConvertable 
 {
-    public class JsonToXml : IConvertable
+    //How to read line by line if we can get json like this?
+    //  {
+    //      "atr1" : 123,
+    //      "field1" : {
+    //          "attr1" : 456
+    //      },
+    //      "atr2" : 456
+    //  }
+    public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        //How to read line by line if we can get json like this?
-        //  {
-        //      "atr1" : 123,
-        //      "field1" : {
-        //          "attr1" : 456
-        //      },
-        //      "atr2" : 456
-        //  }
-        public XStreamingElement Convert(Stream stream, params object?[] rootContent)
-        {
-            var reader = new JsonTextReader(new StreamReader(stream));
-            var ds = JToken.ReadFrom(reader);
-            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
-        }
-        public XElement ConvertByFile(string path, params object?[] rootContent)
-        {
-            path = path.RelativePathToAbsoluteIfNeed();
-            using FileStream fs = File.OpenRead(path);
-            return new XElement(Convert(fs, rootContent));
-        }
+        var reader = new JsonTextReader(new StreamReader(stream, encoding));
+        var ds = JToken.ReadFrom(reader);
+        return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
+    }
 
-        private static IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
+    public XStreamingElement Convert(Stream stream, params object?[] rootContent)
+        => Convert(stream, Encoding.UTF8, rootContent);
+
+    public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
+    {
+        path = path.RelativePathToAbsoluteIfNeed();
+        using FileStream fs = File.OpenRead(path);
+        return new XElement(Convert(fs, encoding ,rootContent));
+    }
+
+    public XElement ConvertByFile(string path, params object?[] rootContent)
+        => ConvertByFile(path, Encoding.UTF8, rootContent);
+
+    private static IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
+    {
+        foreach (var token in reader.OrderByDescending(x=> x.Type))
         {
-            foreach (var token in reader.OrderByDescending(x=> x.Type))
+            switch (token.Type)
             {
-                switch (token.Type)
-                {
-                    case JTokenType.String:
-                    case JTokenType.Boolean:
-                    case JTokenType.Float:
-                    case JTokenType.Integer:
-                    case JTokenType.Date:
-                    case JTokenType.Guid:
-                    case JTokenType.Uri:
-                    case JTokenType.TimeSpan:
-                        if (token is JValue { Value: not null } jValue)
+                case JTokenType.String:
+                case JTokenType.Boolean:
+                case JTokenType.Float:
+                case JTokenType.Integer:
+                case JTokenType.Date:
+                case JTokenType.Guid:
+                case JTokenType.Uri:
+                case JTokenType.TimeSpan:
+                    if (token is JValue { Value: not null } jValue)
+                    {
+                        if (nodeName.Contains('$'))
                         {
-                            if (nodeName.Contains('$'))
-                            {
-                                yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
-                            }
-                            else
-                            {
-                                yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
-                            }
+                            yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
                         }
-                        break;
-                    case JTokenType.Object:
-                         yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
-                        break;
-                    case JTokenType.Array:
-                        yield return ParseJSON(token, nodeName).ToList();
-                        break;
-                    case JTokenType.Property:
-                        yield return ParseJSON(token, (token as JProperty)?.Name ?? "ROOT").ToList();
-                        break;
-                }
+                        else
+                        {
+                            yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
+                        }
+                    }
+                    break;
+                case JTokenType.Object:
+                     yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
+                    break;
+                case JTokenType.Array:
+                    yield return ParseJSON(token, nodeName).ToList();
+                    break;
+                case JTokenType.Property:
+                    yield return ParseJSON(token, (token as JProperty)?.Name ?? "ROOT").ToList();
+                    break;
             }
         }
-
-        private static string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
     }
+
+    private static string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
 }
