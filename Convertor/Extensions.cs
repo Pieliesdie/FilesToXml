@@ -37,7 +37,7 @@ namespace Convertor
         }
         public static bool Not(this bool boolean) => !boolean;
 
-        public static string CreateString(this IEnumerable<char> chars) => new string(chars.ToArray());
+        public static string CreateString(this IEnumerable<char> chars) => new(chars.ToArray());
 
         public static IEnumerable<string> UnpackFolders(IEnumerable<string> pathList)
         {

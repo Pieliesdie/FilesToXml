@@ -31,6 +31,9 @@
     <None Update="Ethalons\xlsx.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Files\dbf.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Files\json.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

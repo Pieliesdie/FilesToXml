@@ -33,6 +33,10 @@
     "tsv": {
       "commandName": "Project",
       "commandLineArgs": "-i D:\\tsv.tsv -o D:\\test.xml -s"
+    },
+    "dbf": {
+      "commandName": "Project",
+      "commandLineArgs": "-i H:\\dbf.dbf -o H:\\test.xml -s"
     }
   }
 }

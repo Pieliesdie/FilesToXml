@@ -35,7 +35,7 @@ partial class Program
             args.Input = Extensions.UnpackFolders(args.Input).ToList();
             Queue<string> delimeters = new(args.Delimiters);
             var files = args.Input.Select((filePath, index) => new ParsedFile(
-                Path: filePath,
+                Path: filePath.RelativePathToAbsoluteIfNeed(),
                 Label: args.Labels.Any() ? args.Labels.ElementAtOrDefault(index) : null,
                 Encoding: Encoding.GetEncoding(index > args.InputEncoding.Count() - 1 ? args.InputEncoding.Last() : args.InputEncoding.ElementAt(index)),
                 Type: filePath.GetExtFromPath(),
@@ -92,6 +92,7 @@ partial class Program
                 SupportedFileExt.xml => new XmlToXml(),
                 SupportedFileExt.json => new JsonToXml(),
                 SupportedFileExt.tsv => new TsvToXml(),
+                SupportedFileExt.dbf => new DbfToXml(),
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/
