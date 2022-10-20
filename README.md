@@ -12,6 +12,7 @@ Supported types for now:
   <li>xml</li>
   <li>json</li>
   <li>tsv</li>
+  <li>dbf</li>
 </ul>
 <br />
 console usage:
@@ -71,7 +72,7 @@ var xml = convertor switch
 			+ **METADATA**:
 			+  *columns*
 			+  *rows*
-## csv/tsv
+## csv/tsv/dbf
 * **DATA**:
     + **DATASET**:
     +  *ext*

@@ -1,9 +1,7 @@
 ﻿using DbfDataReader;
-using Org.BouncyCastle.Crypto.IO;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace ConverterToXml.Converters
@@ -19,7 +17,6 @@ namespace ConverterToXml.Converters
         {
             using var dbfTable = new DbfTable(stream);
             var dbfRecord = new DbfRecord(dbfTable);
-
             var lineNumber = 0;
             var headerRow = dbfTable.Columns.Select((column, index) => new XAttribute($"C{index + 1}", column.ColumnName));
             yield return new XStreamingElement("R", new XAttribute("id", ++lineNumber), headerRow);
@@ -31,7 +28,6 @@ namespace ConverterToXml.Converters
             }
             yield return new XStreamingElement("METADATA", new XAttribute("columns", dbfTable.Columns.Count), new XAttribute("rows", lineNumber));
         }
-
 
         public XElement ConvertByFile(string path, params object?[] rootContent)
         {
