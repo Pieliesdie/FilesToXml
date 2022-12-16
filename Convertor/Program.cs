@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 
-namespace Convertor;
+namespace Converter;
 
 partial class Program
 {

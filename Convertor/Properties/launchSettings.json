@@ -36,7 +36,7 @@
     },
     "dbf": {
       "commandName": "Project",
-      "commandLineArgs": "-i H:\\dbf.dbf -o H:\\test.xml -s"
+      "commandLineArgs": "-i D:\\dbf.dbf -o D:\\test.xml -s"
     }
   }
 }
