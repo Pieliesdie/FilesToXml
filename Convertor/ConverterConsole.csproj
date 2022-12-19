@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<Description>
+			Convert files of types:
+			xls , xlsx, txt, csv, doc, docx
+		</Description>
+		<Company>Infostandart</Company>
+		<Authors>Ponomarev Oleg pov@infostandart.com</Authors>
+		<PackageReleaseNotes></PackageReleaseNotes>
+		<NeutralLanguage />
+		<RepositoryUrl>https://github.com/Pieliesdie/FilesToXml</RepositoryUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<DebugType>embedded</DebugType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<SelfContained>True</SelfContained>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ConverterToXml\ConverterToXml.csproj" />
+	</ItemGroup>
+
+</Project>

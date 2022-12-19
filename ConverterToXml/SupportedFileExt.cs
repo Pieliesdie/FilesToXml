@@ -1,4 +1,4 @@
-﻿namespace Converter;
+﻿namespace ConverterConsole;
 public enum SupportedFileExt
 {
     xlsx = 1,

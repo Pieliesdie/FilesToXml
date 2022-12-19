@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
-using b2xtranslator.StructuredStorage.Reader;
-using b2xtranslator.DocFileFormat;
+﻿using b2xtranslator.DocFileFormat;
 using b2xtranslator.OpenXmlLib.WordprocessingML;
+using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.WordprocessingMLMapping;
+using System.IO;
 using static b2xtranslator.OpenXmlLib.OpenXmlPackage;
 
 namespace ConverterToXml.Converters

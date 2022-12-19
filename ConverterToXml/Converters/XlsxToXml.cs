@@ -22,7 +22,18 @@ public partial class XlsxToXml : IConvertable
         using FileStream fs = File.Open(path, FileMode.Open);
         return new XElement(Convert(fs, rootContent));
     }
-    private record SheetModel(int Id, string Name, WorksheetPart SheetData);
+    private struct SheetModel
+    {
+        public SheetModel(int id, string? name, WorksheetPart sheetData)
+        {
+            Id = id;
+            Name = name;
+            SheetData = sheetData;
+        }
+        public int Id { get; private set; }
+        public string? Name { get; private set; }
+        public WorksheetPart SheetData { get; private set; }
+    }
     /// <summary>
     /// Method of processing xlsx document
     /// </summary>

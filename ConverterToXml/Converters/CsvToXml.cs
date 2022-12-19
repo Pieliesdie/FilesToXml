@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.VisualBasic.FileIO;
+using NotVisualBasic.FileIO;
 
 namespace ConverterToXml.Converters;
 public class CsvToXml : IDelimiterConvertable
@@ -16,8 +16,9 @@ public class CsvToXml : IDelimiterConvertable
 
     public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding, params object?[] rootContent)
     {
-        ArgumentNullException.ThrowIfNull(searchingDelimiters);
-        ArgumentNullException.ThrowIfNull(stream);
+        if (searchingDelimiters is null) throw new NullReferenceException(nameof(searchingDelimiters));
+        if (stream is null) throw new ArgumentNullException(nameof(stream));
+
         var sr = new StreamReader(stream);
         var lines = sr.ReadAllLines().Take(100).ToArray();
         var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
@@ -50,12 +51,12 @@ public class CsvToXml : IDelimiterConvertable
     public XElement ConvertByFile(string path, params object?[] rootContent) => ConvertByFile(path, ";", rootContent);
 
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent) => ConvertByFile(path, ";", encoding, rootContent);
-    
+
     private static IEnumerable<XStreamingElement> ReadLines(Stream stream, string delimiter, Encoding encoding)
     {
-        var csvParser = new TextFieldParser(stream, encoding)
+        var csvParser = new CsvTextFieldParser(stream, encoding)
         {
-            CommentTokens = new[] { "#" },
+            //CommentTokens = new[] { "#" },
             Delimiters = new[] { delimiter },
             HasFieldsEnclosedInQuotes = true
         };
@@ -89,9 +90,9 @@ public class CsvToXml : IDelimiterConvertable
 
         foreach (var sep in q.Select(x => x.Separator))
         {
-            using var csvParser = new TextFieldParser(stream)
+            using var csvParser = new CsvTextFieldParser(stream)
             {
-                CommentTokens = new[] { "#" },
+                //CommentTokens = new[] { "#" },
                 Delimiters = new[] { sep.ToString() },
                 HasFieldsEnclosedInQuotes = true
             };
