@@ -1,5 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Xml.Linq;
 
 namespace ConverterWasm;
@@ -8,7 +10,7 @@ public partial class Program
 {
     // Entry point is invoked by the JavaScript runtime on boot.
     public static void Main()
-    {     
+    {
         Console.WriteLine($"DotNet here!");
     }
 
@@ -18,9 +20,43 @@ public partial class Program
     [JSInvokable] // The method is invoked from JavaScript.
     public static string Formatter(string xml) => XElement.Parse(xml).ToString();
 
+    [JSInvokable] // The method is invoked from JavaScript.
+    public static string DefaultOptions()
+    {
+        return JsonSerializer.Serialize(new WasmOptions());
+    }
     //[JSInvokable]
     //public static void Convert(string[] args) => ConverterConsole.Program.Main(args);
 
-    //[JSInvokable]
-    //public static void Convert(Options args) => ConverterToXml.ConverterToXml.Convert(args, Console.Out, Console.Error);
+    [JSInvokable]
+    public static void Convert(
+        string[] input,
+        string output,
+        char[] searchingDelimiters = null,
+        string[] delimiters = null,
+        int[] inputEncoding = null,
+        string[] labels = null,
+        int outputEncoding = 65001,
+        bool disableFormat = false,
+        bool forceSave = false)
+    {
+        searchingDelimiters ??= new[] { ';', '|', '\t', ',' };
+        delimiters ??= new[] { "auto" };
+        inputEncoding ??= new[] { 65001 };
+        labels ??= new string[0]; 
+        var options = new WasmOptions
+        {
+            Delimiters = delimiters,
+            InputEncoding = inputEncoding,
+            Labels = labels,
+            Output = output,
+            SearchingDelimiters = searchingDelimiters,
+            DisableFormat = disableFormat,
+            ForceSave = forceSave,
+            Input = input,
+            OutputEncoding = outputEncoding
+        };
+
+        ConverterToXml.ConverterToXml.Convert(options, Console.Out, Console.Error);
+    }
 }

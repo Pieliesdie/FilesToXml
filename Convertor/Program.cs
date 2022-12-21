@@ -23,5 +23,4 @@ public partial class Program
             ConverterToXml.ConverterToXml.Convert(args, Console.Out, Console.Error);
         });
     }
-    
 }

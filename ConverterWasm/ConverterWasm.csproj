@@ -1,12 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<PublishTrimmed>true</PublishTrimmed>
-		<TrimMode>full</TrimMode>
 		<Nullable>enable</Nullable>
+		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
+		<BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+		<BlazorEnableCompression>true</BlazorEnableCompression>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<TrimMode>link</TrimMode>
+		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="DotNetJS" Version="0.21.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ConverterToXml\ConverterToXml.csproj" />
 	</ItemGroup>
 </Project>

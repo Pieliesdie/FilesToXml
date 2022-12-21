@@ -1,5 +1,4 @@
-﻿using ConverterConsole;
-using ConverterToXml.Converters;
+﻿using ConverterToXml.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Xml.Linq;
 
 namespace ConverterToXml;
-public static partial class ConverterToXml
+public static class ConverterToXml
 {
     public static void Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)
     {
@@ -17,7 +16,7 @@ public static partial class ConverterToXml
             errorWritter.WriteLine("Output file already exist and ForceSave is false");
             return;
         }
-        options.Input = Extensions.UnpackFolders(options.Input).ToList();
+        options.Input = Extensions.UnpackFolders(options.Input).ToArray();
         Queue<string> delimeters = new(options.Delimiters);
         var files = options.Input.Select((filePath, index) => new ParsedFile(
             path: filePath.RelativePathToAbsoluteIfNeed(),
