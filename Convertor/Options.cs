@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using ConverterToXml;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ConverterConsole;
 

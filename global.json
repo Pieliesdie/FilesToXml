@@ -1,6 +1,3 @@
 {
-  "sdk": {
-    "rollForward": "latestMajor",
-    "allowPrerelease": false
-  }
+
 }

@@ -3,13 +3,13 @@
 namespace ConverterToXml;
 public interface IOptions
 {
-    IEnumerable<string> Delimiters { get; set; }
-    bool DisableFormat { get; set; }
-    bool ForceSave { get; set; } 
+    IEnumerable<string> Delimiters { get; }
+    bool DisableFormat { get;  }
+    bool ForceSave { get;  } 
     IEnumerable<string> Input { get; set; }
-    IEnumerable<int> InputEncoding { get; set; }
-    IEnumerable<string> Labels { get; set; }
-    string Output { get; set; }
-    int OutputEncoding { get; set; }
-    IEnumerable<char> SearchingDelimiters { get; set; }
+    IEnumerable<int> InputEncoding { get; }
+    IEnumerable<string> Labels { get; }
+    string Output { get; }
+    int OutputEncoding { get; }
+    IEnumerable<char> SearchingDelimiters { get; }
 }

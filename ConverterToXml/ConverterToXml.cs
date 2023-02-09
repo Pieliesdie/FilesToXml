@@ -4,41 +4,44 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace ConverterToXml;
 public static class ConverterToXml
 {
-    public static void Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)
+    public static bool Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)
     {
         if (options.Output != null && options.ForceSave.Not() && File.Exists(options.Output))
         {
             errorWritter.WriteLine("Output file already exist and ForceSave is false");
-            return;
+            return false;
         }
         options.Input = Extensions.UnpackFolders(options.Input).ToArray();
         Queue<string> delimeters = new(options.Delimiters);
         var files = options.Input.Select((filePath, index) => new ParsedFile(
             path: filePath.RelativePathToAbsoluteIfNeed(),
-            label: options.Labels.Any() ? options.Labels.ElementAtOrDefault(index) : null,
+            label: (options.Labels?.Any() ?? false) ? options.Labels.ElementAtOrDefault(index) : null,
             encoding: Encoding.GetEncoding(index > options.InputEncoding.Count() - 1 ? options.InputEncoding.Last() : options.InputEncoding.ElementAt(index)),
             type: filePath.GetExtFromPath(),
             delimiter: filePath.GetDelimiter(delimeters),
-            searchingDelimiters: options.SearchingDelimiters?.ToArray()
+            searchingDelimiters: options.SearchingDelimiters?.ToArray() ?? new[] { ';', '|', '\t', ',' }
         ));
 
         var datasets = files.AsParallel().AsUnordered().Select(file => ProcessFile(file, errorWritter, outputWritter, options.Output != null)).ToList();
         var xDoc = new XStreamingElement("DATA", datasets);
         try
         {
-            if (options.Output == null)
+            var isPrintToOutputWriter = string.IsNullOrWhiteSpace(options.Output);
+            var saveOptions = options.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
+            if (isPrintToOutputWriter)
             {
-                xDoc.Save(outputWritter, options.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
+                xDoc.Save(outputWritter, saveOptions);
             }
             else
             {
                 using var sw = new StreamWriter(options.Output, false, Encoding.GetEncoding(options.OutputEncoding));
-                xDoc.Save(sw, options.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None);
+                xDoc.Save(sw, saveOptions);
                 if (datasets.Any(x => x is null))
                 {
                     outputWritter.WriteLine($"Converted all files with some errors");
@@ -52,7 +55,9 @@ public static class ConverterToXml
         catch (Exception e)
         {
             errorWritter.WriteLine($"Failed to convert result document: {e.Message}");
+            return false;
         }
+        return true;
     }
     private static XStreamingElement? ProcessFile(ParsedFile file, TextWriter? errorWriter = null, TextWriter? logWriter = null, bool showLog = false)
     {

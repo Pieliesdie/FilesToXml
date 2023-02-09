@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 namespace ConverterToXml.Converters;
-public class JsonToXml : IEncodingConvertable 
+public class JsonToXml : IEncodingConvertable
 {
     //How to read line by line if we can get json like this?
     //  {
@@ -21,9 +22,16 @@ public class JsonToXml : IEncodingConvertable
     //  }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        var reader = new JsonTextReader(new StreamReader(stream, encoding));
-        var ds = JToken.ReadFrom(reader);
-        return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
+        try
+        {
+            var reader = new JsonTextReader(new StreamReader(stream, encoding)) { SupportMultipleContent = true };
+            var ds = JToken.ReadFrom(reader);
+            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error while processing '{lastProcessedNode}': {ex.Message}");
+        }
     }
 
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
@@ -33,16 +41,19 @@ public class JsonToXml : IEncodingConvertable
     {
         path = path.RelativePathToAbsoluteIfNeed();
         using FileStream fs = File.OpenRead(path);
-        return new XElement(Convert(fs, encoding ,rootContent));
+        return new XElement(Convert(fs, encoding, rootContent));
     }
 
     public XElement ConvertByFile(string path, params object?[] rootContent)
         => ConvertByFile(path, Encoding.UTF8, rootContent);
 
-    private static IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
+    private string lastProcessedNode = string.Empty;
+    private IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
     {
-        foreach (var token in reader.OrderByDescending(x=> x.Type))
+        lastProcessedNode = reader.Path;
+        foreach (var token in reader.OrderByDescending(x => x.Type))
         {
+            lastProcessedNode = token.Path;
             switch (token.Type)
             {
                 case JTokenType.String:
@@ -66,7 +77,7 @@ public class JsonToXml : IEncodingConvertable
                     }
                     break;
                 case JTokenType.Object:
-                     yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
+                    yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
                     break;
                 case JTokenType.Array:
                     yield return ParseJSON(token, nodeName).ToList();
@@ -78,5 +89,5 @@ public class JsonToXml : IEncodingConvertable
         }
     }
 
-    private static string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
+    private string EncodeXmlName(string name) => XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
 }
