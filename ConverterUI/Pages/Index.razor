@@ -22,7 +22,7 @@
         <Column T="FileUpload" Field="Path" Title="Path" />
         <Column T="FileUpload" Field="SizeInKb" Title="Size(kb)" />
         <Column T="FileUpload" Field="Extension" Title="Extension" />
-        <Column T="FileUpload" StickyRight="true" Title="Buttons">
+        <Column T="FileUpload" StickyRight="true" Sortable=false>
             <CellTemplate>
                 <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="() => RemoveUpload(context.Item)" />
             </CellTemplate>
