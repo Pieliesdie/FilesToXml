@@ -1,7 +1,5 @@
 ﻿@page "/"
 @using System.Collections.ObjectModel;
-@using CommunityToolkit.Maui.Core.Primitives;
-@using CommunityToolkit.Maui.Storage;
 @using ConverterToXml;
 @using System.Text;
 @using System.Collections.Concurrent;
@@ -20,9 +18,9 @@
 <MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense=false>
     <Columns>
         <HierarchyColumn T="FileUpload" />
-        <Column T="FileUpload" Field="FileName" Title="Name" />
-        <Column T="FileUpload" Field="FilePath" Title="Path" />
-        <Column T="FileUpload" Field="ContentType" Title="Type" />
+        <Column T="FileUpload" Field="Name" Title="Name" />
+        <Column T="FileUpload" Field="Path" Title="Path" />
+        <Column T="FileUpload" Field="SizeInKb" Title="Size(kb)" />
         <Column T="FileUpload" Field="Extension" Title="Extension" />
         <Column T="FileUpload" StickyRight="true" Title="Buttons">
             <CellTemplate>
@@ -33,7 +31,7 @@
     <ChildRowContent>
         <MudStack Row=false Spacing="1">
             <MudText Typo="Typo.body2">Input encoding</MudText>
-            <MudSelectExtended SearchBox="true" ItemCollection="encodingInfos" @bind-Value="@context.Item.InputEncoding"
+            <MudSelectExtended SearchBox="true" ItemCollection="encodingInfos" @bind-Value="@context.Item.Encoding"
                                T="Encoding" ToStringFunc="@(new Func<Encoding, string>(StringFunc))" />
             <MudText Typo="Typo.body2">Dataset label</MudText>
             <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text"></MudTextField>
@@ -56,12 +54,12 @@
         </MudStack>
     </MudExpansionPanel>
 </MudExpansionPanels>
-<MudStack Row=true Class="mt-5">
+<MudStack Row=true Class="mt-5" Style="max-height: 100px;" >
     <MudButton Variant="Variant.Filled"
                Color="Color.Primary"
                StartIcon="@Icons.Material.Filled.Folder"
                OnClick="() => SelectFolder()">
-        Select output folder
+        Select output file
     </MudButton>
     <MudTextField T="string" @bind-Value=@ConvertOptions.Output Label="Output file" />
     <MudSpacer />
@@ -127,21 +125,27 @@
 
     private async void UploadFiles()
     {
-        var result = await FilePicker.Default.PickMultipleAsync();
+        var ofd = new OpenFileDialog();
+        ofd.Multiselect = true;
+        ofd.Filter = "all files|*.*|" + Enum.GetNames(typeof(SupportedFileExt)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}");
+
+        if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK) { return; }
+        var result = ofd.FileNames;
         if (result is not null && result.Any())
         {
             foreach (var file in result)
             {
-                if (file.FullPath.GetExtFromPath() is null)
+                if (file.GetExtFromPath() is null)
                 {
-                    Snackbar.Add($"{file.FileName} not supported", Severity.Error);
+                    Snackbar.Add($"{file} not supported", Severity.Error);
                     continue;
                 }
+
                 ConvertOptions.Input.Add(new()
                     {
-                        FilePath = file.FullPath,
-                        FileName = file.FileName,
-                        ContentType = file.ContentType
+                        Path = file,
+                        Name = Path.GetFileNameWithoutExtension(file),
+                        Size = new FileInfo(file).Length
                     });
             }
             StateHasChanged();
@@ -156,9 +160,13 @@
     {
         try
         {
-            var folder = await FolderPicker.Default.PickAsync(new CancellationToken());
-            ConvertOptions.Output = Path.Combine(folder.Path, "result.xml");
+            var sfd = new SaveFileDialog();
+            sfd.Filter = "XML File (*.xml)|*.xml";
+            if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK) { return; }
+
+            ConvertOptions.Output = sfd.FileName;
             StateHasChanged();
+
         }
         catch { }
     }
@@ -184,7 +192,7 @@
 
             _events.Clear();
             await InvokeAsync(StateHasChanged);
-            var isConverted = await Task.Run(() => ConverterToXml.Convert((MauiOptions)ConvertOptions, sw, errorSw));
+            var isConverted = await Task.Run(() => ConverterToXml.Convert((ConverterOptions)ConvertOptions, sw, errorSw));
             if (isConverted)
             {
                 Snackbar.Add($"Converted to {ConvertOptions.Output ?? "logs"}", Severity.Success);
@@ -217,9 +225,9 @@
     {
         var messages = sender.ToString().Split(Environment.NewLine).ToList();
 
-        if (_events.Any())
+        var _event = _events.LastOrDefault();
+        if (_event is not null && _event.clr == Color.Default)
         {
-            var _event = _events.Last();
             _event.msg += messages.First();
             messages.Skip(1).ToList().ForEach(x => _events.Enqueue(new() { msg = x, clr = Color.Default }));
         }
@@ -227,7 +235,7 @@
         {
             messages.ToList().ForEach(x => _events.Enqueue(new() { msg = x, clr = Color.Default }));
         }
-        
+
         //_events.Enqueue(new() { msg = sender.ToString(), clr = Color.Default });
         await InvokeAsync(virtualizeComponent.RefreshDataAsync);
     }
