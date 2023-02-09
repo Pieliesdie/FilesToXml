@@ -21,6 +21,7 @@ namespace ConverterUI
         public Form1()
         {
             InitializeComponent();
+            this.FormClosing += Form1_FormClosing;
             this.Text = "Converter";
             var services = new ServiceCollection();
             services.AddWindowsFormsBlazorWebView();
@@ -31,6 +32,11 @@ namespace ConverterUI
             blazorWebView1.HostPage = "wwwroot\\index.html";
             blazorWebView1.Services = services.BuildServiceProvider();
             blazorWebView1.RootComponents.Add<Main>("#app");
+        }
+
+        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

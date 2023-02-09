@@ -48,12 +48,11 @@ public class JsonToXml : IEncodingConvertable
         => ConvertByFile(path, Encoding.UTF8, rootContent);
 
     private string lastProcessedNode = string.Empty;
-    private IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT")
+    private IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT", JTokenType parentType = JTokenType.Object)
     {
         lastProcessedNode = reader.Path;
         foreach (var token in reader.OrderByDescending(x => x.Type))
         {
-            lastProcessedNode = token.Path;
             switch (token.Type)
             {
                 case JTokenType.String:
@@ -72,18 +71,25 @@ public class JsonToXml : IEncodingConvertable
                         }
                         else
                         {
-                            yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
+                            if (parentType != JTokenType.Array)
+                            {
+                                yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
+                            }
+                            else
+                            {
+                                yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
+                            }
                         }
                     }
                     break;
                 case JTokenType.Object:
-                    yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token).ToList());
+                    yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token, nodeName, token.Type).ToList());
                     break;
                 case JTokenType.Array:
-                    yield return ParseJSON(token, nodeName).ToList();
+                    yield return ParseJSON(token, nodeName, token.Type).ToList();
                     break;
                 case JTokenType.Property:
-                    yield return ParseJSON(token, (token as JProperty)?.Name ?? "ROOT").ToList();
+                    yield return ParseJSON(token, (token as JProperty)?.Name ?? "ROOT", token.Type).ToList();
                     break;
             }
         }

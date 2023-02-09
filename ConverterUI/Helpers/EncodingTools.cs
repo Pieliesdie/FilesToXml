@@ -33,6 +33,6 @@ internal static class EncodingTools
 
         // We actually have no idea what the encoding is if we reach this point, so
         // you may wish to return null instead of defaulting to ASCII
-        return Encoding.ASCII;
+        return Encoding.UTF8;
     }
 }
