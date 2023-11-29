@@ -58,7 +58,7 @@ public class CsvToXml : IDelimiterConvertable
         var csvParser = new CsvTextFieldParser(stream, encoding)
         {
             //CommentTokens = new[] { "#" },
-            Delimiters = new[] { delimiter },
+            Delimiters = [delimiter],
             HasFieldsEnclosedInQuotes = true
         };
         long maxLineNumber = 0;

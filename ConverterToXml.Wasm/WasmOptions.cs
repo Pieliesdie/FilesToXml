@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using ConverterToXml.Core;
 namespace ConverterToXml.Wasm;
 
 public class WasmOptions : IOptions

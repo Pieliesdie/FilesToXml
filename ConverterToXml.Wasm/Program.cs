@@ -56,6 +56,6 @@ public partial class Program
             OutputEncoding = outputEncoding
         };
 
-        ConverterToXml.ConverterToXml.Convert(options, Console.Out, Console.Error);
+        Core.ConverterToXml.Convert(options, Console.Out, Console.Error);
     }
 }

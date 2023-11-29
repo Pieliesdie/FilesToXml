@@ -6,10 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+
 using ConverterToXml.Core.Converters.Interfaces;
+
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+
 using NumberingFormats = System.Collections.Immutable.ImmutableArray<DocumentFormat.OpenXml.Spreadsheet.NumberingFormat>;
 
 namespace ConverterToXml.Core.Converters;
@@ -25,17 +28,20 @@ public partial class XlsxToXml : IConvertable
     }
     private struct SheetModel
     {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public WorksheetPart SheetData { get; set; }
-        public ImmutableArray<OpenXmlElement> SharedStringTable { get; set; }
-        public ImmutableArray<CellFormat> CellFormats { get; set; }
-        public NumberingFormats NumberingFormats { get; set; }
+        public SheetModel() { }
+        public int Id { get; init;}
+        public string Name { get; init; } = string.Empty;
+        public required WorksheetPart SheetData { get; init; }
+        public ImmutableArray<OpenXmlElement> SharedStringTable { get; init; }
+        public ImmutableArray<CellFormat> CellFormats { get; init; }
+        public NumberingFormats NumberingFormats { get; init; }
     }
+
     /// <summary>
     /// Method of processing xlsx document
     /// </summary>
     /// <param name="memStream"></param>
+    /// <param name="rootContent"></param>
     /// <returns></returns>
     private static XStreamingElement SpreadsheetProcess(Stream memStream, params object?[] rootContent)
     {
@@ -54,8 +60,8 @@ public partial class XlsxToXml : IConvertable
             .Select((sheet, index) => new SheetModel
             {
                 Id = index,
-                Name = sheet.Name,
-                SheetData = (WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id),
+                Name = sheet.Name?.Value ?? string.Empty,
+                SheetData = (WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id!),
                 NumberingFormats = numberingFormats,
                 CellFormats = cellFormats,
                 SharedStringTable = sharedStringTable
@@ -68,17 +74,16 @@ public partial class XlsxToXml : IConvertable
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
         var rows = ReadRows(sheet);
-        return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows) : null;
+        return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name!), new XAttribute("id", sheet.Id), rows) : null;
     }
     private static IEnumerable<XElement?> ReadRows(SheetModel sheet)
     {
-        var rowCount = 0;
-        var cellCount = 0;
-        var rows = Read(sheet.SheetData).Select(row => RowProcess(row, sheet)).Where(row => row is not null);
+        int rowCount = 0, cellCount = 0;
+        var rows = Read(sheet.SheetData).Select(row => row == null ? null : RowProcess(row, sheet)).Where(row => row != null);
         foreach (var row in rows)
         {
             rowCount++;
-            cellCount = Math.Max(cellCount, row.Attributes().Count() - 1);
+            cellCount = Math.Max(cellCount, row!.Attributes().Count() - 1);
             yield return row;
         }
         yield return new XElement("METADATA", new XAttribute("columns", cellCount), new XAttribute("rows", rowCount));
@@ -87,11 +92,11 @@ public partial class XlsxToXml : IConvertable
     private static XElement? RowProcess(Row row, SheetModel sheet)
     {
         var cells = Read(row)
-            .Select(cell => CellProcess(cell, sheet))
+            .Select(cell => cell == null ? null : CellProcess(cell, sheet))
             .Where(cell => cell is not null);
-        return cells.Any() ? new XElement("R", new XAttribute("id", row.RowIndex), cells) : null;
+        return cells.Any() ? new XElement("R", new XAttribute("id", row.RowIndex == null ? -1 : row.RowIndex.Value), cells) : null;
     }
-    private static XAttribute? CellProcess(Cell cell, SheetModel sheet)
+    private static XAttribute? CellProcess(CellType cell, SheetModel sheet)
     {
         string cellValue = cell.CellFormula == null ? cell.InnerText : (cell.CellValue?.InnerText) ?? cell.CellFormula.InnerText;
         var dataType = cell.DataType?.Value;

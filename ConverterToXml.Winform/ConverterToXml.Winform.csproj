@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<StartupObject>ConverterUI.Program</StartupObject>
+		<StartupObject>ConverterToXml.Winform.Program</StartupObject>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
@@ -16,8 +16,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CodeBeam.MudExtensions" Version="6.3.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="8.0.0-preview.1.7762" />
-	  <PackageReference Include="MudBlazor" Version="6.1.9" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="8.0.3" />
+	  <PackageReference Include="MudBlazor" Version="6.11.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,6 +1,4 @@
-﻿using ConverterUI;
-
-namespace ConverterToXml.Winform
+﻿namespace ConverterToXml.Winform
 {
     internal static class Program
     {

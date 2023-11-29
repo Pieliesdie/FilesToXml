@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
 using ConverterToXml.Core.Converters;
 using ConverterToXml.Core.Converters.Interfaces;
 
@@ -26,8 +27,8 @@ public static class ConverterToXml
             encoding: Encoding.GetEncoding(index > options.InputEncoding.Count() - 1 ? options.InputEncoding.Last() : options.InputEncoding.ElementAt(index)),
             type: filePath.GetExtFromPath(),
             delimiter: filePath.GetDelimiter(delimeters),
-            searchingDelimiters: options.SearchingDelimiters?.ToArray() ?? new[] { ';', '|', '\t', ',' }
-        ));
+            searchingDelimiters: options.SearchingDelimiters?.ToArray() ?? [';', '|', '\t', ',']
+        )).ToList();
 
         var datasets = files
             .AsParallel()
@@ -46,7 +47,7 @@ public static class ConverterToXml
             }
             else
             {
-                using var sw = new StreamWriter(options.Output, false, Encoding.GetEncoding(options.OutputEncoding));
+                using var sw = new StreamWriter(options.Output!, false, Encoding.GetEncoding(options.OutputEncoding));
                 xDoc.Save(sw, saveOptions);
                 if (datasets.Any(x => x is null))
                 {
@@ -57,7 +58,7 @@ public static class ConverterToXml
                     outputWritter.WriteLine($"Converted succesful all files to {options.Output}");
                 }
             }
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 file.Dispose();
             }

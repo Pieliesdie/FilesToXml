@@ -1,13 +1,9 @@
 ﻿@page "/"
-@using System.Collections.ObjectModel;
 @using System.Text;
 @using System.Collections.Concurrent;
-@using ConverterToXml.Core
 @using ConverterToXml.Winform.Helpers
 @using ConverterToXml.Winform.Model
 @inject ISnackbar Snackbar
-@inject IJSRuntime JSRuntime
-
 
 <MudButton HtmlTag="label"
            Variant="Variant.Filled"
@@ -17,21 +13,21 @@
     Select source file
 </MudButton>
 
-<MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense=false>
+<MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense="false">
     <Columns>
         <HierarchyColumn T="FileUpload" />
-        <Column T="FileUpload" Field="Name" Title="Name" />
-        <Column T="FileUpload" Field="Path" Title="Path" />
-        <Column T="FileUpload" Field="SizeInKb" Title="Size(kb)" />
-        <Column T="FileUpload" Field="Extension" Title="Extension" />
-        <Column T="FileUpload" StickyRight="true" Sortable=false>
+        <PropertyColumn Property="x => x.Name" Title="Name" />
+        <PropertyColumn Property="x => x.Path" Title="Path" />
+        <PropertyColumn Property="x => x.SizeInKb" Title="Size(kb)" />
+        <PropertyColumn Property="x => x.Extension" Title="Extension" />
+        <TemplateColumn StickyRight="true" Sortable="false">
             <CellTemplate>
                 <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="() => RemoveUpload(context.Item)" />
             </CellTemplate>
-        </Column>
+        </TemplateColumn>
     </Columns>
     <ChildRowContent>
-        <MudStack Row=false Spacing="1">
+        <MudStack Row="false" Spacing="1">
             <MudText Typo="Typo.body2">Input encoding</MudText>
             <MudSelectExtended SearchBox="true" ItemCollection="encodingInfos" @bind-Value="@context.Item.Encoding"
                                T="Encoding" ToStringFunc="@(new Func<Encoding, string>(StringFunc))" />
@@ -56,7 +52,7 @@
         </MudStack>
     </MudExpansionPanel>
 </MudExpansionPanels>
-<MudStack Row=true Class="mt-5" Style="max-height: 100px;" >
+<MudStack Row=true Class="mt-5" Style="max-height: 100px;">
     <MudButton Variant="Variant.Filled"
                Color="Color.Primary"
                StartIcon="@Icons.Material.Filled.Folder"
@@ -219,7 +215,7 @@
         _events.Enqueue(new() { msg = sender?.ToString() ?? string.Empty, clr = Color.Error });
         await InvokeAsync(async () =>
         {
-            if(virtualizeComponent is null)
+            if (virtualizeComponent is null)
             {
                 return;
             }
@@ -230,7 +226,7 @@
     async void writer_OkFlushed(object sender, EventArgs args)
     {
         var messages = sender?.ToString()?.Split(Environment.NewLine).ToList();
-        if(messages is null)
+        if (messages is null)
         {
             return;
         }

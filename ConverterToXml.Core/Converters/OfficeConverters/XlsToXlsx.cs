@@ -276,7 +276,7 @@ namespace ConverterToXml.Core.Converters.OfficeConverters
         /// <param name="rowNum"></param>
         /// <param name="cellNum"></param>
         /// <returns>Коллекция адресов объединенных ячеек</returns>
-        private CellRangeAddress GetMergedRegion(HSSFSheet sheet, int rowNum, short cellNum)
+        private CellRangeAddress? GetMergedRegion(HSSFSheet sheet, int rowNum, short cellNum)
         {
             for (var i = 0; i < sheet.NumMergedRegions; i++)
             {

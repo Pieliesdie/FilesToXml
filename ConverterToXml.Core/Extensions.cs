@@ -15,26 +15,21 @@ public static class Extensions
         {
             return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
         }
-        return null;
+        return ";";
     }
     public static SupportedFileExt? GetExtFromPath(this string path)
     {
         var extension = Path.GetExtension(path);
-        if (extension is not null && extension.Length > 1)
+        if (extension is null || extension.Length <= 1)
+            return null;
+
+        if (Enum.TryParse<SupportedFileExt>(extension.Skip(1).CreateString(), out var supportedFileExt))
         {
-            if (Enum.TryParse<SupportedFileExt>(extension.Skip(1).CreateString(), out var supportedFileExt))
-            {
-                return supportedFileExt;
-            }
-            else
-            {
-                return null;
-            }
+            return supportedFileExt;
         }
         return null;
     }
     public static bool Not(this bool boolean) => !boolean;
-
     public static string CreateString(this IEnumerable<char> chars) => new(chars.ToArray());
     public static IEnumerable<string> UnpackFolders(IEnumerable<string> pathList)
     {
@@ -61,13 +56,14 @@ public static class Extensions
         }
     }
 
-    public static string ToStringWithDeclaration(this XDocument XDoc)
+    public static string ToStringWithDeclaration(this XDocument xDoc)
     {
-        return XDoc.Declaration + Environment.NewLine + XDoc.ToString();
+        return xDoc.Declaration + Environment.NewLine + xDoc;
     }
 
-    public static int ColumnIndex(string reference)
+    public static int ColumnIndex(string? reference)
     {
+        if (reference == null) return -1;
         int ci = 0;
         reference = reference.ToUpper();
         for (int ix = 0; ix < reference.Length && reference[ix] >= 'A'; ix++)
@@ -93,7 +89,7 @@ public static class Extensions
 
     public static IEnumerable<string> ReadAllLinesWithNewLine(this StreamReader reader)
     {
-        foreach(var line in reader.ReadAllLines())
+        foreach (var line in reader.ReadAllLines())
         {
             yield return line;
             yield return Environment.NewLine;
