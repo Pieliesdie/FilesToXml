@@ -10,7 +10,7 @@
 		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="DotNetJS" Version="0.21.0" />
+	  <PackageReference Include="DotNetJS" Version="0.23.4" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ConverterToXml.Core\ConverterToXml.Core.csproj" />
