@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
@@ -13,7 +12,6 @@
 		<NeutralLanguage />
 		<RepositoryUrl>https://github.com/Pieliesdie/FilesToXml</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
-		<DebugType>embedded</DebugType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<SelfContained>True</SelfContained>
 		<Nullable>enable</Nullable>
@@ -25,7 +23,12 @@
 		<PlatformTarget>AnyCPU</PlatformTarget>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net8.0|Release'">
+		<PublishAot>true</PublishAot>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">	
+		<InvariantGlobalization>true</InvariantGlobalization>
 		<DebuggerSupport>false</DebuggerSupport>
 		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
 		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>

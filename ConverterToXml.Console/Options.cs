@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using CommandLine;
 using ConverterToXml.Core;
 
@@ -7,10 +9,10 @@ namespace ConverterToXml.Console;
 public class Options : IOptions
 {
     [Option('i', "in", Required = true, HelpText = @"Set paths to input files (Example: -i C:\1.txt C:\2.txt)")]
-    public IEnumerable<string> Input { get; set; }
+    public IEnumerable<string> Input { get; set; } = null!;
 
     [Option('o', "out", Required = false, HelpText = "Set path to output file, if path is empty print to console")]
-    public string Output { get; set; }
+    public string? Output { get; set; }
 
     [Option('s', "forceSave", Required = false, Default = false, HelpText = "Save output file even if exist")]
     public bool ForceSave { get; set; } = false;
@@ -29,11 +31,11 @@ public class Options : IOptions
     public int OutputEncoding { get; set; } = 65001;
 
     [Option('l', "labels", Required = false, HelpText = @"Set labels for input files")]
-    public IEnumerable<string> Labels { get; set; }
+    public IEnumerable<string> Labels { get; set; } = Enumerable.Empty<string>();
 
     [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Disable format output xml")]
     public bool DisableFormat { get; set; } = false;
 
     [Option("support", Required = false, HelpText = "Display supported types")]
-    public string Support { get; set; }
+    public string? Support { get; set; }
 }
