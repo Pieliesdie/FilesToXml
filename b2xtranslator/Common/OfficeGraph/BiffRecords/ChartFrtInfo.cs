@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the versions of the application that originally created 
@@ -22,7 +20,7 @@ namespace b2xtranslator.OfficeGraph
     /// which is a record that has a record number greater than or equal to 2048 and less 
     /// than or equal to 2303 according to Record Enumeration.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.ChartFrtInfo)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.ChartFrtInfo)]
     public class ChartFrtInfo : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.ChartFrtInfo;

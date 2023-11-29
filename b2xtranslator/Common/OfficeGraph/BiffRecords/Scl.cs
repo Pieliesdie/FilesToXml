@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the zoom level of the current view in the window used 
@@ -12,7 +10,7 @@ namespace b2xtranslator.OfficeGraph
     /// The fraction MUST be greater than or equal to 1/10 and less than or equal to 4/1. <br/>
     /// This record MUST exist if the zoom of the current view is not equal to 1.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Scl)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Scl)]
     public class Scl : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Scl;

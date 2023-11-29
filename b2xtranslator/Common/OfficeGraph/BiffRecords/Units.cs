@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record MUST be zero, and MUST be ignored.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Units)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Units)]
     public class Units : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Units;

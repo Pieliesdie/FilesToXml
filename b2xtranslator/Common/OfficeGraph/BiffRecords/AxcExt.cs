@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies additional extension properties of a date axis, along with a CatSerRange record.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AxcExt)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AxcExt)]
     public class AxcExt : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AxcExt;

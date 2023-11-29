@@ -1,17 +1,15 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of a data label on a chart group, series, or data point. 
     /// 
     /// Refer to the data label overview for additional information on how this record is used and when this record is ignored.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AttachedLabel)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AttachedLabel)]
     public class AttachedLabel : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AttachedLabel;

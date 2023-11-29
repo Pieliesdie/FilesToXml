@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies a continuation of the data of the preceding record. 
@@ -14,7 +12,7 @@ namespace b2xtranslator.OfficeGraph
     /// records. For example, the size of TxO record is less than 8,225 bytes, but it is 
     /// always followed by Continue records that store the string data and formatting runs.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Continue)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Continue)]
     public class Continue : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Continue;

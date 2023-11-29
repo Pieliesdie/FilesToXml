@@ -1,15 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the attributes of the axis labels, major tick marks, and minor tick marks associated with an axis.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Tick)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Tick)]
     public class Tick : OfficeGraphBiffRecord
     {
         public enum MarkLocation

@@ -1,10 +1,10 @@
 using System.Text;
 using System.Xml;
-using b2xtranslator.OpenXmlLib;
 using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.OfficeDrawing.Shapetypes;
+using b2xtranslator.OpenXmlLib;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class VMLShapeTypeMapping : PropertiesMapping,
           IMapping<ShapeType>

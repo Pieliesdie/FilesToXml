@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the properties of a category (3) axis, a date axis, or a series axis.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.CatSerRange)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.CatSerRange)]
     public class CatSerRange : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.CatSerRange;

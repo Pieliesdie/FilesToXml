@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the series for the chart.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SeriesList)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SeriesList)]
     public class SeriesList : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SeriesList;

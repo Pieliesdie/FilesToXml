@@ -2,7 +2,7 @@
 
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     public class UnknownGraphRecord : OfficeGraphBiffRecord
     {

@@ -1,15 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the text in a text box or a form control.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.TxO)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.TxO)]
     public class TxO : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.TxO;

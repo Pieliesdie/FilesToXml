@@ -1,4 +1,4 @@
-﻿namespace b2xtranslator.OpenXmlLib.WordprocessingML
+﻿namespace b2xtranslator.OpenXmlLib
 {
     public class CustomXmlPart : OpenXmlPart
     {

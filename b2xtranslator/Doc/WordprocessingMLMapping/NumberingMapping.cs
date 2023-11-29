@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
-using b2xtranslator.CommonTranslatorLib;
-using b2xtranslator.DocFileFormat;
 using System.Xml;
+using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.OpenXmlLib;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class NumberingMapping : AbstractOpenXmlMapping,
           IMapping<ListTable>

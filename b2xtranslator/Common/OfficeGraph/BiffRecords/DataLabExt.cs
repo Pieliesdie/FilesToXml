@@ -1,15 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the beginning of a collection of records as defined by 
     /// the Chart Sheet Substream ABNF. The collection specifies an extended data label.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.DataLabExt)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.DataLabExt)]
     public class DataLabExt : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.DataLabExt;

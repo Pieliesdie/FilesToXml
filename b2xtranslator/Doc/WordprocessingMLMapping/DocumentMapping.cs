@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using b2xtranslator.DocFileFormat;
-using b2xtranslator.CommonTranslatorLib;
 using System.Xml;
+using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.doc.DocFileFormat;
+using b2xtranslator.OfficeDrawing;
 using b2xtranslator.OpenXmlLib;
 using b2xtranslator.Tools;
-using b2xtranslator.OfficeDrawing;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public abstract class DocumentMapping : 
         AbstractOpenXmlMapping,

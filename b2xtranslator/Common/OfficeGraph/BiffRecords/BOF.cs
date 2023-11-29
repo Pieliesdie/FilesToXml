@@ -1,17 +1,15 @@
-﻿
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties about the substream and specifies the beginning 
     /// of a collection of records as defined by the Workbook Stream ABNF and the Chart Sheet Substream ABNF.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.BOF)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.BOF)]
     public class BOF : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.BOF;

@@ -1,17 +1,15 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the type, size and position of the frame around a chart 
     /// element as defined by the Chart Sheet Substream ABNF. 
     /// A chart element‟s frame is specified by the Frame record following it.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Frame)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Frame)]
     public class Frame : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Frame;

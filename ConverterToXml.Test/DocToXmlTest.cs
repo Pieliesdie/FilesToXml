@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test
@@ -10,7 +11,7 @@ namespace ConverterToXml.Test
         [Fact]
         public void DocToDocxConvertByFileToXmlNotNull()
         {
-            Converters.DocToXml converter = new Converters.DocToXml();
+            DocToXml converter = new DocToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\doc1.doc";
 
@@ -21,7 +22,7 @@ namespace ConverterToXml.Test
         [Fact]
         public void DocToDocxConvertToXmlNotNull()
         {
-            Converters.DocToXml converter = new Converters.DocToXml();
+            DocToXml converter = new DocToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\doc1.doc";
             using var fs = File.Open(path, FileMode.Open);

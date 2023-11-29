@@ -1,15 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the contents of an extended data label.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.DataLabExtContents)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.DataLabExtContents)]
     public class DataLabExtContents : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.DataLabExtContents;

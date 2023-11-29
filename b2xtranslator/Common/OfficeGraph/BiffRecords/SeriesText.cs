@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the text for a series, trendline name, trendline label, axis title or chart title.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SeriesText)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SeriesText)]
     public class SeriesText : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SeriesText;

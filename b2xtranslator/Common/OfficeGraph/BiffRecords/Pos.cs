@@ -1,16 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the size and position for a legend, an attached label, 
     /// or the plot area, as specified by the primary axis group. <br/>
     /// This record MUST be ignored for the plot area when the fManPlotArea field of ShtProps is set to 1.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Pos)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Pos)]
     public class Pos : OfficeGraphBiffRecord
     {
         public enum PositionMode

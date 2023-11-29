@@ -1,7 +1,7 @@
-﻿using ConverterToXml.Converters;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test;
@@ -22,7 +22,7 @@ public class CsvToXmlTest
     [Fact]
     public void CsvConvertToXmlNotNull()
     {
-        var converter = new Converters.CsvToXml();
+        var converter = new CsvToXml();
         string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         string path = curDir + @"\Files\csv.csv";
         using var fs = File.Open(path, FileMode.Open);

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using b2xtranslator.DocFileFormat;
+using b2xtranslator.doc.DocFileFormat;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class RevisionData
     {

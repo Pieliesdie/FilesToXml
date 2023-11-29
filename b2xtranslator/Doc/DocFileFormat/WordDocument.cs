@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.OfficeDrawing;
 using b2xtranslator.StructuredStorage.Common;
 using b2xtranslator.StructuredStorage.Reader;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class WordDocument : IVisitable
     {

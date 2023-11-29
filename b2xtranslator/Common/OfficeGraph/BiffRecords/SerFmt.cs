@@ -1,10 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of the associated data points, data markers, or lines of the series. 
@@ -12,7 +10,7 @@ namespace b2xtranslator.OfficeGraph
     /// DataFormat record. If this record is not present in the sequence of records that conforms to the 
     /// SS rule then all the fields will have default values otherwise all the fields MUST contain a value.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SerFmt)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SerFmt)]
     public class SerFmt : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SerFmt;

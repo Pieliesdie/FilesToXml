@@ -1,10 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the patterns and colors used in a filled region of a chart. 
@@ -12,7 +10,7 @@ namespace b2xtranslator.OfficeGraph
     /// If this record is not present in the SS rule of the chart sheet substream ABNF 
     /// then all the fields will have default values otherwise all the fields MUST contain a value.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AreaFormat)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AreaFormat)]
     public class AreaFormat : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AreaFormat;

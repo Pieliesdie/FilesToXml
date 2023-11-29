@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the series to which the current trendline or error bar corresponds.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SerParent)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SerParent)]
     public class SerParent : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SerParent;

@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies code page information for the graph object.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.CodePage)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.CodePage)]
     public class CodePage : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.CodePage;

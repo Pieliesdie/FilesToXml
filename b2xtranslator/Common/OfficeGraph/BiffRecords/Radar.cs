@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies that the chart group is a radar chart group and specifies the chart group attributes.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Radar)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Radar)]
     public class Radar : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Radar;

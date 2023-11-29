@@ -2,7 +2,7 @@
 
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.Structures
 {
     /// <summary>
     /// This structure specifies formatting information for a text run.

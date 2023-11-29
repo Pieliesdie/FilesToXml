@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies where in the data sheet window to paste the selection from the OLE stream.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.LinkedSelection)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.LinkedSelection)]
     public class LinkedSelection : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.LinkedSelection;

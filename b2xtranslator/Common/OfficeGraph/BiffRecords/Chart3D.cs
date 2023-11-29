@@ -1,10 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies that the plot area of the chart group is rendered in a 3-D scene 
@@ -12,7 +10,7 @@ namespace b2xtranslator.OfficeGraph
     /// 
     /// The preceding chart group type MUST be of type bar, pie, line, area, or surface.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Chart3D)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Chart3D)]
     public class Chart3D : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Chart3D;

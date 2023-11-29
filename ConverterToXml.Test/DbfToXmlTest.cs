@@ -1,6 +1,6 @@
-﻿using ConverterToXml.Converters;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test;

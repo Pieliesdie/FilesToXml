@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using b2xtranslator.CommonTranslatorLib;
-using b2xtranslator.OfficeDrawing;
-using System.Xml;
-using b2xtranslator.OpenXmlLib;
-using System.IO;
-using b2xtranslator.DocFileFormat;
-using b2xtranslator.Tools;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Xml;
+using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.doc.DocFileFormat;
+using b2xtranslator.OfficeDrawing;
 using b2xtranslator.OfficeDrawing.Shapetypes;
+using b2xtranslator.OpenXmlLib;
+using b2xtranslator.Tools;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class VMLShapeMapping: PropertiesMapping,
           IMapping<ShapeContainer>

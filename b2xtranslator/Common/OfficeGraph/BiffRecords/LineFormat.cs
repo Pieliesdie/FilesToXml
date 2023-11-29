@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the appearance of a line.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.LineFormat)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.LineFormat)]
     public class LineFormat : OfficeGraphBiffRecord
     {
         public enum LineStyle

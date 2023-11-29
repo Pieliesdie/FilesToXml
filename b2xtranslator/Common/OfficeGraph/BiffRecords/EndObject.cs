@@ -1,9 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of a Future Record Type (FRT) as defined 
@@ -14,7 +13,7 @@ namespace b2xtranslator.OfficeGraph
     /// This record MUST have an associated StartObject record. StartObject and 
     /// EndObject pairs can be nested. Up to 100 levels of blocks can be nested.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.EndObject)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.EndObject)]
     public class EndObject : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.EndObject;

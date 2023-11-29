@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of a chart as defined by the Chart Sheet Substream ABNF.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.ShtProps)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.ShtProps)]
     public class ShtProps : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.ShtProps;

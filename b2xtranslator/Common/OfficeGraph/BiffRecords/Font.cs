@@ -1,15 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies a font and font formatting information.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Font)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Font)]
     public class Font : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Font;

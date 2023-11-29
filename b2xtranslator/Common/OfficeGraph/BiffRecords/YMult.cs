@@ -1,10 +1,9 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of the value multiplier for a value axis 
@@ -13,7 +12,7 @@ namespace b2xtranslator.OfficeGraph
     /// 
     /// The collection of records specifies a display units label.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.YMult)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.YMult)]
     public class YMult : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.YMult;

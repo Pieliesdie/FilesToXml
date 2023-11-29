@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the selection within the data sheet window.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Selection)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Selection)]
     public class Selection : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Selection;

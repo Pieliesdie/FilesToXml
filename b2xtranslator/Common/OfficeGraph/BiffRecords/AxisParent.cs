@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of an axis group and specifies the beginning 
     /// of a collection of records as defined by the Chart Sheet Substream ABNF that specifies an axis group.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AxisParent)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AxisParent)]
     public class AxisParent : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AxisParent;

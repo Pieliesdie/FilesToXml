@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the date system that the workbook uses.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Date1904)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Date1904)]
     public class Date1904 : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Date1904;

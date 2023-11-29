@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the end of a collection of records as defined by the 
     /// Chart Sheet Substream ABNF. The collection of records specifies properties of a chart.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.End)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.End)]
     public class End : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.End;

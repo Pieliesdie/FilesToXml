@@ -1,8 +1,8 @@
-﻿using ConverterToXml.Converters;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test

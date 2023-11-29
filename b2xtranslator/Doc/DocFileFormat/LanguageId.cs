@@ -1,6 +1,6 @@
 using b2xtranslator.CommonTranslatorLib;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class LanguageId : IVisitable
     {

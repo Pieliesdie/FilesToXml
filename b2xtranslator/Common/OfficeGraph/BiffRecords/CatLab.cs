@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the attributes of the axis label.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.CatLab)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.CatLab)]
     public class CatLab : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.CatLab;

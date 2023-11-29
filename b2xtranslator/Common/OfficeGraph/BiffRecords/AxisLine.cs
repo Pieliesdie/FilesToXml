@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies which part of the axis is specified by the LineFormat record that follows.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AxisLine)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AxisLine)]
     public class AxisLine : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AxisLine;

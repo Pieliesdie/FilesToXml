@@ -1,10 +1,10 @@
-﻿using ConverterToXml.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test
@@ -25,7 +25,7 @@ namespace ConverterToXml.Test
         [Fact]
         public void TxtConvertToXmlNotNull()
         {
-            var converter = new Converters.TxtToXml();
+            var converter = new TxtToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\txt.txt";
             string result = converter.Convert(File.Open(path, FileMode.Open)).ToString();

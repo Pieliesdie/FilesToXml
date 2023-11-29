@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the location of the OLE server window that is contained in the parent document window when the chart data was saved.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.MainWindow)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.MainWindow)]
     public class MainWindow : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.MainWindow;

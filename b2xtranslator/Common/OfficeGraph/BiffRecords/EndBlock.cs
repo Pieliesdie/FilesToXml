@@ -1,9 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the end of a collection of records. 
@@ -35,7 +34,7 @@ namespace b2xtranslator.OfficeGraph
     ///        matching EndBlock, then the matching EndBlock record MUST be written immediately
     ///        before writing the End record of the current Sheet.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.EndBlock)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.EndBlock)]
     public class EndBlock : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.EndBlock;

@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the number format to use for the text on an axis.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.IFmtRecord)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.IFmtRecord)]
     public class IFmtRecord : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.IFmtRecord;

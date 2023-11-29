@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the text elements that are formatted using the 
     /// information specified by the Text record immediately following this record.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.DefaultText)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.DefaultText)]
     public class DefaultText : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.DefaultText;

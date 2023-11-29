@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using ConverterToXml.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test

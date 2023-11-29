@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the properties of a value axis.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.ValueRange)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.ValueRange)]
     public class ValueRange : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.ValueRange;

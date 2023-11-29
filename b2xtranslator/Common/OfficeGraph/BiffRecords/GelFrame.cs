@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the properties of a fill pattern for parts of a chart. 
@@ -11,7 +9,7 @@ namespace b2xtranslator.OfficeGraph
     /// and an OfficeArtTertiaryFOPT, as specified in [MS-ODRAW] section 2.2.11, that both
     /// contain properties for the fill pattern applied. <55>
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.GelFrame)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.GelFrame)]
     public class GelFrame : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.GelFrame;

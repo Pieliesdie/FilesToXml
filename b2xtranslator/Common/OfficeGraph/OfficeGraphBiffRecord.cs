@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using b2xtranslator.OfficeGraph.BiffRecords;
 using b2xtranslator.StructuredStorage.Reader;
 
 namespace b2xtranslator.OfficeGraph

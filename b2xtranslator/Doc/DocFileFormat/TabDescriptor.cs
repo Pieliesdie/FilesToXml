@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class TabDescriptor
     {

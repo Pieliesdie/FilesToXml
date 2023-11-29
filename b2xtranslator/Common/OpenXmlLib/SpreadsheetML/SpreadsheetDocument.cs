@@ -45,18 +45,15 @@
             return spreadsheet;
         }
 
-        public OpenXmlPackage.DocumentType DocumentType
+        public new OpenXmlPackage.DocumentType DocumentType
         {
-            get { return this._documentType; }
-            set { this._documentType = value; }
+            get => _documentType;
+            set => _documentType = value;
         }
 
         /// <summary>
         /// returns the workbookPart from the new excel document 
         /// </summary>
-        public WorkbookPart WorkbookPart
-        {
-            get { return this.workBookPart; }
-        }
+        public WorkbookPart WorkbookPart => this.workBookPart;
     }
 }

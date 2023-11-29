@@ -1,8 +1,8 @@
 using System.Text;
-using b2xtranslator.Tools;
 using b2xtranslator.StructuredStorage.Reader;
+using b2xtranslator.Tools;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class FontFamilyName : ByteStructure
     {

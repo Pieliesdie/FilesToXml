@@ -3,13 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using ConverterToXml.Converters;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test
 {
     public class XlsxToXmlTest
     {
+        [Fact]
+        public void XlsxConverterTestReadSomeCustomDates()
+        {
+            XlsxToXml converter = new XlsxToXml();
+            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"/Files/xlsx4.xlsx";
+
+            var result = converter.ConvertByFile(path);
+            var isdateValid = result.Elements("TABLE").ElementAt(10).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "2")?.Attribute("C2")?.Value == "1998-12-11T00:00:00";
+            Assert.True(isdateValid);
+        }
+
         [Fact]
         public void XlsxConverterTestNotNull()
         {
@@ -19,12 +31,12 @@ namespace ConverterToXml.Test
 
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
-
         }
+
         [Fact]
         public void XlsxConvertToXmlNotNull()
         {
-            var converter = new Converters.XlsxToXml();
+            var converter = new XlsxToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/xlsx.xlsx";
             using var fs = File.Open(path, FileMode.Open);
@@ -48,7 +60,6 @@ namespace ConverterToXml.Test
                 && result.Elements("TABLE").ElementAt(2).Elements("R").Where(x => x.Attribute("id").Value == "494").First().Attribute("C1").Value == "17158:Волги";
 
             Assert.True(isFirstTableValid && isSecondTableValid && isThirdTableValid);
-
         }
 
         [Fact]
@@ -61,7 +72,6 @@ namespace ConverterToXml.Test
             var result = converter.ConvertByFile(path);
             var isNumberValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C145")?.Value == "-0.0019999999894935172";
             Assert.True(isNumberValid);
-
         }
 
         [Fact]
@@ -75,7 +85,6 @@ namespace ConverterToXml.Test
             var result = converter.ConvertByFile(path);
             var isBoolValid = result.Elements("TABLE").ElementAt(0).Elements("R").FirstOrDefault(R => R.Attribute("id").Value == "25")?.Attribute("C148")?.Value == "True";
             Assert.True(isBoolValid);
-
         }
 
         [Fact]
@@ -94,7 +103,6 @@ namespace ConverterToXml.Test
                 && result.Elements("TABLE").ElementAt(2).Elements("R").Last().Attribute("id").Value == "10006";
 
             Assert.True(isFirstTableValid && isSecondTableValid && isThirdTableValid);
-
         }
     }
 }

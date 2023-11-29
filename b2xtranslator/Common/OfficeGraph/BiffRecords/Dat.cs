@@ -1,17 +1,15 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the beginning of a collection of records as defined by 
     /// the Chart Sheet Substream ABNF. The collection of records specifies the options 
     /// of the data table which can be displayed within a chart area.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Dat)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Dat)]
     public class Dat : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Dat;

@@ -1,10 +1,8 @@
-﻿
-
-using System.Text;
+﻿using System.Text;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.Structures
 {
     /// <summary>
     /// This structure specifies a Unicode string. 

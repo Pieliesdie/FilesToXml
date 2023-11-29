@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of an error bar.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SerAuxErrBar)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SerAuxErrBar)]
     public class SerAuxErrBar : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SerAuxErrBar;

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using b2xtranslator.DocFileFormat;
-using b2xtranslator.StructuredStorage.Reader;
-using b2xtranslator.Tools;
 using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.StructuredStorage.Common;
+using b2xtranslator.StructuredStorage.Reader;
+using b2xtranslator.Tools;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class OleObject : IVisitable
     {

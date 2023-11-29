@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies a trendline.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SerAuxTrend)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SerAuxTrend)]
     public class SerAuxTrend : OfficeGraphBiffRecord
     {
         public enum TrendlineType

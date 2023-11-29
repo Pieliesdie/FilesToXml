@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies an object on a chart, or the entire chart, to which Text is linked.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.ObjectLink)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.ObjectLink)]
     public class ObjectLink : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.ObjectLink;

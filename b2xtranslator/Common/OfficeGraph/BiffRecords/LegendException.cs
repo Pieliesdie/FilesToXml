@@ -1,10 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies information about a legend entry which has been changed from the 
@@ -15,7 +13,7 @@ namespace b2xtranslator.OfficeGraph
     /// as defined in the legend overview, there MUST be zero or one instances of this record 
     /// in the sequence of records that conforms to the SERIESFORMAT rule.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.LegendException)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.LegendException)]
     public class LegendException : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.LegendException;

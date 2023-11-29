@@ -1,11 +1,9 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.CrtLine)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.CrtLine)]
     public class CrtLine : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.CrtLine;

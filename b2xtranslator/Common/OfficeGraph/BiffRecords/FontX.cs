@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the font for a given text element. 
     /// The Font referenced by iFont can be in this chart sheet substream, or in the workbook.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.FontX)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.FontX)]
     public class FontX : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.FontX;

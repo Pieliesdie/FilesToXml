@@ -38,21 +38,13 @@
             return doc;
         }
 
-        public OpenXmlPackage.DocumentType DocumentType
+        public new OpenXmlPackage.DocumentType DocumentType
         {
-            get { return this._documentType; }
-            set { this._documentType = value; }
+            get => _documentType;
+            set => _documentType = value;
         }
 
-        public CustomXmlPropertiesPart CustomFilePropertiesPart
-        {
-            get { return this._customFilePropertiesPart; }
-        }
-
-        
-        public MainDocumentPart MainDocumentPart
-        {
-            get { return this._mainDocumentPart; }
-        }
+        public CustomXmlPropertiesPart CustomFilePropertiesPart => this._customFilePropertiesPart;
+        public MainDocumentPart MainDocumentPart => this._mainDocumentPart;
     }
 }

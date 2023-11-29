@@ -1,8 +1,8 @@
-﻿using ConverterToXml.Converters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ConverterToXml.Core.Converters;
 using Xunit;
 
 namespace ConverterToXml.Test
@@ -23,7 +23,7 @@ namespace ConverterToXml.Test
         [Fact]
         public void DocxConvertToXmlNotNull()
         {
-            var converter = new Converters.DocxToXml();
+            var converter = new DocxToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\docx.docx";
             using var fs = File.Open(path, FileMode.Open);

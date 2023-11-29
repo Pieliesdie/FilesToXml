@@ -1,16 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the size and position of the chart window within the OLE server window that 
     /// is contained in the parent document window. When this record follows a MainWindow record, 
     /// to define the position of the data sheet window, the Window1_10 record MUST be used.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Window1)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Window1)]
     public class Window1 : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Window1;

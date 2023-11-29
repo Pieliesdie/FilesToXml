@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the chart group for the current series.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.SerToCrt)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.SerToCrt)]
     public class SerToCrt : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.SerToCrt;

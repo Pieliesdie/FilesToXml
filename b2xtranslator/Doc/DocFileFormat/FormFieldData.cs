@@ -1,7 +1,7 @@
-using b2xtranslator.Tools;
 using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.Tools;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class FormFieldData : IVisitable
     {

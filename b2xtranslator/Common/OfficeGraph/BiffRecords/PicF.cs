@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the layout of a picture attached to a picture-filled chart element.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.PicF)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.PicF)]
     public class PicF : OfficeGraphBiffRecord
     {
         public enum LayoutType

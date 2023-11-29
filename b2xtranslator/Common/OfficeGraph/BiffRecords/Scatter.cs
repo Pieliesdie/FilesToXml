@@ -1,16 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies that the chart group is a scatter chart group or a bubble chart group, 
     /// and specifies the chart group attributes.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Scatter)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Scatter)]
     public class Scatter : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Scatter;

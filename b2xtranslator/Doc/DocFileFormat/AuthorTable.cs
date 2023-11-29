@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class AuthorTable : List<string>
     {

@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the beginning of a collection of records as 
@@ -11,7 +9,7 @@ namespace b2xtranslator.OfficeGraph
     /// 
     /// The collection of records specifies a data sheet.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.BOFDatasheet)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.BOFDatasheet)]
     public class BOFDatasheet : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.BOFDatasheet;

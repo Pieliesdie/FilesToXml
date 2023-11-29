@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the number of non-empty rows and the number of non-empty cells in the longest row of a Graph object.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Dimensions)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Dimensions)]
     public class Dimensions : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Dimensions;

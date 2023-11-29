@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat
 {
     public class DocumentProperties : IVisitable
     {

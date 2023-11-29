@@ -1,16 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies that the chart group is a bar chart group or 
     /// a column chart group, and specifies the chart group attributes.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Bar)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Bar)]
     public class Bar : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Bar;

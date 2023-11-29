@@ -1,11 +1,9 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Axis)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Axis)]
     public class Axis : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Axis;

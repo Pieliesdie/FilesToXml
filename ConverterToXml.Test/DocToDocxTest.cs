@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ConverterToXml.Core.Converters.OfficeConverters;
 using Xunit;
 
 namespace ConverterToXml.Test
@@ -9,7 +10,7 @@ namespace ConverterToXml.Test
         [Fact]
         public void DocToDocxConvertToDocxNotNull()
         {
-            Converters.DocToDocx converter = new Converters.DocToDocx();
+            DocToDocx converter = new DocToDocx();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/doc1.doc";
             converter.ConvertFromFileToDocxFile(path, curDir + @"/Files/Result.docx");

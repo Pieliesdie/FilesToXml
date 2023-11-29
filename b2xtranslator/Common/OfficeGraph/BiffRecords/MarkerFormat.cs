@@ -1,10 +1,8 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the color, size, and shape of the associated data markers that 
@@ -13,7 +11,7 @@ namespace b2xtranslator.OfficeGraph
     /// that conforms to the SS rule then all the fields will have default values otherwise all 
     /// the fields MUST contain a value.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.MarkerFormat)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.MarkerFormat)]
     public class MarkerFormat : OfficeGraphBiffRecord
     {
         public enum MarkerType

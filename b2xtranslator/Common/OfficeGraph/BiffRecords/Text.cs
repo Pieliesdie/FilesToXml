@@ -1,17 +1,16 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the properties of an attached label and specifies the beginning of a 
     /// collection of records as defined by the chart sheet substream ABNF. 
     /// This collection of records specifies an attached label.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Text)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Text)]
     public class Text : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Text;

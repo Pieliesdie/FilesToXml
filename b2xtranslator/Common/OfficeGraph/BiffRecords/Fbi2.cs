@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the font information at the time the scalable font is added to the chart. <47>
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Fbi2)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Fbi2)]
     public class Fbi2 : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Fbi2;

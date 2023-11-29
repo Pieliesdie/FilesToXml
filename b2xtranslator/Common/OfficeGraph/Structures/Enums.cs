@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.Structures
 {
     public enum HorizontalAlignment
     {

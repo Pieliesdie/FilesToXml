@@ -1,10 +1,10 @@
-using b2xtranslator.CommonTranslatorLib;
 using System.Xml;
+using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.OpenXmlLib;
-using b2xtranslator.DocFileFormat;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class PropertiesMapping : AbstractOpenXmlMapping
     {

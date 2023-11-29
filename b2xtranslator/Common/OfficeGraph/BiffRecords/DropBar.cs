@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the attributes of the up bars or the down bars between multiple
@@ -13,7 +11,7 @@ namespace b2xtranslator.OfficeGraph
     /// attributes of the down bars. If this record exists, then the chart group type 
     /// MUST be line and the field cSer in the record SeriesList MUST be greater than 1.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.DropBar)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.DropBar)]
     public class DropBar : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.DropBar;

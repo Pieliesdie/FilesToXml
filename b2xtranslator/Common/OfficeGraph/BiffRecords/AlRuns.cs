@@ -1,14 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using b2xtranslator.OfficeGraph.Structures;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies rich text formatting within chart titles, trendline, and data labels.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.AlRuns)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.AlRuns)]
     public class AlRuns : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.AlRuns;

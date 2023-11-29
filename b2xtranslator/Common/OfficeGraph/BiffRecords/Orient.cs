@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies how the series data of a chart is arranged.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Orient)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Orient)]
     public class Orient : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.Orient;

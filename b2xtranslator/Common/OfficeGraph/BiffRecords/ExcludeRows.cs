@@ -1,14 +1,12 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies which rows of the data sheet are to be included or excluded from the chart.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.ExcludeRows)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.ExcludeRows)]
     public class ExcludeRows : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.ExcludeRows;

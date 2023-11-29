@@ -1,15 +1,13 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies a reference to data in a sheet that is used by a part of a series or by a legend entry.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.BRAI)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.BRAI)]
     public class BRAI : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.BRAI;

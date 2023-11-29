@@ -1,9 +1,7 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies the data point and series that the formatting information 
@@ -11,7 +9,7 @@ namespace b2xtranslator.OfficeGraph
     /// as defined by the Chart Sheet Substream ABNF. This collection of records 
     /// specifies formatting properties for the data point and series.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.DataFormat)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.DataFormat)]
     public class DataFormat : OfficeGraphBiffRecord
     {
         public const GraphRecordNumber ID = GraphRecordNumber.DataFormat;

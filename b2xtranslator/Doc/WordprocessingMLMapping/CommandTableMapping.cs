@@ -1,11 +1,9 @@
-using System;
-using b2xtranslator.DocFileFormat;
-using b2xtranslator.CommonTranslatorLib;
-using b2xtranslator.OpenXmlLib;
 using System.Xml;
-using System.IO;
+using b2xtranslator.CommonTranslatorLib;
+using b2xtranslator.doc.DocFileFormat;
+using b2xtranslator.OpenXmlLib;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class CommandTableMapping : AbstractOpenXmlMapping,
         IMapping<CommandTable>

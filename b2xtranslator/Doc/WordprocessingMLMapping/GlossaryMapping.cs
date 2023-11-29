@@ -1,7 +1,7 @@
+using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.OpenXmlLib;
-using b2xtranslator.DocFileFormat;
 
-namespace b2xtranslator.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping
 {
     public class GlossaryMapping : DocumentMapping
     {

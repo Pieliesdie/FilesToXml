@@ -1,16 +1,14 @@
-﻿
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.OfficeGraph
+namespace b2xtranslator.OfficeGraph.BiffRecords
 {
     /// <summary>
     /// This record specifies properties of the data for a series, a trendline, or error bars, and 
     /// specifies the beginning of a collection of records as defined by the Chart Sheet Substream ABNF.<br/> 
     /// The collection of records specifies a series, a trendline, or error bars.
     /// </summary>
-    [OfficeGraphBiffRecordAttribute(GraphRecordNumber.Series)]
+    [OfficeGraphBiffRecord(GraphRecordNumber.Series)]
     public class Series : OfficeGraphBiffRecord
     {
         public enum SeriesDataType
