@@ -8,10 +8,7 @@
 		<StartupObject>FilesToXml.Winforms.Program</StartupObject>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Folder Include="Pages\" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="6.8.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="8.0.3" />
