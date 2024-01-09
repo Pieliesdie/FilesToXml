@@ -35,13 +35,13 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
         {
             var date = new StringBuilder();
             date.Append($"{dttm.yr:0000}");
-            date.Append("-");
+            date.Append('-');
             date.Append($"{dttm.mon:00}");
-            date.Append("-");
+            date.Append('-');
             date.Append($"{dttm.dom:00}");
-            date.Append("T");
+            date.Append('T');
             date.Append($"{dttm.hr:00}");
-            date.Append(":");
+            date.Append(':');
             date.Append($"{dttm.mint:00}");
             date.Append(":00Z");
 

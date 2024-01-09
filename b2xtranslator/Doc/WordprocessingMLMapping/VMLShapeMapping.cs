@@ -569,7 +569,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             }
             if (shadowOffsetY != null)
             {
-                offset.Append(",");
+                offset.Append(',');
                 offset.Append(shadowOffsetY.ToPoints());
                 offset.Append("pt");
             }
@@ -585,7 +585,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             }
             if (secondShadowOffsetY != null)
             {
-                offset2.Append(",");
+                offset2.Append(',');
                 offset2.Append(secondShadowOffsetY.ToPoints());
                 offset2.Append("pt");
             }
@@ -626,13 +626,13 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                     }
                     if (viewPointY != null)
                     {
-                        viewPoint.Append(",");
+                        viewPoint.Append(',');
                         viewPoint.Append(viewPointY.Value);
                     }
                     
                     if (viewPointZ != null)
                     {
-                        viewPoint.Append(",");
+                        viewPoint.Append(',');
                         viewPoint.Append(viewPointZ.Value);
                     }
                     appendValueAttribute(this._3dstyle, null, "viewpoint", viewPoint.ToString(), null);
@@ -648,7 +648,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                     }
                     if (viewPointOriginY != null)
                     {
-                        viewPointOrigin.Append(",");
+                        viewPointOrigin.Append(',');
                         viewPointOrigin.Append(string.Format(CultureInfo.CreateSpecificCulture("EN"), "{0:0.00}", viewPointOriginY));
                     }
                     appendValueAttribute(this._3dstyle, null, "viewpointorigin", viewPointOrigin.ToString(), null);
@@ -742,7 +742,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                 result.Append(colorPos);
                 result.Append("f #");
                 result.Append(color.SixDigitHexCode);
-                result.Append(";");
+                result.Append(';');
             }
 
             return result.ToString();
@@ -786,39 +786,39 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                     switch (seg.Type)
                     {
                         case PathSegment.SegmentType.msopathLineTo:
-                            VmlPath.Append("l");
+                            VmlPath.Append('l');
                             VmlPath.Append(parser.Values[valuePointer].X);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer].Y);
                             valuePointer += 1;
                             break;
                         case PathSegment.SegmentType.msopathCurveTo:
-                            VmlPath.Append("c");
+                            VmlPath.Append('c');
                             VmlPath.Append(parser.Values[valuePointer].X);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer].Y);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer + 1].X);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer + 1].Y);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer + 2].X);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer + 2].Y);
                             valuePointer += 3;
                             break;
                         case PathSegment.SegmentType.msopathMoveTo:
-                            VmlPath.Append("m");
+                            VmlPath.Append('m');
                             VmlPath.Append(parser.Values[valuePointer].X);
-                            VmlPath.Append(",");
+                            VmlPath.Append(',');
                             VmlPath.Append(parser.Values[valuePointer].Y);
                             valuePointer += 1;
                             break;
                         case PathSegment.SegmentType.msopathClose:
-                            VmlPath.Append("x");
+                            VmlPath.Append('x');
                             break;
                         case PathSegment.SegmentType.msopathEnd:
-                            VmlPath.Append("e");
+                            VmlPath.Append('e');
                             break;
                         case PathSegment.SegmentType.msopathEscape:
                         case PathSegment.SegmentType.msopathClientEscape:
@@ -839,7 +839,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             // end the path
             if (VmlPath[VmlPath.Length-1] != 'e')
             {
-                VmlPath.Append("e");
+                VmlPath.Append('e');
             }
 
             return VmlPath.ToString();
@@ -1182,7 +1182,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             foreach (int coord in pVertices)
             {
                 coords.Append(coord);
-                coords.Append(" ");
+                coords.Append(' ');
             }
 
             return coords.ToString().Trim();
@@ -1409,9 +1409,9 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
         private static void appendStyleProperty(StringBuilder b, string propName, string propValue)
         {
             b.Append(propName);
-            b.Append(":");
+            b.Append(':');
             b.Append(propValue);
-            b.Append(";");
+            b.Append(';');
         }
 
 

@@ -10,8 +10,8 @@ namespace FilesToXml.Test
         public void TxtToXmlTestNotNull()
         {
             var converter = new TxtToXml();
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/txt.txt";
+            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string path = curDir + @"\Files\txt.txt";
 
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
@@ -23,7 +23,7 @@ namespace FilesToXml.Test
             var converter = new TxtToXml();
             string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"\Files\txt.txt";
-            string result = converter.Convert(File.Open(path, FileMode.Open)).ToString();
+            string result = converter.Convert(File.OpenRead(path)).ToString();
             Assert.NotNull(result);
         }
     }

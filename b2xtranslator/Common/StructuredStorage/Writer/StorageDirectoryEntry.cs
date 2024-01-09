@@ -169,7 +169,7 @@ namespace b2xtranslator.StructuredStorage.Writer
         /// <param name="treeHeight">The height of the balanced red-black-tree</param>
         /// <param name="treeLevel">The current tree level</param>
         /// <returns>The root of this red-black-tree</returns>
-        private uint setRelationsAndColorRecursive(List<BaseDirectoryEntry> entryList, int treeHeight, int treeLevel)
+        private static uint setRelationsAndColorRecursive(List<BaseDirectoryEntry> entryList, int treeHeight, int treeLevel)
         {
             if (entryList.Count < 1)
             {                

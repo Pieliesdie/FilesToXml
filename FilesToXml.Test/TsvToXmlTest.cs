@@ -25,7 +25,7 @@ public class TsvToXmlTest
         var converter = new TsvToXml();
         string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         string path = curDir + @"\Files\tsv.tsv";
-        using var fs = File.Open(path, FileMode.Open);
+        using var fs = File.OpenRead(path);
         string result = converter.Convert(fs).ToString();
         Assert.NotNull(result);
     }

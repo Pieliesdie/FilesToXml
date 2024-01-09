@@ -94,7 +94,7 @@ public class CsvToXml : IDelimiterConvertable
             using var csvParser = new CsvTextFieldParser(stream)
             {
                 //CommentTokens = new[] { "#" },
-                Delimiters = new[] { sep.ToString() },
+                Delimiters = [sep.ToString()],
                 HasFieldsEnclosedInQuotes = true
             };
             if (csvParser.EndOfData.Not() && csvParser.ReadFields().Length > 1)

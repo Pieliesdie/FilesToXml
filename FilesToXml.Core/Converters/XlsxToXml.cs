@@ -20,7 +20,7 @@ public class XlsxToXml : IConvertable
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         path = path.RelativePathToAbsoluteIfNeed();
-        using FileStream fs = File.Open(path, FileMode.Open);
+        using FileStream fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
     private struct SheetModel

@@ -25,7 +25,7 @@ public class DbfToXmlTest
         var converter = new DbfToXml();
         string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         string path = curDir + @"/Files/dbf.dbf";
-        using var fs = File.Open(path, FileMode.Open);
+        using var fs = File.OpenRead(path);
         string result = converter.Convert(fs).ToString();
         Assert.NotNull(result);
     }

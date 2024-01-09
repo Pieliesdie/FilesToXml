@@ -24,7 +24,7 @@ namespace FilesToXml.Test
             var converter = new JsonToXml();
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/json.json";
-            using var fs = File.Open(path, FileMode.Open);
+            using var fs = File.OpenRead(path);
             string result = converter.Convert(fs).ToString();
             Assert.NotNull(result);
         }
@@ -35,7 +35,7 @@ namespace FilesToXml.Test
             var converter = new JsonToXml();
             string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string path = curDir + @"/Files/json.json";
-            using var fs = File.Open(path, FileMode.Open);
+            using var fs = File.OpenRead(path);
             var ds = new XElement(converter.Convert(fs));
             var result = ds.Element("ROOT").Element("items").Element("address").Element("region").Attribute("guid").Value;
             Assert.Equal("5f77834b-6351-4bcd-95af-a9ff7f6b511c", result);

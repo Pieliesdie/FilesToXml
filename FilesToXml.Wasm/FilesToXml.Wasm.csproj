@@ -3,12 +3,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
 		<Nullable>enable</Nullable>
-		<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
-		<BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
-		<BlazorEnableCompression>true</BlazorEnableCompression>
-		<InvariantGlobalization>true</InvariantGlobalization>
-		<TrimMode>link</TrimMode>
-		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="Bootsharp" Version="0.1.3" />

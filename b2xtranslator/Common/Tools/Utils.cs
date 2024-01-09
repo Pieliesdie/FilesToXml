@@ -347,7 +347,7 @@ namespace b2xtranslator.Tools
                 }
             }
 
-            result.Append("\"");
+            result.Append('"');
 
             return result.ToString();
         }
