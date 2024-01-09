@@ -8,14 +8,11 @@
 		</Description>
 		<Company>Infostandart</Company>
 		<Authors>Ponomarev Oleg pov@infostandart.com</Authors>
-		<PackageReleaseNotes></PackageReleaseNotes>
 		<NeutralLanguage />
 		<RepositoryUrl>https://github.com/Pieliesdie/FilesToXml</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<SelfContained>True</SelfContained>
 		<Nullable>enable</Nullable>
-		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<AssemblyName>Convertor</AssemblyName>
 	</PropertyGroup>
 
@@ -39,10 +36,7 @@
 		<TrimMode>partial</TrimMode>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Include="..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
+		<None Include="..\README.md"/>
 	</ItemGroup>
 
 	<ItemGroup>

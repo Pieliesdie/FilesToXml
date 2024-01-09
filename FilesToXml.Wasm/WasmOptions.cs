@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using FilesToXml.Core;
+
 
 namespace FilesToXml.Wasm;
 
-public class WasmOptions : IOptions
+public class WasmOptions //: IOptions
 {
     public WasmOptions(IEnumerable<string> input)
     {
