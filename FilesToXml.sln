@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Test", "FilesToXml.Test\FilesToXml.Test.csproj", "{79BDCFC2-38B6-4C10-A947-8CB59AB78902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Tests", "FilesToXml.Tests\FilesToXml.Tests.csproj", "{79BDCFC2-38B6-4C10-A947-8CB59AB78902}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "b2xtranslator", "b2xtranslator\Common\b2xtranslator.csproj", "{2F937E73-E06C-4785-8576-F2E37A99A867}"
 EndProject
