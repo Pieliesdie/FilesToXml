@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConverterToXml.Core\ConverterToXml.Core.csproj" />
+    <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

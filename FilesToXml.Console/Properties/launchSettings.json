@@ -16,7 +16,7 @@
 
     "xlsx": {
       "commandName": "Project",
-      "commandLineArgs": "-i C:\\Users\\haket\\Downloads\\test.xlsx -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i C:\\Users\\haket\\Downloads\\publish\\publish\\windows-x64\\test.xlsx -e 1251 -E 1251 -o D:\\test.xml -s"
     },
     "txt": {
       "commandName": "Project",

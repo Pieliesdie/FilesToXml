@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConverterToXml.Test\ConverterToXml.Test.csproj" />
+    <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
