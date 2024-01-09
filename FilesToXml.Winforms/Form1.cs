@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 using MudExtensions.Services;
 
-namespace FilesToXml.Winform;
+namespace FilesToXml.Winforms;
 public partial class Form1 : Form
 {
     public Form1()

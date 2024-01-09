@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 
-namespace FilesToXml.Winform.Model;
+namespace FilesToXml.Winforms.Model;
 
 public record OptionsViewModel
 {

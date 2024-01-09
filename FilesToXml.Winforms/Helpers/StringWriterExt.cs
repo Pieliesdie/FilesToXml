@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using System.IO;
 
-namespace FilesToXml.Winform.Helpers;
+namespace FilesToXml.Winforms.Helpers;
 
 public class StringWriterExt : StringWriter
 {

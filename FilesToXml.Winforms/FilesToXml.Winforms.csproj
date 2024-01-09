@@ -5,13 +5,11 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<StartupObject>FilesToXml.Winform.Program</StartupObject>
+		<StartupObject>FilesToXml.Winforms.Program</StartupObject>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
-
 	<ItemGroup>
 	  <Folder Include="Pages\" />
-	  <Folder Include="Resources\Fonts\" />
 	</ItemGroup>
 
 	<ItemGroup>

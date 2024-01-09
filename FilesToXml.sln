@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Core", "FilesToX
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Wasm", "FilesToXml.Wasm\FilesToXml.Wasm.csproj", "{E23761AE-41FB-4BE4-846D-298AC6933923}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Winform", "FilesToXml.Winform\FilesToXml.Winform.csproj", "{EDD5A7A9-8636-4A6B-B5AA-4B4B02AB8DEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Winforms", "FilesToXml.Winforms\FilesToXml.Winforms.csproj", "{EDD5A7A9-8636-4A6B-B5AA-4B4B02AB8DEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

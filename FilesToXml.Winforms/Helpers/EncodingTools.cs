@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
+
 #pragma warning disable SYSLIB0001
 
-namespace FilesToXml.Winform.Helpers;
+namespace FilesToXml.Winforms.Helpers;
 
 internal static class EncodingTools
 {
@@ -15,10 +17,8 @@ internal static class EncodingTools
     {
         // Read the BOM
         var bom = new byte[4];
-        using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
-        {
-            file.Read(bom, 0, 4);
-        }
+        using var file = File.OpenRead(filename);
+        file.Read(bom, 0, 4);
 
         // Analyze the BOM
         if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;

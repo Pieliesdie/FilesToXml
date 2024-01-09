@@ -1,4 +1,4 @@
-﻿namespace FilesToXml.Winform
+﻿namespace FilesToXml.Winforms
 {
     partial class Form1
     {

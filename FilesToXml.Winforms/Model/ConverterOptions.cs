@@ -1,6 +1,6 @@
 ﻿using FilesToXml.Core;
 
-namespace FilesToXml.Winform.Model;
+namespace FilesToXml.Winforms.Model;
 
 public class ConverterOptions : IOptions
 {
