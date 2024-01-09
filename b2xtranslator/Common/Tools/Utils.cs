@@ -300,7 +300,7 @@ namespace b2xtranslator.Tools
         public static string GetHashDump(byte[] bytes)
         {
             int colCount = 16;
-            string ret = string.Format("({0:X04}) ", 0);
+            string ret = $"({0:X04}) ";
 
             int colCounter = 0;
             for (int i = 0; i < bytes.Length; i++)
@@ -308,9 +308,9 @@ namespace b2xtranslator.Tools
                 if (colCounter == colCount)
                 {
                     colCounter = 0;
-                    ret += Environment.NewLine + string.Format("({0:X04}) ", i);
+                    ret += Environment.NewLine + $"({i:X04}) ";
                 }
-                ret += string.Format("{0:X02} ", bytes[i]);
+                ret += $"{bytes[i]:X02} ";
                 colCounter++;
             }
 

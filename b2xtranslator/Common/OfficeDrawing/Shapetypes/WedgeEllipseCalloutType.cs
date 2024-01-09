@@ -13,30 +13,32 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.Path = "wr,,21600,21600@15@16@17@18l@21@22xe";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("val #1");
-            this.Formulas.Add("sum 10800 0 #0");
-            this.Formulas.Add("sum 10800 0 #1");
-            this.Formulas.Add("atan2 @2 @3");
-            this.Formulas.Add("sumangle @4 11 0");
-            this.Formulas.Add("sumangle @4 0 11");
-            this.Formulas.Add("cos 10800 @4");
-            this.Formulas.Add("sin 10800 @4");
-            this.Formulas.Add("cos 10800 @5");
-            this.Formulas.Add("sin 10800 @5");
-            this.Formulas.Add("cos 10800 @6");
-            this.Formulas.Add("sin 10800 @6");
-            this.Formulas.Add("sum 10800 0 @7");
-            this.Formulas.Add("sum 10800 0 @8");
-            this.Formulas.Add("sum 10800 0 @9");
-            this.Formulas.Add("sum 10800 0 @10");
-            this.Formulas.Add("sum 10800 0 @11");
-            this.Formulas.Add("sum 10800 0 @12");
-            this.Formulas.Add("mod @2 @3 0");
-            this.Formulas.Add("sum @19 0 10800");
-            this.Formulas.Add("if @20 #0 @13");
-            this.Formulas.Add("if @20 #1 @14");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "val #1",
+                "sum 10800 0 #0",
+                "sum 10800 0 #1",
+                "atan2 @2 @3",
+                "sumangle @4 11 0",
+                "sumangle @4 0 11",
+                "cos 10800 @4",
+                "sin 10800 @4",
+                "cos 10800 @5",
+                "sin 10800 @5",
+                "cos 10800 @6",
+                "sin 10800 @6",
+                "sum 10800 0 @7",
+                "sum 10800 0 @8",
+                "sum 10800 0 @9",
+                "sum 10800 0 @10",
+                "sum 10800 0 @11",
+                "sum 10800 0 @12",
+                "mod @2 @3 0",
+                "sum @19 0 10800",
+                "if @20 #0 @13",
+                "if @20 #1 @14"
+            };
 
             this.AdjustmentValues = "1350,25920";
 

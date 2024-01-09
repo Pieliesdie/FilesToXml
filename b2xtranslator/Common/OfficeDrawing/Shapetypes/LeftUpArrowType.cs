@@ -10,21 +10,22 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.ShapeConcentricFill = false;
             this.Joins = JoinStyle.miter;
             this.Path = "m@4,l@0@2@5@2@5@5@2@5@2@0,0@4@2,21600@2@1@1@1@1@2,21600@2xe";
-            this.Formulas = new List<string>();
-
-            this.Formulas.Add("val #0"); 
-            this.Formulas.Add("val #1");  
-            this.Formulas.Add("val #2");  
-            this.Formulas.Add("prod #0 1 2");  
-            this.Formulas.Add("sum @3 10800 0");  
-            this.Formulas.Add("sum 21600 #0 #1");  
-            this.Formulas.Add("sum #1 #2 0");  
-            this.Formulas.Add("prod @6 1 2");  
-            this.Formulas.Add("prod #1 2 1");  
-            this.Formulas.Add("sum @8 0 21600");  
-            this.Formulas.Add("sum @5 0 @4");  
-            this.Formulas.Add("sum #0 0 @4");
-            this.Formulas.Add("prod @2 @10 @11"); 
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "val #1",
+                "val #2",
+                "prod #0 1 2",
+                "sum @3 10800 0",
+                "sum 21600 #0 #1",
+                "sum #1 #2 0",
+                "prod @6 1 2",
+                "prod #1 2 1",
+                "sum @8 0 21600",
+                "sum @5 0 @4",
+                "sum #0 0 @4",
+                "prod @2 @10 @11"
+            };
 
             this.AdjustmentValues = "9257,18514,6171";
             this.ConnectorLocations = "@4,0;@0,@2;@2,@0;0,@4;@2,21600;@7,@1;@1,@7;21600,@2";

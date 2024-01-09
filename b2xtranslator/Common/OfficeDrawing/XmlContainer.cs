@@ -61,7 +61,7 @@ namespace b2xtranslator.OfficeDrawing
                 filePath = Path.GetFileName(forPartPath);
             }
 
-            string relPath = string.Format("{0}_rels/{1}.rels", directoryPath, filePath);
+            string relPath = $"{directoryPath}_rels/{filePath}.rels";
             return relPath;
         }
 

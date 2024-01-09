@@ -167,7 +167,8 @@ namespace b2xtranslator.StructuredStorage.Common
                 this._diFatStartSector = value;
                 if (value > this._ioHandler.IOStreamSize / this.SectorSize && value != SectorId.ENDOFCHAIN && value != SectorId.FREESECT)
                 {
-                    throw new InvalidValueInHeaderException("DiFatStartSector", string.Format("Details: value={0};_ioHandler.IOStreamSize={1};SectorSize={2}; SectorId.ENDOFCHAIN: {3}", value, this._ioHandler.IOStreamSize, this.SectorSize, SectorId.ENDOFCHAIN));
+                    throw new InvalidValueInHeaderException("DiFatStartSector",
+                        $"Details: value={value};_ioHandler.IOStreamSize={this._ioHandler.IOStreamSize};SectorSize={this.SectorSize}; SectorId.ENDOFCHAIN: {SectorId.ENDOFCHAIN}");
                 }
             }
         }

@@ -34,15 +34,15 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
         public void Apply(DateAndTime dttm)
         {
             var date = new StringBuilder();
-            date.Append(string.Format("{0:0000}", dttm.yr));
+            date.Append($"{dttm.yr:0000}");
             date.Append("-");
-            date.Append(string.Format("{0:00}", dttm.mon));
+            date.Append($"{dttm.mon:00}");
             date.Append("-");
-            date.Append(string.Format("{0:00}", dttm.dom));
+            date.Append($"{dttm.dom:00}");
             date.Append("T");
-            date.Append(string.Format("{0:00}", dttm.hr));
+            date.Append($"{dttm.hr:00}");
             date.Append(":");
-            date.Append(string.Format("{0:00}", dttm.mint));
+            date.Append($"{dttm.mint:00}");
             date.Append(":00Z");
 
             var xml = this._nodeFactory.CreateAttribute("w", "date", OpenXmlNamespaces.WordprocessingML);

@@ -69,7 +69,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             {
                 this._writer.WriteAttributeString("wne", "kcmPrimary",
                     OpenXmlNamespaces.MicrosoftWordML,
-                    string.Format("{0:x4}", kme.kcm1));
+                    $"{kme.kcm1:x4}");
             }
 
             this._writer.WriteStartElement("wne", "macro", OpenXmlNamespaces.MicrosoftWordML);

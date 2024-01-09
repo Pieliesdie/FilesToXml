@@ -13,21 +13,23 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.Path = "m,l,21600@0,21600,21600@0,21600,xem@0,21600nfl@3@5c@7@9@11@13,21600@0e";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("sum 21600 0 @0");
-            this.Formulas.Add("prod @1 8481 32768");
-            this.Formulas.Add("sum @2 @0 0");
-            this.Formulas.Add("prod @1 1117 32768");
-            this.Formulas.Add("sum @4 @0 0");
-            this.Formulas.Add("prod @1 11764 32768");
-            this.Formulas.Add("sum @6 @0 0");
-            this.Formulas.Add("prod @1 6144 32768");
-            this.Formulas.Add("sum @8 @0 0");
-            this.Formulas.Add("prod @1 20480 32768");
-            this.Formulas.Add("sum @10 @0 0");
-            this.Formulas.Add("prod @1 6144 32768");
-            this.Formulas.Add("sum @12 @0 0");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "sum 21600 0 @0",
+                "prod @1 8481 32768",
+                "sum @2 @0 0",
+                "prod @1 1117 32768",
+                "sum @4 @0 0",
+                "prod @1 11764 32768",
+                "sum @6 @0 0",
+                "prod @1 6144 32768",
+                "sum @8 @0 0",
+                "prod @1 20480 32768",
+                "sum @10 @0 0",
+                "prod @1 6144 32768",
+                "sum @12 @0 0"
+            };
 
             this.AdjustmentValues = "18900";
 

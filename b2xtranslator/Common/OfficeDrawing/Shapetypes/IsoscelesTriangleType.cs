@@ -16,10 +16,12 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.Path = "m@0,l,21600r21600,xe";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("prod #0 1 2");
-            this.Formulas.Add("sum @1 10800 0");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "prod #0 1 2",
+                "sum @1 10800 0"
+            };
 
             this.AdjustmentValues = "10800";
 

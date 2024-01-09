@@ -177,17 +177,14 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
         public static ShapeType GetShapeType(uint typeCode)
         {
             ShapeType result;
-            Type cls;
 
-            if (TypeToShapeClassMapping.TryGetValue(typeCode, out cls))
+            if (TypeToShapeClassMapping.TryGetValue(typeCode, out var cls))
             {
                 var constructor = cls.GetConstructor(new Type[] {});
 
                 if (constructor == null)
                 {
-                    throw new Exception(string.Format(
-                        "Internal error: Could not find a matching constructor for class {0}",
-                        cls));
+                    throw new Exception($"Internal error: Could not find a matching constructor for class {cls}");
                 }
 
                 try

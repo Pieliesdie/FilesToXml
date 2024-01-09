@@ -14,14 +14,16 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.Path = "m@0,l0@0,,21600@1,21600,21600@2,21600,xem0@0nfl@1@0,21600,em@1@0nfl@1,21600e";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("sum width 0 #0");
-            this.Formulas.Add("sum height 0 #0");
-            this.Formulas.Add("mid height #0");
-            this.Formulas.Add("prod @1 1 2");
-            this.Formulas.Add("prod @2 1 2");
-            this.Formulas.Add("mid width #0");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "sum width 0 #0",
+                "sum height 0 #0",
+                "mid height #0",
+                "prod @1 1 2",
+                "prod @2 1 2",
+                "mid width #0"
+            };
 
             this.AdjustmentValues = "5400";
 

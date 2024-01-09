@@ -58,9 +58,8 @@ namespace b2xtranslator.StructuredStorage.Reader
         /// <param name="immediateCycleCheck">Flag whether to check for cycles in every loop</param>
         internal List<uint> GetSectorChain(uint startSector, ulong maxCount, string name, bool immediateCycleCheck)
         {
-            var result = new List<uint>();
+            var result = new List<uint> { startSector };
 
-            result.Add(startSector);
             while (true)
             {
                 uint nextSectorInStream = this.GetNextSectorInChain(result[result.Count - 1]);

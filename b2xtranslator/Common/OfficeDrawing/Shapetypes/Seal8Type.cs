@@ -11,21 +11,19 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.Joins = JoinStyle.miter;
             this.Path = "m21600,10800l@3@6,18436,3163@4@5,10800,0@6@5,3163,3163@5@6,,10800@5@4,3163,18436@6@3,10800,21600@4@3,18436,18436@3@4xe";
 
-            this.Formulas = new List<string>();
-
-
-
-            this.Formulas.Add("sum 10800 0 #0"); 
-            this.Formulas.Add("prod @0 30274 32768"); 
-            this.Formulas.Add("prod @0 12540 32768"); 
-            this.Formulas.Add("sum @1 10800 0"); 
-            this.Formulas.Add("sum @2 10800 0"); 
-            this.Formulas.Add("sum 10800 0 @1"); 
-            this.Formulas.Add("sum 10800 0 @2"); 
-            this.Formulas.Add("prod @0 23170 32768"); 
-            this.Formulas.Add("sum @7 10800 0");
-            this.Formulas.Add("sum 10800 0 @7");
-
+            this.Formulas = new List<string>
+            {
+                "sum 10800 0 #0",
+                "prod @0 30274 32768",
+                "prod @0 12540 32768",
+                "sum @1 10800 0",
+                "sum @2 10800 0",
+                "sum 10800 0 @1",
+                "sum 10800 0 @2",
+                "prod @0 23170 32768",
+                "sum @7 10800 0",
+                "sum 10800 0 @7"
+            };
 
             this.AdjustmentValues = "2538";
             this.ConnectorLocations = "Rectangle";

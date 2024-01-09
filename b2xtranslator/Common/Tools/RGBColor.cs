@@ -25,33 +25,33 @@ namespace b2xtranslator.Tools
             {
                 //R
                 this.Red = bytes[0];
-                this.SixDigitHexCode = string.Format("{0:x2}", this.Red);
+                this.SixDigitHexCode = $"{this.Red:x2}";
                 //G
                 this.Green = bytes[1];
-                this.SixDigitHexCode += string.Format("{0:x2}", this.Green);
+                this.SixDigitHexCode += $"{this.Green:x2}";
                 //B
                 this.Blue = bytes[2];
-                this.SixDigitHexCode += string.Format("{0:x2}", this.Blue);
+                this.SixDigitHexCode += $"{this.Blue:x2}";
                 this.EightDigitHexCode = this.SixDigitHexCode;
                 //Alpha
                 this.Alpha = bytes[3];
-                this.EightDigitHexCode += string.Format("{0:x2}", this.Alpha);
+                this.EightDigitHexCode += $"{this.Alpha:x2}";
             }
             else if (order == ByteOrder.RedLast)
             {
                 //R
                 this.Red = bytes[2];
-                this.SixDigitHexCode = string.Format("{0:x2}", this.Red);
+                this.SixDigitHexCode = $"{this.Red:x2}";
                 //G
                 this.Green = bytes[1];
-                this.SixDigitHexCode += string.Format("{0:x2}", this.Green);
+                this.SixDigitHexCode += $"{this.Green:x2}";
                 //B
                 this.Blue = bytes[0];
-                this.SixDigitHexCode += string.Format("{0:x2}", this.Blue);
+                this.SixDigitHexCode += $"{this.Blue:x2}";
                 this.EightDigitHexCode = this.SixDigitHexCode;
                 //Alpha
                 this.Alpha = bytes[3];
-                this.EightDigitHexCode += string.Format("{0:x2}", this.Alpha);
+                this.EightDigitHexCode += $"{this.Alpha:x2}";
             }
 
         }

@@ -20,22 +20,24 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.TextboxRectangle = "@1,@1,@10,@7";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("sum height 0 #0 ");
-            this.Formulas.Add("val #0 ");
-            this.Formulas.Add("prod @1 1 2 ");
-            this.Formulas.Add("prod @1 3 4 ");
-            this.Formulas.Add("prod @1 5 4 ");
-            this.Formulas.Add("prod @1 3 2 ");
-            this.Formulas.Add("prod @1 2 1 ");
-            this.Formulas.Add("sum height 0 @2 ");
-            this.Formulas.Add("sum height 0 @3 ");
-            this.Formulas.Add("sum width 0 @5 ");
-            this.Formulas.Add("sum width 0 @1 ");
-            this.Formulas.Add("sum width 0 @2"); 
-            this.Formulas.Add("val height ");
-            this.Formulas.Add("prod height 1 2"); 
-            this.Formulas.Add("prod width 1 2");
+            this.Formulas = new List<string>
+            {
+                "sum height 0 #0 ",
+                "val #0 ",
+                "prod @1 1 2 ",
+                "prod @1 3 4 ",
+                "prod @1 5 4 ",
+                "prod @1 3 2 ",
+                "prod @1 2 1 ",
+                "sum height 0 @2 ",
+                "sum height 0 @3 ",
+                "sum width 0 @5 ",
+                "sum width 0 @1 ",
+                "sum width 0 @2",
+                "val height ",
+                "prod height 1 2",
+                "prod width 1 2"
+            };
 
             this.Handles = new List<Handle>();
             var handleOne = new Handle

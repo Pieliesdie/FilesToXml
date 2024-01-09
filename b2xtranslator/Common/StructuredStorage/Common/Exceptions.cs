@@ -20,11 +20,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("Magic Number not found in file. " + additionalMessage)
         {
         }
-
-        protected MagicNumberException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -32,11 +27,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public ValueNotZeroException(string value)
             : base(value + " must be zero.")
-        {
-        }
-
-        protected ValueNotZeroException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -48,11 +38,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("The number of bytes read mismatches the specified amount.")
         {
         }
-
-        protected ReadBytesAmountMismatchException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -60,11 +45,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public UnsupportedSizeException(string value)
             : base("The size of " + value + " is not supported.")
-        {
-        }
-
-        protected UnsupportedSizeException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -81,11 +61,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("The value for '" + value + "' in the header is invalid. " + additionalMessage)
         {
         }
-
-        protected InvalidValueInHeaderException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -93,11 +68,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public ChainCycleDetectedException(string chain)
             : base(chain + " contains a cycle.")
-        {
-        }
-
-        protected ChainCycleDetectedException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -114,11 +84,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("The number of sectors used by " + name + " does not match the specified size. " + additionalMessage)
         {
         }
-
-        protected ChainSizeMismatchException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -126,11 +91,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public InvalidSectorInChainException()
             : base("Chain could not be build due to an invalid sector id.")
-        {
-        }
-
-        protected InvalidSectorInChainException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -142,11 +102,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("The current stream is not initialized.")
         {
         }
-
-        protected StreamNotInitalizedException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -154,11 +109,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public InvalidValueInDirectoryEntryException(string value)
             : base("The value for '" + value + "' is invalid.")
-        {
-        }
-
-        protected InvalidValueInDirectoryEntryException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -170,11 +120,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("The directory entry is not of type STGTY_STREAM.")
         {
         }
-
-        protected WrongDirectoryEntryTypeException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -182,11 +127,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public StreamNotFoundException(string name)
             : base("Stream with name '" + name + "' not found.")
-        {
-        }
-
-        protected StreamNotFoundException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -198,11 +138,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("DirectoryEntry with name '" + name + "' not found.")
         {
         }
-
-        protected DirectoryEntryNotFoundException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -210,11 +145,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public FileHandlerNotCorrectlyInitializedException()
             : base("The file handler is not correctly initialized.")
-        {
-        }
-
-        protected FileHandlerNotCorrectlyInitializedException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }
@@ -226,11 +156,6 @@ namespace b2xtranslator.StructuredStorage.Common
             : base("Inconsistancy found while writing DiFat.")
         {
         }
-
-        protected DiFatInconsistentException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
-        {
-        }
     }
 
     [Serializable]
@@ -238,11 +163,6 @@ namespace b2xtranslator.StructuredStorage.Common
     {
         public InvalidSectorSizeException()
             : base("Inconsistancy found while writing a sector.")
-        {
-        }
-
-        protected InvalidSectorSizeException(SerializationInfo info, StreamingContext ctxt)
-            : base(info, ctxt)
         {
         }
     }

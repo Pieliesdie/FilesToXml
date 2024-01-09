@@ -15,13 +15,15 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
 
             this.Path = "m0@0l21600,m,21600l21600@1e";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("sum 21600 0 @0");
-            this.Formulas.Add("prod #0 1 2");
-            this.Formulas.Add("sum @2 10800 0");
-            this.Formulas.Add("prod @1 1 2");
-            this.Formulas.Add("sum @4 10800 0");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "sum 21600 0 @0",
+                "prod #0 1 2",
+                "sum @2 10800 0",
+                "prod @1 1 2",
+                "sum @4 10800 0"
+            };
 
             this.ConnectorLocations = "10800,@2;0,@3;10800,@5;21600,@4";
             this.ConnectorAngles = "270,180,90,0";

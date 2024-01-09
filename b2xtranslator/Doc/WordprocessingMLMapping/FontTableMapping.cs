@@ -42,7 +42,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                 //charset
                 this._writer.WriteStartElement("w", "charset", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x2}", font.chs));
+                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, $"{font.chs:x2}");
                 this._writer.WriteEndElement();
 
                 //font family
@@ -55,7 +55,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                 this._writer.WriteStartAttribute("w", "val", OpenXmlNamespaces.WordprocessingML);
                 foreach (byte b in font.panose)
                 {
-                    this._writer.WriteString(string.Format("{0:x2}", b));
+                    this._writer.WriteString($"{b:x2}");
                 }
                 this._writer.WriteEndAttribute();
                 this._writer.WriteEndElement();
@@ -75,12 +75,18 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                 //font signature
                 this._writer.WriteStartElement("w", "sig", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "usb0", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.UnicodeSubsetBitfield0));
-                this._writer.WriteAttributeString("w", "usb1", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.UnicodeSubsetBitfield1));
-                this._writer.WriteAttributeString("w", "usb2", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.UnicodeSubsetBitfield2));
-                this._writer.WriteAttributeString("w", "usb3", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.UnicodeSubsetBitfield3));
-                this._writer.WriteAttributeString("w", "csb0", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.CodePageBitfield0));
-                this._writer.WriteAttributeString("w", "csb1", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x8}", font.fs.CodePageBitfield1));
+                this._writer.WriteAttributeString("w", "usb0", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.UnicodeSubsetBitfield0:x8}");
+                this._writer.WriteAttributeString("w", "usb1", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.UnicodeSubsetBitfield1:x8}");
+                this._writer.WriteAttributeString("w", "usb2", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.UnicodeSubsetBitfield2:x8}");
+                this._writer.WriteAttributeString("w", "usb3", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.UnicodeSubsetBitfield3:x8}");
+                this._writer.WriteAttributeString("w", "csb0", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.CodePageBitfield0:x8}");
+                this._writer.WriteAttributeString("w", "csb1", OpenXmlNamespaces.WordprocessingML,
+                    $"{font.fs.CodePageBitfield1:x8}");
                 this._writer.WriteEndElement();
 
                 this._writer.WriteEndElement();

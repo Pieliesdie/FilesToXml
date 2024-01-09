@@ -46,7 +46,7 @@ namespace b2xtranslator.StructuredStorage.Reader
             // Check for Magic Number                       
             if (magicNumber != MAGIC_NUMBER)
             {                
-                throw new MagicNumberException(string.Format("Found: {0,10:X}", magicNumber));
+                throw new MagicNumberException($"Found: {magicNumber,10:X}");
             }
 
             this.SectorShift = fileHandler.ReadUInt16(0x1E);

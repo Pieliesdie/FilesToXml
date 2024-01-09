@@ -12,14 +12,16 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.Joins = JoinStyle.miter;
             this.Path = "m10800,l21600@0@3@0@3@2,21600@2,10800,21600,0@2@1@2@1@0,0@0xe";
 
-            this.Formulas= new List<string>();
-            this.Formulas.Add("val #1");
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("sum 21600 0 #1");
-            this.Formulas.Add("sum 21600 0 #0");
-            this.Formulas.Add("prod #1 #0 10800 ");
-            this.Formulas.Add("sum #1 0 @4");
-            this.Formulas.Add("sum 21600 0 @5");
+            this.Formulas= new List<string>
+            {
+                "val #1",
+                "val #0",
+                "sum 21600 0 #1",
+                "sum 21600 0 #0",
+                "prod #1 #0 10800 ",
+                "sum #1 0 @4",
+                "sum 21600 0 @5"
+            };
 
             this.AdjustmentValues = "5400,4320";
 

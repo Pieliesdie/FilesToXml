@@ -6,8 +6,8 @@ public class StringWriterExt : StringWriter
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public delegate void FlushedEventHandler(object sender, EventArgs args);
-    public event FlushedEventHandler Flushed;
-    public virtual bool AutoFlush { get; set; } = true;
+    public event FlushedEventHandler? Flushed;
+    public bool AutoFlush { get; set; } = true;
 
     public StringWriterExt()
         : base() { }
@@ -17,9 +17,7 @@ public class StringWriterExt : StringWriter
 
     protected void OnFlush()
     {
-        var eh = Flushed;
-        if (eh != null)
-            eh(this, EventArgs.Empty);
+        Flushed?.Invoke(this, EventArgs.Empty);
         this.GetStringBuilder().Clear();
     }
 
@@ -35,12 +33,12 @@ public class StringWriterExt : StringWriter
         if (AutoFlush) Flush();
     }
 
-    public override void Write(string value)
+    public override void Write(string? value)
     {
         base.Write(value);
         if (AutoFlush) Flush();
     }
-    public override void WriteLine(string value)
+    public override void WriteLine(string? value)
     {
         base.WriteLine(value);
         if (AutoFlush) Flush();

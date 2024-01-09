@@ -10,54 +10,54 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.ShapeConcentricFill = false;
             this.Joins = JoinStyle.miter;
             this.Path = "ar0@22@3@21,,0@4@21@14@22@1@21@7@21@12@2l@13@2@8,0@11@2wa0@22@3@21@10@2@16@24@14@22@1@21@16@24@14,xewr@14@22@1@21@7@21@16@24nfe";
-            this.Formulas = new List<string>();
-
-
-            this.Formulas.Add("val #0");  
-            this.Formulas.Add("val #1"); 
-            this.Formulas.Add("val #2"); 
-            this.Formulas.Add("sum #0 width #1"); 
-            this.Formulas.Add("prod @3 1 2"); 
-            this.Formulas.Add("sum #1 #1 width ");
-            this.Formulas.Add("sum @5 #1 #0"); 
-            this.Formulas.Add("prod @6 1 2"); 
-            this.Formulas.Add("mid width #0"); 
-            this.Formulas.Add("ellipse #2 height @4"); 
-            this.Formulas.Add("sum @4 @9 0 ");
-            this.Formulas.Add("sum @10 #1 width"); 
-            this.Formulas.Add("sum @7 @9 0 ");
-            this.Formulas.Add("sum @11 width #0 ");
-            this.Formulas.Add("sum @5 0 #0 ");
-            this.Formulas.Add("prod @14 1 2 ");
-            this.Formulas.Add("mid @4 @7 ");
-            this.Formulas.Add("sum #0 #1 width ");
-            this.Formulas.Add("prod @17 1 2 ");
-            this.Formulas.Add("sum @16 0 @18 ");
-            this.Formulas.Add("val width ");
-            this.Formulas.Add("val height ");
-            this.Formulas.Add("sum 0 0 height"); 
-            this.Formulas.Add("sum @16 0 @4 ");
-            this.Formulas.Add("ellipse @23 @4 height ");
-            this.Formulas.Add("sum @8 128 0 ");
-            this.Formulas.Add("prod @5 1 2 ");
-            this.Formulas.Add("sum @5 0 128 ");
-            this.Formulas.Add("sum #0 @16 @11 ");
-            this.Formulas.Add("sum width 0 #0 ");
-            this.Formulas.Add("prod @29 1 2 ");
-            this.Formulas.Add("prod height height 1 ");
-            this.Formulas.Add("prod #2 #2 1 ");
-            this.Formulas.Add("sum @31 0 @32 ");
-            this.Formulas.Add("sqrt @33 ");
-            this.Formulas.Add("sum @34 height 0 ");
-            this.Formulas.Add("prod width height @35"); 
-            this.Formulas.Add("sum @36 64 0 ");
-            this.Formulas.Add("prod #0 1 2 ");
-            this.Formulas.Add("ellipse @30 @38 height ");
-            this.Formulas.Add("sum @39 0 64 ");
-            this.Formulas.Add("prod @4 1 2");
-            this.Formulas.Add("sum #1 0 @41 ");
-            this.Formulas.Add("prod height 4390 32768");
-            this.Formulas.Add("prod height 28378 32768");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "val #1",
+                "val #2",
+                "sum #0 width #1",
+                "prod @3 1 2",
+                "sum #1 #1 width ",
+                "sum @5 #1 #0",
+                "prod @6 1 2",
+                "mid width #0",
+                "ellipse #2 height @4",
+                "sum @4 @9 0 ",
+                "sum @10 #1 width",
+                "sum @7 @9 0 ",
+                "sum @11 width #0 ",
+                "sum @5 0 #0 ",
+                "prod @14 1 2 ",
+                "mid @4 @7 ",
+                "sum #0 #1 width ",
+                "prod @17 1 2 ",
+                "sum @16 0 @18 ",
+                "val width ",
+                "val height ",
+                "sum 0 0 height",
+                "sum @16 0 @4 ",
+                "ellipse @23 @4 height ",
+                "sum @8 128 0 ",
+                "prod @5 1 2 ",
+                "sum @5 0 128 ",
+                "sum #0 @16 @11 ",
+                "sum width 0 #0 ",
+                "prod @29 1 2 ",
+                "prod height height 1 ",
+                "prod #2 #2 1 ",
+                "sum @31 0 @32 ",
+                "sqrt @33 ",
+                "sum @34 height 0 ",
+                "prod width height @35",
+                "sum @36 64 0 ",
+                "prod #0 1 2 ",
+                "ellipse @30 @38 height ",
+                "sum @39 0 64 ",
+                "prod @4 1 2",
+                "sum #1 0 @41 ",
+                "prod height 4390 32768",
+                "prod height 28378 32768"
+            };
 
             this.AdjustmentValues = "12960,19440,7200";
             this.ConnectorLocations = "@8,0;@11,@2;@15,0;@16,@21;@13,@2";

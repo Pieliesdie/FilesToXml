@@ -1,4 +1,5 @@
 ﻿using System.Text;
+#pragma warning disable SYSLIB0001
 
 namespace FilesToXml.Winform.Helpers;
 

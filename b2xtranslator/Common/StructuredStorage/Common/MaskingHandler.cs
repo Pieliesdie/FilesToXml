@@ -35,7 +35,7 @@ namespace b2xtranslator.StructuredStorage.Common
             string result = text;
             foreach (uint character in CharsToMask)
             {
-                result = result.Replace(string.Format("%{0:X4}", character), new string((char)character, 1));
+                result = result.Replace($"%{character:X4}", new string((char)character, 1));
             }
             return result;
         }

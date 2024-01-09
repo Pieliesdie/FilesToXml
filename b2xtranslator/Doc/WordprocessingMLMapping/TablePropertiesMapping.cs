@@ -117,7 +117,8 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                     //table look
                     case SinglePropertyModifier.OperationCode.sprmTTlp:
-                        appendValueElement(this._tblPr, "tblLook", string.Format("{0:x4}", System.BitConverter.ToInt16(sprm.Arguments, 2)), true);
+                        appendValueElement(this._tblPr, "tblLook",
+                            $"{System.BitConverter.ToInt16(sprm.Arguments, 2):x4}", true);
                         break;
 
                     //autofit

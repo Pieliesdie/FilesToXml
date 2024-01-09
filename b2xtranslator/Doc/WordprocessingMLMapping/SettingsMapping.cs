@@ -79,7 +79,8 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
             if (dop.grfFmtFilter != 0)
             {
                 this._writer.WriteStartElement("w", "stylePaneFormatFilter", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, string.Format("{0:x4}", dop.grfFmtFilter));
+                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML,
+                    $"{dop.grfFmtFilter:x4}");
                 this._writer.WriteEndElement();
             }
 

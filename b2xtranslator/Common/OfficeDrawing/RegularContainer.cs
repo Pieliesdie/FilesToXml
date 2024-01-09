@@ -43,10 +43,11 @@ namespace b2xtranslator.OfficeDrawing
                 catch
                 {
                     if (WRITE_DEBUG_DUMPS)
+#pragma warning disable CS0162 // Unreachable code detected
                     {
                         if (child != null)
                         {
-                            string filename = string.Format(@"{0}\{1}.record", "dumps", child.GetIdentifier());
+                            string filename = $@"{"dumps"}\{child.GetIdentifier()}.record";
 
                             using (var fs = new FileStream(filename, FileMode.Create))
                             {
@@ -54,6 +55,7 @@ namespace b2xtranslator.OfficeDrawing
                             }
                         }
                     }
+#pragma warning restore CS0162 // Unreachable code detected
 
                     throw;
                 }

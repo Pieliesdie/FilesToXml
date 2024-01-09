@@ -89,8 +89,7 @@ namespace b2xtranslator.OfficeGraph
             {
                 ushort id = reader.ReadUInt16();
                 ushort size = reader.ReadUInt16();
-                Type cls;
-                if (TypeToRecordClassMapping.TryGetValue(id, out cls))
+                if (TypeToRecordClassMapping.TryGetValue(id, out var cls))
                 {
                     var constructor = cls.GetConstructor(
                         new Type[] { typeof(IStreamReader), typeof(GraphRecordNumber), typeof(ushort) }

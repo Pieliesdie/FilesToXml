@@ -94,7 +94,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                 {
                     //rsid for paragraph property enditing (write to parent element)
                     case SinglePropertyModifier.OperationCode.sprmPRsid:
-                        string rsid = string.Format("{0:x8}", System.BitConverter.ToInt32(sprm.Arguments, 0));
+                        string rsid = $"{System.BitConverter.ToInt32(sprm.Arguments, 0):x8}";
                         this._ctx.AddRsid(rsid);
                         this._writer.WriteAttributeString("w", "rsidR", OpenXmlNamespaces.WordprocessingML, rsid);
                         break;

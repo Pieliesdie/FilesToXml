@@ -15,59 +15,61 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.ConnectorLocations = "@40,@0;@51,10800;@33,@4;@50,10800";
             this.ConnectorAngles = "270,180,90,0";
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("prod @0 41 9");
-            this.Formulas.Add("prod @0 23 9");
-            this.Formulas.Add("sum 0 0 @2");
-            this.Formulas.Add("sum 21600 0 #0");
-            this.Formulas.Add("sum 21600 0 @1");
-            this.Formulas.Add("sum 21600 0 @3");
-            this.Formulas.Add("sum #1 0 10800");
-            this.Formulas.Add("sum 21600 0 #1");
-            this.Formulas.Add("prod @8 1 3");
-            this.Formulas.Add("prod @8 2 3");
-            this.Formulas.Add("prod @8 4 3");
-            this.Formulas.Add("prod @8 5 3");
-            this.Formulas.Add("prod @8 2 1");
-            this.Formulas.Add("sum 21600 0 @9");
-            this.Formulas.Add("sum 21600 0 @10");
-            this.Formulas.Add("sum 21600 0 @8");
-            this.Formulas.Add("sum 21600 0 @11");
-            this.Formulas.Add("sum 21600 0 @12");
-            this.Formulas.Add("sum 21600 0 @13");
-            this.Formulas.Add("prod #1 1 3");
-            this.Formulas.Add("prod #1 2 3");
-            this.Formulas.Add("prod #1 4 3");
-            this.Formulas.Add("prod #1 5 3");
-            this.Formulas.Add("prod #1 2 1");
-            this.Formulas.Add("sum 21600 0 @20");
-            this.Formulas.Add("sum 21600 0 @21");
-            this.Formulas.Add("sum 21600 0 @22");
-            this.Formulas.Add("sum 21600 0 @23");
-            this.Formulas.Add("sum 21600 0 @24");
-            this.Formulas.Add("if @7 @19 0");
-            this.Formulas.Add("if @7 @18 @20");
-            this.Formulas.Add("if @7 @17 @21");
-            this.Formulas.Add("if @7 @16 #1");
-            this.Formulas.Add("if @7 @15 @22");
-            this.Formulas.Add("if @7 @14 @23");
-            this.Formulas.Add("if @7 21600 @24");
-            this.Formulas.Add("if @7 0 @29");
-            this.Formulas.Add("if @7 @9 @28");
-            this.Formulas.Add("if @7 @10 @27");
-            this.Formulas.Add("if @7 @8 @8");
-            this.Formulas.Add("if @7 @11 @26");
-            this.Formulas.Add("if @7 @12 @25");
-            this.Formulas.Add("if @7 @13 21600");
-            this.Formulas.Add("sum @36 0 @30");
-            this.Formulas.Add("sum @4 0 @0");
-            this.Formulas.Add("max @30 @37");
-            this.Formulas.Add("min @36 @43");
-            this.Formulas.Add("prod @0 2 1");
-            this.Formulas.Add("sum 21600 0 @48");
-            this.Formulas.Add("mid @36 @43");
-            this.Formulas.Add("mid @30 @37");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "prod @0 41 9",
+                "prod @0 23 9",
+                "sum 0 0 @2",
+                "sum 21600 0 #0",
+                "sum 21600 0 @1",
+                "sum 21600 0 @3",
+                "sum #1 0 10800",
+                "sum 21600 0 #1",
+                "prod @8 1 3",
+                "prod @8 2 3",
+                "prod @8 4 3",
+                "prod @8 5 3",
+                "prod @8 2 1",
+                "sum 21600 0 @9",
+                "sum 21600 0 @10",
+                "sum 21600 0 @8",
+                "sum 21600 0 @11",
+                "sum 21600 0 @12",
+                "sum 21600 0 @13",
+                "prod #1 1 3",
+                "prod #1 2 3",
+                "prod #1 4 3",
+                "prod #1 5 3",
+                "prod #1 2 1",
+                "sum 21600 0 @20",
+                "sum 21600 0 @21",
+                "sum 21600 0 @22",
+                "sum 21600 0 @23",
+                "sum 21600 0 @24",
+                "if @7 @19 0",
+                "if @7 @18 @20",
+                "if @7 @17 @21",
+                "if @7 @16 #1",
+                "if @7 @15 @22",
+                "if @7 @14 @23",
+                "if @7 21600 @24",
+                "if @7 0 @29",
+                "if @7 @9 @28",
+                "if @7 @10 @27",
+                "if @7 @8 @8",
+                "if @7 @11 @26",
+                "if @7 @12 @25",
+                "if @7 @13 21600",
+                "sum @36 0 @30",
+                "sum @4 0 @0",
+                "max @30 @37",
+                "min @36 @43",
+                "prod @0 2 1",
+                "sum 21600 0 @48",
+                "mid @36 @43",
+                "mid @30 @37"
+            };
 
             this.Handles = new List<Handle>();
 

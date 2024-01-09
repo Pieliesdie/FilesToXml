@@ -198,11 +198,11 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                         break;
                     case 0x6870:
                         //R
-                        colorVal.Value = string.Format("{0:x2}", sprm.Arguments[0]);
+                        colorVal.Value = $"{sprm.Arguments[0]:x2}";
                         //G
-                        colorVal.Value += string.Format("{0:x2}", sprm.Arguments[1]);
+                        colorVal.Value += $"{sprm.Arguments[1]:x2}";
                         //B
-                        colorVal.Value += string.Format("{0:x2}", sprm.Arguments[2]);
+                        colorVal.Value += $"{sprm.Arguments[2]:x2}";
                         break;
 
                     //highlightning

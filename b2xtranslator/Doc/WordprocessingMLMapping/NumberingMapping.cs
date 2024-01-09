@@ -41,7 +41,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                 //nsid
                 this._writer.WriteStartElement("w", "nsid", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, string.Format("{0:X8}", lstf.lsid));
+                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, $"{lstf.lsid:X8}");
                 this._writer.WriteEndElement();
 
                 //multiLevelType
@@ -56,7 +56,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                 //template
                 this._writer.WriteStartElement("w", "tmpl", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, string.Format("{0:X8}", lstf.tplc));
+                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, $"{lstf.tplc:X8}");
                 this._writer.WriteEndElement();
 
                 //writes the levels

@@ -125,8 +125,7 @@ namespace b2xtranslator.Shell
                     {
                         //parse verbose level
                         string verbose = args[i + 1].ToLower();
-                        int vLvl;
-                        if (int.TryParse(verbose, out vLvl))
+                        if (int.TryParse(verbose, out var vLvl))
                         {
                             TraceLogger.LogLevel = (TraceLogger.LoggingLevel)vLvl;
                         }

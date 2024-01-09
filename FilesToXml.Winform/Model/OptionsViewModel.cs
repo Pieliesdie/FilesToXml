@@ -13,11 +13,10 @@ public record OptionsViewModel
 
     public static implicit operator ConverterOptions(OptionsViewModel optionsViewModel)
     {
-        return new ConverterOptions()
+        return new ConverterOptions(optionsViewModel.Input.Select(x => x.Path))
         {
             DisableFormat = optionsViewModel.DisableFormat,
             ForceSave = optionsViewModel.ForceSave,
-            Input = optionsViewModel.Input.Select(x => x.Path),
             InputEncoding = optionsViewModel.Input.Select(x => x.Encoding.CodePage),
             Output = optionsViewModel.Output,
             OutputEncoding = optionsViewModel.OutputEncoding.CodePage,

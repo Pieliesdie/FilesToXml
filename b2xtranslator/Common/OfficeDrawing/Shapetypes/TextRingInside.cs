@@ -22,12 +22,14 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             };
             this.LockShapeType = true;
 
-            this.Formulas = new List<string>();
-            this.Formulas.Add("val #0");
-            this.Formulas.Add("prod #0 1 2");
-            this.Formulas.Add("sum height 0 @1");
-            this.Formulas.Add("sum height 0 #0");
-            this.Formulas.Add("sum @2 0 @1");
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "prod #0 1 2",
+                "sum height 0 @1",
+                "sum height 0 #0",
+                "sum @2 0 @1"
+            };
 
             this.Handles = new List<Handle>();
             var h1 = new Handle

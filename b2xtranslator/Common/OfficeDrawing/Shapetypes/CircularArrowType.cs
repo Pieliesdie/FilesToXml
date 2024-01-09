@@ -10,60 +10,60 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.ShapeConcentricFill = false;
             this.Joins = JoinStyle.miter;
             this.Path = "al10800,10800@8@8@4@6,10800,10800,10800,10800@9@7l@30@31@17@18@24@25@15@16@32@33xe"; 
-            this.Formulas = new List<string>();
+            this.Formulas = new List<string>
+            {
+                "val #1",
+                "val #0",
+                "sum #1 0 #0",
+                "val 10800",
+                "sum 0 0 #1",
+                "sumangle @2 360 0",
+                "if @2 @2 @5",
+                "sum 0 0 @6",
+                "val #2",
+                "sum 0 0 #0",
+                "sum #2 0 2700",
+                "cos @10 #1 ",
+                "sin @10 #1 ",
+                "cos 13500 #1",
+                "sin 13500 #1 ",
+                "sum @11 10800 0",
+                "sum @12 10800 0 ",
+                "sum @13 10800 0 ",
+                "sum @14 10800 0 ",
+                "prod #2 1 2 ",
+                "sum @19 5400 0",
+                "cos @20 #1",
+                "sin @20 #1",
+                "sum @21 10800 0 ",
+                "sum @12 @23 @22",
+                "sum @22 @23 @11",
+                "cos 10800 #1",
+                "sin 10800 #1",
+                "cos #2 #1 ",
+                "sin #2 #1 ",
+                "sum @26 10800 0",
+                "sum @27 10800 0",
+                "sum @28 10800 0",
+                "sum @29 10800 0",
+                "sum @19 5400 0 ",
+                "cos @34 #0 ",
+                "sin @34 #0 ",
+                "mid #0 #1 ",
+                "sumangle @37 180 0 ",
+                "if @2 @37 @38",
+                "cos 10800 @39 ",
+                "sin 10800 @39 ",
+                "cos #2 @39 ",
+                "sin #2 @39 ",
+                "sum @40 10800 0",
+                "sum @41 10800 0 ",
+                "sum @42 10800 0 ",
+                "sum @43 10800 0 ",
+                "sum @35 10800 0 ",
+                "sum @36 10800 0"
+            };
 
-            this.Formulas.Add("val #1"); 
-            this.Formulas.Add("val #0"); 
-            this.Formulas.Add("sum #1 0 #0"); 
-            this.Formulas.Add("val 10800"); 
-            this.Formulas.Add("sum 0 0 #1"); 
-            this.Formulas.Add("sumangle @2 360 0"); 
-            this.Formulas.Add("if @2 @2 @5"); 
-            this.Formulas.Add("sum 0 0 @6"); 
-            this.Formulas.Add("val #2"); 
-            this.Formulas.Add("sum 0 0 #0");
-            this.Formulas.Add("sum #2 0 2700"); 
-            this.Formulas.Add("cos @10 #1 ");
-            this.Formulas.Add("sin @10 #1 ");
-            this.Formulas.Add("cos 13500 #1"); 
-            this.Formulas.Add("sin 13500 #1 ");
-            this.Formulas.Add("sum @11 10800 0"); 
-            this.Formulas.Add("sum @12 10800 0 ");
-            this.Formulas.Add("sum @13 10800 0 ");
-            this.Formulas.Add("sum @14 10800 0 ");
-            this.Formulas.Add("prod #2 1 2 ");
-            this.Formulas.Add("sum @19 5400 0"); 
-            this.Formulas.Add("cos @20 #1"); 
-            this.Formulas.Add("sin @20 #1"); 
-            this.Formulas.Add("sum @21 10800 0 ");
-            this.Formulas.Add("sum @12 @23 @22"); 
-            this.Formulas.Add("sum @22 @23 @11"); 
-            this.Formulas.Add("cos 10800 #1"); 
-            this.Formulas.Add("sin 10800 #1"); 
-            this.Formulas.Add("cos #2 #1 ");
-            this.Formulas.Add("sin #2 #1 ");
-            this.Formulas.Add("sum @26 10800 0"); 
-            this.Formulas.Add("sum @27 10800 0"); 
-            this.Formulas.Add("sum @28 10800 0"); 
-            this.Formulas.Add("sum @29 10800 0"); 
-            this.Formulas.Add("sum @19 5400 0 ");
-            this.Formulas.Add("cos @34 #0 ");
-            this.Formulas.Add("sin @34 #0 ");
-            this.Formulas.Add("mid #0 #1 ");
-            this.Formulas.Add("sumangle @37 180 0 ");
-            this.Formulas.Add("if @2 @37 @38"); 
-            this.Formulas.Add("cos 10800 @39 ");
-            this.Formulas.Add("sin 10800 @39 ");
-            this.Formulas.Add("cos #2 @39 ");
-            this.Formulas.Add("sin #2 @39 ");
-            this.Formulas.Add("sum @40 10800 0"); 
-            this.Formulas.Add("sum @41 10800 0 ");
-            this.Formulas.Add("sum @42 10800 0 ");
-            this.Formulas.Add("sum @43 10800 0 ");
-            this.Formulas.Add("sum @35 10800 0 ");
-            this.Formulas.Add("sum @36 10800 0");
-
-    
             this.AdjustmentValues = "-11796480,,5400";
             this.ConnectorLocations = "@44,@45;@48,@49;@46,@47;@17,@18;@24,@25;@15,@16";
 

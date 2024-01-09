@@ -643,19 +643,19 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
                 //append rsids
                 if (rev.Rsid != 0)
                 {
-                    string rsid = string.Format("{0:x8}", rev.Rsid);
+                    string rsid = $"{rev.Rsid:x8}";
                     this._writer.WriteAttributeString("w", "rsidR", OpenXmlNamespaces.WordprocessingML, rsid);
                     this._ctx.AddRsid(rsid);
                 }
                 if (rev.RsidDel != 0)
                 {
-                    string rsidDel = string.Format("{0:x8}", rev.RsidDel);
+                    string rsidDel = $"{rev.RsidDel:x8}";
                     this._writer.WriteAttributeString("w", "rsidDel", OpenXmlNamespaces.WordprocessingML, rsidDel);
                     this._ctx.AddRsid(rsidDel);
                 }
                 if (rev.RsidProp != 0)
                 {
-                    string rsidProp = string.Format("{0:x8}", rev.RsidProp);
+                    string rsidProp = $"{rev.RsidProp:x8}";
                     this._writer.WriteAttributeString("w", "rsidP", OpenXmlNamespaces.WordprocessingML, rsidProp);
                     this._ctx.AddRsid(rsidProp);
                 }
@@ -1205,7 +1205,7 @@ namespace b2xtranslator.doc.WordprocessingMLMapping
 
                     var ffn = (FontFamilyName)this._doc.FontTable.Data[fontIndex];
                     ret.FontName = ffn.xszFtn;
-                    ret.HexValue = string.Format("{0:x4}", code);
+                    ret.HexValue = $"{code:x4}";
                     break;
                 }
             }

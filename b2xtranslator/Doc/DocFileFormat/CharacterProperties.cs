@@ -169,8 +169,7 @@ namespace b2xtranslator.doc.DocFileFormat
             setDefaultValues();
 
             //get all CHPX in the hierarchy
-            var chpxHierarchy = new List<CharacterPropertyExceptions>();
-            chpxHierarchy.Add(chpx);
+            var chpxHierarchy = new List<CharacterPropertyExceptions> { chpx };
 
             //add parent character styles
             buildHierarchy(chpxHierarchy, parentDocument.Styles, (ushort)getIsdt(chpx));

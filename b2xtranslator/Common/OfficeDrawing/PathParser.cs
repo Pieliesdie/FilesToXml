@@ -62,9 +62,6 @@ namespace b2xtranslator.OfficeDrawing
             this.Segments = new List<PathSegment>();
             if (pSegmentInfo != null && pSegmentInfo.Length > 0)
             {
-                ushort nElemsSeg = System.BitConverter.ToUInt16(pSegmentInfo, 0);
-                ushort nElemsAllocSeg = System.BitConverter.ToUInt16(pSegmentInfo, 2);
-                ushort cbElemSeg = System.BitConverter.ToUInt16(pSegmentInfo, 4);
                 for (int i = 6; i < pSegmentInfo.Length; i += 2)
                 {
                     this.Segments.Add(
@@ -76,8 +73,6 @@ namespace b2xtranslator.OfficeDrawing
 
             // parse the values
             this.Values = new List<Point>();
-            ushort nElemsVert = System.BitConverter.ToUInt16(pVertices, 0);
-            ushort nElemsAllocVert = System.BitConverter.ToUInt16(pVertices, 2);
             this.cbElemVert = System.BitConverter.ToUInt16(pVertices, 4);
             if (this.cbElemVert == 0xfff0) this.cbElemVert = 4;
             int x;

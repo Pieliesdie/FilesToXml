@@ -83,7 +83,7 @@ namespace b2xtranslator.StructuredStorage.Reader
         {
             return Read(array, 0, count);
         }
-
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         /// <summary>
         /// Reads bytes from a virtual stream.
         /// </summary>
@@ -98,6 +98,7 @@ namespace b2xtranslator.StructuredStorage.Reader
         {
             return Read(array, offset, count, this._position);
         }
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 
         /// <summary>
         /// Reads bytes from the virtual stream.

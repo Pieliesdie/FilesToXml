@@ -10,12 +10,12 @@ namespace b2xtranslator.OfficeDrawing.Shapetypes
             this.ShapeConcentricFill = false;
             this.Joins = JoinStyle.miter;
             this.Path = "m@0,l,0@1,10800,,21600@0,21600,21600,10800xe"; 
-            this.Formulas = new List<string>();
-    
-            this.Formulas.Add("val #0"); 
-            this.Formulas.Add("sum 21600 0 @0"); 
-            this.Formulas.Add("prod #0 1 2");
-
+            this.Formulas = new List<string>
+            {
+                "val #0",
+                "sum 21600 0 @0",
+                "prod #0 1 2"
+            };
 
             this.AdjustmentValues = "16200";
             this.ConnectorLocations = "@2,0;@1,10800;@2,21600;21600,10800";

@@ -266,18 +266,15 @@ namespace b2xtranslator.OfficeDrawing
                 bool isContainer = (version == 0xF);
 
                 Record result;
-                Type cls;
 
-                if (TypeToRecordClassMapping.TryGetValue(typeCode, out cls))
+                if (TypeToRecordClassMapping.TryGetValue(typeCode, out var cls))
                 {
                     var constructor = cls.GetConstructor(new Type[] {
                     typeof(BinaryReader), typeof(uint), typeof(uint), typeof(uint), typeof(uint) });
 
                     if (constructor == null)
                     {
-                        throw new Exception(string.Format(
-                            "Internal error: Could not find a matching constructor for class {0}",
-                            cls));
+                        throw new Exception($"Internal error: Could not find a matching constructor for class {cls}");
                     }
 
                     //TraceLogger.DebugInternal("Going to read record of type {0} ({1})", cls, typeCode);

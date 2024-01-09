@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
 using FilesToXml.Core.Converters;
 using FilesToXml.Core.Converters.Interfaces;
 
@@ -48,14 +49,9 @@ public static class ConverterToXml
             {
                 using var sw = new StreamWriter(options.Output!, false, Encoding.GetEncoding(options.OutputEncoding));
                 xDoc.Save(sw, saveOptions);
-                if (datasets.Any(x => x is null))
-                {
-                    outputWritter.WriteLine($"Converted all files with some errors");
-                }
-                else
-                {
-                    outputWritter.WriteLine($"Converted succesful all files to {options.Output}");
-                }
+                outputWritter.WriteLine(datasets.Any(x => x is null)
+                    ? "Converted all files with some errors"
+                    : $"Converted succesful all files to {options.Output}");
             }
             foreach (var file in files)
             {
@@ -69,6 +65,16 @@ public static class ConverterToXml
         }
         return true;
     }
+
+    public static XStreamingElement? Convert(
+        ParsedFile file,
+        TextWriter? errorWriter = null,
+        TextWriter? logWriter = null,
+        bool showLog = false)
+    {
+        return ProcessFile(file, errorWriter, logWriter, showLog);
+    }
+
     private static XStreamingElement? ProcessFile(ParsedFile file, TextWriter? errorWriter = null, TextWriter? logWriter = null, bool showLog = false)
     {
         if (File.Exists(file.Path).Not())
