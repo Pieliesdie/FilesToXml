@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using ConverterToXml.Core.Converters.OfficeConverters;
+using FilesToXml.Core.Converters.OfficeConverters;
 using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     [Collection("DocToXml")]
     public class DocToDocxTest

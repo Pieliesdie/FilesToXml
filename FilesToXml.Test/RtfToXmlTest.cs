@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     public class RtfToXmlTest
     {

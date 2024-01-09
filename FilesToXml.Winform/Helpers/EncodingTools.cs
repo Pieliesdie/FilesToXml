@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace ConverterToXml.Winform.Helpers;
+namespace FilesToXml.Winform.Helpers;
 
 internal static class EncodingTools
 {

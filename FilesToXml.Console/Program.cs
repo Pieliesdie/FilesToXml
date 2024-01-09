@@ -1,10 +1,9 @@
 ﻿using CommandLine;
-using ConverterToXml;
 using System;
 using System.Linq;
 using System.Text;
-using ConverterToXml.Console;
-using ConverterToXml.Core;
+using FilesToXml.Console;
+using FilesToXml.Core;
 
 var isSupportCommand = args.FirstOrDefault(x => x == "--support") is not null;
 if (isSupportCommand)
@@ -16,5 +15,5 @@ if (isSupportCommand)
 Parser.Default.ParseArguments<Options>(args).WithParsed(parsedArgs =>
 {
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-    ConverterToXml.Core.ConverterToXml.Convert(parsedArgs, Console.Out, Console.Error);
+    ConverterToXml.Convert(parsedArgs, Console.Out, Console.Error);
 });

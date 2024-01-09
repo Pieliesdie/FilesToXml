@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Linq;
 
-namespace ConverterToXml.Core.Converters.Interfaces
+namespace FilesToXml.Core.Converters.Interfaces
 {
     public interface IConvertable
     {

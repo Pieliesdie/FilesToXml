@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class JsonToXml : IEncodingConvertable
 {
     //How to read line by line if we can get json like this?

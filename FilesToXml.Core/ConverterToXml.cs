@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using FilesToXml.Core.Converters;
+using FilesToXml.Core.Converters.Interfaces;
 
-using ConverterToXml.Core.Converters;
-using ConverterToXml.Core.Converters.Interfaces;
-
-namespace ConverterToXml.Core;
+namespace FilesToXml.Core;
 public static class ConverterToXml
 {
     public static bool Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)

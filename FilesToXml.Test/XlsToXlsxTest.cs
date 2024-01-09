@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using ConverterToXml.Core.Converters.OfficeConverters;
+﻿using System.IO;
+using FilesToXml.Core.Converters.OfficeConverters;
 using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     [Collection("XlsToXml")]
     public class XlsToXlsxTest

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace ConverterToXml.Core;
+namespace FilesToXml.Core;
 
 public struct ParsedFile : IDisposable
 {

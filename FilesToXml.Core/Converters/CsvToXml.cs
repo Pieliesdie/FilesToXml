@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.Interfaces;
 using NotVisualBasic.FileIO;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class CsvToXml : IDelimiterConvertable
 {
     public XStreamingElement Convert(Stream stream, string delimiter, Encoding encoding, params object?[] rootContent)

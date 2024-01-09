@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using Xunit;
+﻿using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     public class OdsToXmlTest
     {

@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using ConverterToXml.Core;
-using ConverterToXml.Winform.Helpers;
+using FilesToXml.Core;
+using FilesToXml.Winform.Helpers;
 
-namespace ConverterToXml.Winform.Model;
+namespace FilesToXml.Winform.Model;
 
 public record FileUpload
 {

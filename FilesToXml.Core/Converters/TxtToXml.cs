@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Text;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.Interfaces;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class TxtToXml : IEncodingConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent) => this.Convert(stream, Encoding.UTF8, rootContent);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using ConverterToXml.Core;
-namespace ConverterToXml.Wasm;
+using FilesToXml.Core;
+
+namespace FilesToXml.Wasm;
 
 public class WasmOptions : IOptions
 {

@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
-
-using ConverterToXml.Core.Converters;
+using FilesToXml.Core.Converters;
 
 namespace Benchmark
 {

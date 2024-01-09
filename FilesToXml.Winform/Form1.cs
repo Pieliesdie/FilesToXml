@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
-using FilesToXml.Winform;
 
-namespace ConverterToXml.Winform;
+namespace FilesToXml.Winform;
 public partial class Form1 : Form
 {
     public Form1()

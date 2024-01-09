@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace ConverterToXml.Core;
+namespace FilesToXml.Core;
 public static class Extensions
 {
     public static string GetDelimiter(this string path, Queue<string> delimiters)

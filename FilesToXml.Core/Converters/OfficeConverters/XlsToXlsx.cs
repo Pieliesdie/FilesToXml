@@ -7,7 +7,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using CellType = NPOI.SS.UserModel.CellType;
 
-namespace ConverterToXml.Core.Converters.OfficeConverters
+namespace FilesToXml.Core.Converters.OfficeConverters
 {
     public class XlsToXlsx
     {

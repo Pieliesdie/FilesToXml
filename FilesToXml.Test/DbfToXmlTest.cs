@@ -1,9 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
-using ConverterToXml.Core.Converters;
+using System.Xml.Linq;
+using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace ConverterToXml.Test;
+namespace FilesToXml.Test;
 
 public class DbfToXmlTest
 {
@@ -37,7 +38,7 @@ public class DbfToXmlTest
         string path = curDir + @"/Files/dbf.dbf";
 
         var result = converter.ConvertByFile(path);
-        Assert.Equal("LSHET", result.Elements().First().Elements().First().Attribute("C1").Value);
+        Assert.Equal("LSHET", Enumerable.First<XElement>(result.Elements()).Elements().First().Attribute("C1").Value);
     }
 
     [Fact]
@@ -48,6 +49,6 @@ public class DbfToXmlTest
         string path = curDir + @"/Files/dbf.dbf";
 
         var result = converter.ConvertByFile(path);
-        Assert.Equal("Ашарина", result.Elements().First().Elements("R").Last().Attribute("C2").Value);
+        Assert.Equal("Ашарина", Enumerable.First<XElement>(result.Elements()).Elements("R").Last().Attribute("C2").Value);
     }
 }

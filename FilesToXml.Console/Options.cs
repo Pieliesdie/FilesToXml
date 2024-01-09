@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using CommandLine;
-using ConverterToXml.Core;
+using FilesToXml.Core;
 
-namespace ConverterToXml.Console;
+namespace FilesToXml.Console;
 
 public class Options : IOptions
 {

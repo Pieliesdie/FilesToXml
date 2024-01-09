@@ -1,11 +1,9 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using System.Xml.XPath;
-using ConverterToXml.Core.Converters;
+using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     public class JsonToXmlTest
     {

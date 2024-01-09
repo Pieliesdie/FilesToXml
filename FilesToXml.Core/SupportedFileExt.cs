@@ -1,4 +1,4 @@
-﻿namespace ConverterToXml.Core;
+﻿namespace FilesToXml.Core;
 public enum SupportedFileExt
 {
     xlsx = 1,

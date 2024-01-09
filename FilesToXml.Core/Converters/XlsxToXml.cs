@@ -6,17 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-
-using ConverterToXml.Core.Converters.Interfaces;
-
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-
+using FilesToXml.Core.Converters.Interfaces;
 using NumberingFormats = System.Collections.Immutable.ImmutableArray<DocumentFormat.OpenXml.Spreadsheet.NumberingFormat>;
 
-namespace ConverterToXml.Core.Converters;
-public partial class XlsxToXml : IConvertable
+namespace FilesToXml.Core.Converters;
+public class XlsxToXml : IConvertable
 {
     public XStreamingElement Convert(Stream memStream, params object?[] rootContent) => SpreadsheetProcess(memStream, rootContent);
 

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using FilesToXml.Core.Converters.Interfaces;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class DocxToXml : IConvertable
 {
     public XStreamingElement Convert(Stream memStream, params object?[] rootContent)

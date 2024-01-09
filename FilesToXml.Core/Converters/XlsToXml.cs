@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
-using ConverterToXml.Core.Converters.OfficeConverters;
+using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.OfficeConverters;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class XlsToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)

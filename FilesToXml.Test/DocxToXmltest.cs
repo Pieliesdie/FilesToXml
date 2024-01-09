@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using ConverterToXml.Core.Converters;
+﻿using System.IO;
+using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace ConverterToXml.Test
+namespace FilesToXml.Test
 {
     public class DocxToXmlTest
     {

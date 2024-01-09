@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<StartupObject>ConverterToXml.Winform.Program</StartupObject>
+		<StartupObject>FilesToXml.Winform.Program</StartupObject>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 

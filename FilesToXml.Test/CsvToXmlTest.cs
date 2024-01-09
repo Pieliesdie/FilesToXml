@@ -1,10 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
-using ConverterToXml.Core.Converters;
+using System.Xml.Linq;
+using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace ConverterToXml.Test;
+namespace FilesToXml.Test;
 
 public class CsvToXmlTest
 {
@@ -39,7 +40,7 @@ public class CsvToXmlTest
         string path = curDir + @"/Files/csv.csv";
 
         var result = converter.ConvertByFile(path, encoding: Encoding.GetEncoding(1251) );
-        Assert.Equal("первый", result.Elements().First().Elements().First().Attribute("C1").Value);
+        Assert.Equal("первый", Enumerable.First<XElement>(result.Elements()).Elements().First().Attribute("C1").Value);
     }
     
     [Fact]
@@ -51,7 +52,7 @@ public class CsvToXmlTest
         string path = curDir + @"/Files/csv2.csv";
 
         var result = converter.ConvertByFile(path, new[] {';', '|', '\t', ','} ,encoding: Encoding.GetEncoding(1251) );
-        Assert.Equal("step_id", result.Elements().First().Elements().First().Attribute("C1").Value);
+        Assert.Equal("step_id", Enumerable.First<XElement>(result.Elements()).Elements().First().Attribute("C1").Value);
     }
     
     [Fact]
@@ -63,6 +64,6 @@ public class CsvToXmlTest
         string path = curDir + @"/Files/csv2.csv";
 
         var result = converter.ConvertByFile(path, new[] {';', '|', '\t', ','}, encoding: Encoding.GetEncoding(1251) );
-        Assert.Equal("18526", result.Elements().First().Elements("R").Last().Attribute("C4").Value);
+        Assert.Equal("18526", Enumerable.First<XElement>(result.Elements()).Elements("R").Last().Attribute("C4").Value);
     }
 }

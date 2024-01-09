@@ -1,10 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
-using ConverterToXml.Core.Converters;
+using System.Xml.Linq;
+using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace ConverterToXml.Test;
+namespace FilesToXml.Test;
 public class TsvToXmlTest
 {
     [Fact]
@@ -38,7 +39,7 @@ public class TsvToXmlTest
         string path = curDir + @"/Files/tsv.tsv";
 
         var result = converter.ConvertByFile(path);
-        Assert.Equal("rice", result.Elements().First().Elements().First().Attribute("C6").Value);
+        Assert.Equal("rice", Enumerable.First<XElement>(result.Elements()).Elements().First().Attribute("C6").Value);
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConverterToXml.Core;
+namespace FilesToXml.Core;
 public interface IOptions
 {
     IEnumerable<string> Delimiters { get; }

@@ -5,7 +5,7 @@ using b2xtranslator.OpenXmlLib.WordprocessingML;
 using b2xtranslator.StructuredStorage.Reader;
 using static b2xtranslator.OpenXmlLib.OpenXmlPackage;
 
-namespace ConverterToXml.Core.Converters.OfficeConverters
+namespace FilesToXml.Core.Converters.OfficeConverters
 {
     public class DocToDocx
     {

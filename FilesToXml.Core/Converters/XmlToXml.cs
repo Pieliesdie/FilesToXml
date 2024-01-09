@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.Interfaces;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 public class XmlToXml : IEncodingConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent) 

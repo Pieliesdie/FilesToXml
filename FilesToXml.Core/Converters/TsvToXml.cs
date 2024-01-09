@@ -1,16 +1,16 @@
 ﻿using System.IO;
 using System.Text;
 using System.Xml.Linq;
-using ConverterToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Converters.Interfaces;
 
-namespace ConverterToXml.Core.Converters;
+namespace FilesToXml.Core.Converters;
 
 public class TsvToXml : IEncodingConvertable
 {
-    private const string tsvDelimiter = "\t";
+    private const string TsvDelimiter = "\t";
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return new CsvToXml().Convert(stream, tsvDelimiter, encoding, rootContent);
+        return new CsvToXml().Convert(stream, TsvDelimiter, encoding, rootContent);
     }
 
     public XStreamingElement Convert(Stream stream, params object?[] rootContent) 
@@ -18,7 +18,7 @@ public class TsvToXml : IEncodingConvertable
 
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        return new CsvToXml().ConvertByFile(path, tsvDelimiter, encoding, rootContent);
+        return new CsvToXml().ConvertByFile(path, TsvDelimiter, encoding, rootContent);
     }
 
     public XElement ConvertByFile(string path, params object?[] rootContent)

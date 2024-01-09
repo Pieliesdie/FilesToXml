@@ -2,7 +2,7 @@
 using System.Text;
 using System.Xml.Linq;
 
-namespace ConverterToXml.Core.Converters.Interfaces
+namespace FilesToXml.Core.Converters.Interfaces
 {
     public interface IDelimiterConvertable : IConvertable, IEncodingConvertable
     {

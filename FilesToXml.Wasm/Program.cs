@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
 
-namespace ConverterToXml.Wasm;
+namespace FilesToXml.Wasm;
 
 public partial class Program
 {
