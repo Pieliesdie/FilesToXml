@@ -13,7 +13,7 @@ public static class ConverterToXml
 {
     public static bool Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)
     {
-        if (options.Output != null && options.ForceSave.Not() && File.Exists(options.Output))
+        if (options is { Output: not null, ForceSave: false } && File.Exists(options.Output))
         {
             errorWritter.WriteLine("Output file already exist and ForceSave is false");
             return false;
@@ -21,7 +21,7 @@ public static class ConverterToXml
         options.Input = Extensions.UnpackFolders(options.Input).ToArray();
         Queue<string> delimeters = new(options.Delimiters);
 
-        var files = options.Input.Select((filePath, index) => new ParsedFile(
+        var files = options.Input.Select((filePath, index) => new FileInformation(
             path: filePath.RelativePathToAbsoluteIfNeed(),
             label: (options.Labels?.Any() ?? false) ? options.Labels.ElementAtOrDefault(index) : null,
             encoding: Encoding.GetEncoding(index > options.InputEncoding.Count() - 1 ? options.InputEncoding.Last() : options.InputEncoding.ElementAt(index)),
@@ -53,10 +53,7 @@ public static class ConverterToXml
                     ? "Converted all files with some errors"
                     : $"Converted succesful all files to {options.Output}");
             }
-            foreach (var file in files)
-            {
-                file.Dispose();
-            }
+            files.ForEach(file => file.Dispose());
         }
         catch (Exception e)
         {
@@ -67,64 +64,64 @@ public static class ConverterToXml
     }
 
     public static XStreamingElement? Convert(
-        ParsedFile file,
+        FileInformation fileInformation,
         TextWriter? errorWriter = null,
         TextWriter? logWriter = null,
         bool showLog = false)
     {
-        return ProcessFile(file, errorWriter, logWriter, showLog);
+        return ProcessFile(fileInformation, errorWriter, logWriter, showLog);
     }
 
-    private static XStreamingElement? ProcessFile(ParsedFile file, TextWriter? errorWriter = null, TextWriter? logWriter = null, bool showLog = false)
+    private static XStreamingElement? ProcessFile(FileInformation fileInformation, TextWriter? errorWriter = null, TextWriter? logWriter = null, bool showLog = false)
     {
-        if (File.Exists(file.Path).Not())
+        if (!File.Exists(fileInformation.Path))
         {
-            errorWriter?.WriteLine($"Input file {file.Path} doesn't exist");
+            errorWriter?.WriteLine($"Input file {fileInformation.Path} doesn't exist");
             return null;
         }
         try
         {
-            IConvertable convertor = file.Type switch
+            IConvertable convertor = fileInformation.Type switch
             {
-                SupportedFileExt.xls => new XlsToXml(),
-                SupportedFileExt.xlsx => new XlsxToXml(),
-                SupportedFileExt.txt => new TxtToXml(),
-                SupportedFileExt.csv => new CsvToXml(),
-                SupportedFileExt.docx => new DocxToXml(),
-                SupportedFileExt.doc => new DocToXml(),
-                SupportedFileExt.xml => new XmlToXml(),
-                SupportedFileExt.json => new JsonToXml(),
-                SupportedFileExt.tsv => new TsvToXml(),
-                SupportedFileExt.dbf => new DbfToXml(),
+                SupportedFileExt.Xls => new XlsToXml(),
+                SupportedFileExt.Xlsx => new XlsxToXml(),
+                SupportedFileExt.Txt => new TxtToXml(),
+                SupportedFileExt.Csv => new CsvToXml(),
+                SupportedFileExt.Docx => new DocxToXml(),
+                SupportedFileExt.Doc => new DocToXml(),
+                SupportedFileExt.Xml => new XmlToXml(),
+                SupportedFileExt.Json => new JsonToXml(),
+                SupportedFileExt.Tsv => new TsvToXml(),
+                SupportedFileExt.Dbf => new DbfToXml(),
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/
                 _ => throw new NotImplementedException($"Unsupported type")
             };
 
-            var additionalInfo = new List<XObject> { new XAttribute("ext", file.Type), new XAttribute("path", file.Path) };
-            if (file.Label is not null)
+            var additionalInfo = new List<XObject> { new XAttribute("ext", fileInformation.Type), new XAttribute("path", fileInformation.Path) };
+            if (fileInformation.Label is not null)
             {
-                additionalInfo.Add(new XAttribute("label", file.Label));
+                additionalInfo.Add(new XAttribute("label", fileInformation.Label));
             }
 
-            var stream = file.Stream;
+            var stream = fileInformation.Stream;
             var xml = convertor switch
             {
-                IDelimiterConvertable c when file.Delimiter == "auto" => c.Convert(stream, file.SearchingDelimiters, file.Encoding, additionalInfo),
-                IDelimiterConvertable c => c.Convert(stream, file.Delimiter, file.Encoding, additionalInfo),
-                IEncodingConvertable c => c.Convert(stream, file.Encoding, additionalInfo),
+                IDelimiterConvertable c when fileInformation.Delimiter == "auto" => c.Convert(stream, fileInformation.SearchingDelimiters, fileInformation.Encoding, additionalInfo),
+                IDelimiterConvertable c => c.Convert(stream, fileInformation.Delimiter, fileInformation.Encoding, additionalInfo),
+                IEncodingConvertable c => c.Convert(stream, fileInformation.Encoding, additionalInfo),
                 { } c => c.Convert(stream, additionalInfo)
             };
             if (showLog)
             {
-                logWriter?.WriteLine($"Succesful start converting file: {file.Path}");
+                logWriter?.WriteLine($"Succesful start converting file: {fileInformation.Path}");
             }
             return xml;
         }
         catch (Exception e)
         {
-            errorWriter?.WriteLine($"Failed convert file: {file.Path}, {e.Message}");
+            errorWriter?.WriteLine($"Failed convert file: {fileInformation.Path}, {e.Message}");
             return null;
         }
     }

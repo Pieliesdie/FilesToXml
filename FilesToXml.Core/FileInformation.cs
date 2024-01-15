@@ -4,19 +4,18 @@ using System.Text;
 
 namespace FilesToXml.Core;
 
-public struct ParsedFile : IDisposable
+public struct FileInformation : IDisposable
 {
-    public string Path;
-    public string? Label;
-    public Encoding Encoding;
+    public readonly string Path;
+    public readonly string? Label;
+    public readonly Encoding Encoding;
     public SupportedFileExt? Type;
-    public string Delimiter;
-    public char[] SearchingDelimiters;
+    public readonly string Delimiter;
+    public readonly char[] SearchingDelimiters;
     private Stream? stream;
-
     public Stream Stream { get => stream ??= File.OpenRead(Path); private set => stream = value; }
 
-    public ParsedFile(string path,
+    public FileInformation(string path,
                       string? label,
                       Encoding encoding,
                       SupportedFileExt? type,
@@ -31,9 +30,6 @@ public struct ParsedFile : IDisposable
         SearchingDelimiters = searchingDelimiters;
     }
 
-    public void Dispose()
-    {
-        stream?.Dispose();
-    }
+    public void Dispose() => stream?.Dispose();
 }
 

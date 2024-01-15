@@ -11,31 +11,30 @@ public static class Extensions
     public static string GetDelimiter(this string path, Queue<string> delimiters)
     {
         var type = path.GetExtFromPath();
-        if (type == SupportedFileExt.csv)
+        if (type == SupportedFileExt.Csv)
         {
             return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
         }
         return ";";
     }
-    public static SupportedFileExt? GetExtFromPath(this string path)
+    public static SupportedFileExt? GetExtFromPath(this string? path)
     {
         var extension = Path.GetExtension(path);
         if (extension is null || extension.Length <= 1)
             return null;
 
-        if (Enum.TryParse<SupportedFileExt>(extension.Skip(1).CreateString(), out var supportedFileExt))
+        if (Enum.TryParse<SupportedFileExt>(extension[1..], out var supportedFileExt))
         {
             return supportedFileExt;
         }
         return null;
     }
-    public static bool Not(this bool boolean) => !boolean;
-    public static string CreateString(this IEnumerable<char> chars) => new(chars.ToArray());
+    
     public static IEnumerable<string> UnpackFolders(IEnumerable<string> pathList)
     {
         foreach (string path in pathList)
         {
-            if (File.Exists(path).Not() && Directory.Exists(path).Not())
+            if (!File.Exists(path) && !Directory.Exists(path))
             {
                 yield return path;
                 continue;

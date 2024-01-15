@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Xml.Linq;
 using Bootsharp;
+using FilesToXml.Core;
 
 public static partial class Program
 {
-    public static void Main ()
+    public static void Main () { }
+    
+    [JSInvokable]
+    public static string GetBackendName() => $"hello from .NET {Environment.Version}";
+    
+    [JSInvokable]
+    public static string Beautify(string xml) => XDocument.Parse(xml).ToString();
+    
+    [JSInvokable]
+    public static string Beautify(FileInformation fileInformation)
     {
-        OnMainInvoked($"Hello {GetFrontendName()}, .NET here!");
+        return null;
     }
-
-    [JSEvent] // used in JS as `bootsharp.Global.onMainInvoked.subscribe`
-    public static partial void OnMainInvoked (string message);
-
-    [JSFunction] // assigned in JS as `bootsharp.Global.getName = () => ...`
-    public static partial string GetFrontendName ();
-
-    [JSInvokable] // invoked from JS as `bootsharp.Global.GetBackendName()`
-    public static string GetBackendName () => $".NET {Environment.Version}";
+    
 }
