@@ -10,9 +10,17 @@ public enum SupportedFileExt
     Xml = 7,
     Json = 8,
     Tsv = 9,
-    Dbf
+    Dbf = 10
     /*    ,
     rtf = 8,
     ods = 9,
     odt = 10*/
+}
+
+public static class SupportedFileExtExtensions
+{
+    public static string ToFriendlyString(this SupportedFileExt ext)
+    {
+        return ext.ToString().ToLower();
+    }
 }

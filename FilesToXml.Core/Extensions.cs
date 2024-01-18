@@ -6,16 +6,12 @@ using System.Text;
 using System.Xml.Linq;
 
 namespace FilesToXml.Core;
+
 public static class Extensions
 {
-    public static string GetDelimiter(this string path, Queue<string> delimiters)
+    public static T ElementAtOrLast<T>(this List<T> source, int index)
     {
-        var type = path.GetExtFromPath();
-        if (type == SupportedFileExt.Csv)
-        {
-            return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
-        }
-        return ";";
+        return index > source.Count - 1 ? source.Last() : source.ElementAt(index);
     }
     public static SupportedFileExt? GetExtFromPath(this string? path)
     {
@@ -23,13 +19,13 @@ public static class Extensions
         if (extension is null || extension.Length <= 1)
             return null;
 
-        if (Enum.TryParse<SupportedFileExt>(extension[1..], out var supportedFileExt))
+        if (Enum.TryParse<SupportedFileExt>(extension[1..], true, out var supportedFileExt))
         {
             return supportedFileExt;
         }
+
         return null;
     }
-    
     public static IEnumerable<string> UnpackFolders(IEnumerable<string> pathList)
     {
         foreach (string path in pathList)
@@ -39,6 +35,7 @@ public static class Extensions
                 yield return path;
                 continue;
             }
+
             var pathInfo = File.GetAttributes(path);
             if (pathInfo.HasFlag(FileAttributes.Directory))
             {
@@ -54,12 +51,6 @@ public static class Extensions
             }
         }
     }
-
-    public static string ToStringWithDeclaration(this XDocument xDoc)
-    {
-        return xDoc.Declaration + Environment.NewLine + xDoc;
-    }
-
     public static int ColumnIndex(string? reference)
     {
         if (reference == null) return -1;
@@ -69,14 +60,12 @@ public static class Extensions
             ci = (ci * 26) + ((int)reference[ix] - 64);
         return ci;
     }
-
     public static int RowIndex(string reference)
     {
         int startIndex = reference.IndexOfAny("0123456789".ToCharArray());
         _ = int.TryParse(reference.AsSpan(startIndex), out var row);
         return row;
     }
-
     public static IEnumerable<string> ReadAllLines(this StreamReader reader)
     {
         while (!reader.EndOfStream)
@@ -85,7 +74,6 @@ public static class Extensions
             yield return reader.ReadLine()!;
         }
     }
-
     public static IEnumerable<string> ReadAllLinesWithNewLine(this StreamReader reader)
     {
         foreach (var line in reader.ReadAllLines())
@@ -94,18 +82,12 @@ public static class Extensions
             yield return Environment.NewLine;
         }
     }
-
-    public static MemoryStream ToStream(this string value)
-    {
-        return new MemoryStream(Encoding.UTF8.GetBytes(value ?? ""));
-    }
-
     public static string RelativePathToAbsoluteIfNeed(this string path)
     {
         if (!Path.IsPathFullyQualified(path))
         {
             path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
         }
-        return path;
+        return Path.GetFullPath(path);
     }
 }

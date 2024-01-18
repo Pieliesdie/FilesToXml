@@ -4,81 +4,93 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-
 using FilesToXml.Core.Converters;
 using FilesToXml.Core.Converters.Interfaces;
 
 namespace FilesToXml.Core;
+
 public static class ConverterToXml
 {
-    public static bool Convert(IOptions options, TextWriter outputWritter, TextWriter errorWritter)
+    public static bool Convert(IOptions options, Stream outputStream, Stream errorStream)
     {
-        if (options is { Output: not null, ForceSave: false } && File.Exists(options.Output))
+        var encoding = Encoding.GetEncoding(options.OutputEncoding);
+        var outputPath = options.Output?.RelativePathToAbsoluteIfNeed();
+        
+        using var errorSw = CreateDefaulStreamWriter(errorStream, encoding);
+        if (options is { Output: not null, ForceSave: false } && File.Exists(outputPath))
         {
-            errorWritter.WriteLine("Output file already exist and ForceSave is false");
+            errorSw?.WriteLine("Output file already exist and ForceSave is false");
             return false;
         }
+        
+        var writeResultToStream = string.IsNullOrWhiteSpace(outputPath);
+        using var outputSw = writeResultToStream
+            ? CreateDefaulStreamWriter(outputStream, encoding)
+            : CreateDefaulStreamWriter(outputPath!, encoding);
+        using var logSw = writeResultToStream
+            ? CreateDefaulStreamWriter(Stream.Null, encoding)
+            : CreateDefaulStreamWriter(outputStream, encoding);
+        
         options.Input = Extensions.UnpackFolders(options.Input).ToArray();
         Queue<string> delimeters = new(options.Delimiters);
 
         var files = options.Input.Select((filePath, index) => new FileInformation(
             path: filePath.RelativePathToAbsoluteIfNeed(),
-            label: (options.Labels?.Any() ?? false) ? options.Labels.ElementAtOrDefault(index) : null,
-            encoding: Encoding.GetEncoding(index > options.InputEncoding.Count() - 1 ? options.InputEncoding.Last() : options.InputEncoding.ElementAt(index)),
+            label: options.Labels?.ElementAtOrDefault(index),
+            encoding: Encoding.GetEncoding(options.InputEncoding.ToList().ElementAtOrLast(index)),
             type: filePath.GetExtFromPath(),
-            delimiter: filePath.GetDelimiter(delimeters),
+            delimiter: PopOrPeekDelimiter(filePath, delimeters),
             searchingDelimiters: options.SearchingDelimiters?.ToArray() ?? [';', '|', '\t', ',']
         )).ToList();
 
         var datasets = files
             .AsParallel()
             .AsUnordered()
-            .Select(file => ProcessFile(file, errorWritter, outputWritter, options.Output != null))
+            // ReSharper disable AccessToDisposedClosure
+            .Select(file => ProcessFile(file, errorSw, logSw))
             .ToList();
 
         var xDoc = new XStreamingElement("DATA", datasets);
         try
         {
-            var isPrintToOutputWriter = string.IsNullOrWhiteSpace(options.Output);
             var saveOptions = options.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
-            if (isPrintToOutputWriter)
-            {
-                xDoc.Save(outputWritter, saveOptions);
-            }
-            else
-            {
-                using var sw = new StreamWriter(options.Output!, false, Encoding.GetEncoding(options.OutputEncoding));
-                xDoc.Save(sw, saveOptions);
-                outputWritter.WriteLine(datasets.Any(x => x is null)
-                    ? "Converted all files with some errors"
-                    : $"Converted succesful all files to {options.Output}");
-            }
+            xDoc.Save(outputSw, saveOptions);
+            logSw.WriteLine(datasets.Any(x => x is null)
+                ? "Converted all files with some errors"
+                : $"Converted succesful all files to {outputPath}");
             files.ForEach(file => file.Dispose());
+            ResetStream(outputSw, logSw, errorSw);
         }
         catch (Exception e)
         {
-            errorWritter.WriteLine($"Failed to convert result document: {e.Message}");
+            errorSw?.WriteLine($"Failed to convert result document: {e.Message}");
             return false;
         }
+
         return true;
-    }
 
-    public static XStreamingElement? Convert(
-        FileInformation fileInformation,
-        TextWriter? errorWriter = null,
-        TextWriter? logWriter = null,
-        bool showLog = false)
+        static string PopOrPeekDelimiter(string path, Queue<string> delimiters)
+        {
+            if (path.GetExtFromPath() == SupportedFileExt.Csv)
+            {
+                return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
+            }
+
+            return ";";
+        }
+    }
+    public static XStreamingElement? Convert(FileInformation fileInformation, StreamWriter? errorWriter = null, StreamWriter? logWriter = null)
     {
-        return ProcessFile(fileInformation, errorWriter, logWriter, showLog);
+        return ProcessFile(fileInformation, errorWriter, logWriter);
     }
-
-    private static XStreamingElement? ProcessFile(FileInformation fileInformation, TextWriter? errorWriter = null, TextWriter? logWriter = null, bool showLog = false)
+    private static XStreamingElement? ProcessFile(FileInformation fileInformation, TextWriter? errorWriter = null, TextWriter? logWriter = null)
     {
         if (!File.Exists(fileInformation.Path))
         {
             errorWriter?.WriteLine($"Input file {fileInformation.Path} doesn't exist");
             return null;
         }
+
         try
         {
             IConvertable convertor = fileInformation.Type switch
@@ -99,8 +111,13 @@ public static class ConverterToXml
                 _ => throw new NotImplementedException($"Unsupported type")
             };
 
-            var additionalInfo = new List<XObject> { new XAttribute("ext", fileInformation.Type), new XAttribute("path", fileInformation.Path) };
-            if (fileInformation.Label is not null)
+            var additionalInfo = new List<XObject>
+            {
+                new XAttribute("ext", fileInformation.Type!.ToString()!.ToLower()),
+                new XAttribute("path", fileInformation.Path),
+                new XAttribute("filename", Path.GetFileName(fileInformation.Path))
+            };
+            if (!string.IsNullOrEmpty(fileInformation.Label))
             {
                 additionalInfo.Add(new XAttribute("label", fileInformation.Label));
             }
@@ -108,21 +125,41 @@ public static class ConverterToXml
             var stream = fileInformation.Stream;
             var xml = convertor switch
             {
-                IDelimiterConvertable c when fileInformation.Delimiter == "auto" => c.Convert(stream, fileInformation.SearchingDelimiters, fileInformation.Encoding, additionalInfo),
-                IDelimiterConvertable c => c.Convert(stream, fileInformation.Delimiter, fileInformation.Encoding, additionalInfo),
+                IDelimiterConvertable c when fileInformation.Delimiter == "auto" => c.Convert(stream,
+                    fileInformation.SearchingDelimiters, fileInformation.Encoding, additionalInfo),
+                IDelimiterConvertable c => c.Convert(stream, fileInformation.Delimiter, fileInformation.Encoding,
+                    additionalInfo),
                 IEncodingConvertable c => c.Convert(stream, fileInformation.Encoding, additionalInfo),
                 { } c => c.Convert(stream, additionalInfo)
             };
-            if (showLog)
-            {
-                logWriter?.WriteLine($"Succesful start converting file: {fileInformation.Path}");
-            }
+
+            logWriter?.WriteLine($"Succesful start converting file: {fileInformation.Path}");
             return xml;
         }
         catch (Exception e)
         {
             errorWriter?.WriteLine($"Failed convert file: {fileInformation.Path}, {e.Message}");
             return null;
+        }
+    }
+    private static StreamWriter CreateDefaulStreamWriter(string path, Encoding encoding)
+    {
+        return new StreamWriter(path, false, encoding)
+            { AutoFlush = true };
+    }
+    private static StreamWriter CreateDefaulStreamWriter(Stream stream, Encoding encoding)
+    {
+        return new StreamWriter(stream, encoding, -1, true)
+            { AutoFlush = true };
+    }
+    private static void ResetStream(params StreamWriter[] streams)
+    {
+        foreach (var stream in streams)
+        {
+            if (stream.BaseStream.CanSeek)
+            {
+                stream.BaseStream.Position = 0;
+            }
         }
     }
 }

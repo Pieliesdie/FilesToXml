@@ -1,29 +1,25 @@
 ﻿using System.Text;
 using System.Windows;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using MudBlazor.Services;
-
 using MudExtensions.Services;
 
-namespace FilesToXml.WPF
+namespace FilesToXml.WPF;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            var services = new ServiceCollection();
-            services.AddWpfBlazorWebView();
-            services.AddMudServices();
-            services.AddMudExtensions();
-            services.AddBlazorWebViewDeveloperTools();
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Resources.Add("services", services.BuildServiceProvider());
-        }
+        InitializeComponent();
+        var services = new ServiceCollection();
+        services.AddWpfBlazorWebView();
+        services.AddMudServices();
+        services.AddMudExtensions();
+        services.AddBlazorWebViewDeveloperTools();
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Resources.Add("services", services.BuildServiceProvider());
     }
 }

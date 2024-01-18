@@ -9,12 +9,11 @@ public struct FileInformation : IDisposable
     public readonly string Path;
     public readonly string? Label;
     public readonly Encoding Encoding;
-    public SupportedFileExt? Type;
+    public readonly SupportedFileExt? Type;
     public readonly string Delimiter;
     public readonly char[] SearchingDelimiters;
     private Stream? stream;
-    public Stream Stream { get => stream ??= File.OpenRead(Path); private set => stream = value; }
-
+    public Stream Stream => stream ??= File.OpenRead(Path);
     public FileInformation(string path,
                       string? label,
                       Encoding encoding,

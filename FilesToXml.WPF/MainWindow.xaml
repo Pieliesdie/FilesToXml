@@ -11,7 +11,7 @@
         MinWidth="550"
         Title="Files to xml" Height="450" Width="800">
     <Grid>
-        <wpf:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}">
+        <wpf:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}" Name="BlazorWebView">
             <wpf:BlazorWebView.RootComponents>
                 <wpf:RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
             </wpf:BlazorWebView.RootComponents>

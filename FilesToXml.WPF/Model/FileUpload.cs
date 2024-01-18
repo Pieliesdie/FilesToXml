@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using FilesToXml.Core;
-using FilesToXml.Winforms.Helpers;
+using FilesToXml.WPF.Helpers;
 
-namespace FilesToXml.Winforms.Model;
+namespace FilesToXml.WPF.Model;
 
 public record FileUpload
 {
@@ -18,7 +18,7 @@ public record FileUpload
         init
         {
             filePath = value;
-            Extension = Path.GetExtFromPath()?.ToString() ?? "Unsupported";
+            Extension = Path.GetExtFromPath()?.ToFriendlyString() ?? "Unsupported";
             Encoding = EncodingTools.GetEncoding(filePath);
         }
     }

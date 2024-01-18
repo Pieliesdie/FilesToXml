@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandLine;
 using FilesToXml.Core;
-
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable once ClassNeverInstantiated.Global
 namespace FilesToXml.Console;
 
 public class Options : IOptions
@@ -34,7 +38,10 @@ public class Options : IOptions
 
     [Option('F', "disableFormat", Required = false, Default = false, HelpText = "Disable format output xml")]
     public bool DisableFormat { get; set; } = false;
-
+    
     [Option("support", Required = false, HelpText = "Display supported types")]
     public string? Support { get; set; }
+    
+    [Option("codepages", Required = false, HelpText = "Display supported codepages with names")]
+    public string? Codepages { get; set; }
 }

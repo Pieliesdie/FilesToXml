@@ -2,21 +2,21 @@
   "profiles": {
     "Convertor": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\large.csv D:\\testFiles -e 1251 -E 1251 -o D:\\test.xml -s -l ds1 ds2 ds3"
+      "commandLineArgs": "--codepages -i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv"
     },
     "docx": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\docx.docx -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\docx.docx -e 1251 -E 1251 -o .\\test.xml -s"
     },
 
     "csv": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\git\\FilesToXml\\ConverterToXml.Test\\Files\\csv.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv -e 1251 -E 1251 -o D:\\test.xml -s"
     },
 
     "xlsx": {
       "commandName": "Project",
-      "commandLineArgs": "-i C:\\Users\\haket\\Downloads\\publish\\publish\\windows-x64\\test.xlsx -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 1251 -E 866 -s"
     },
     "txt": {
       "commandName": "Project",

@@ -3,7 +3,7 @@ using System.Text;
 
 #pragma warning disable SYSLIB0001
 
-namespace FilesToXml.Winforms.Helpers;
+namespace FilesToXml.WPF.Helpers;
 
 internal static class EncodingTools
 {

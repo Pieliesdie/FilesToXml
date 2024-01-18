@@ -1,28 +1,28 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
+using FilesToXml.Core;
 
-namespace FilesToXml.Winforms.Model;
+namespace FilesToXml.WPF.Model;
 
 public record OptionsViewModel
 {
-    public ObservableCollection<FileUpload> Input { get; set; } = new();
+    public ObservableCollection<FileUpload> Input { get; set; } = [];
     public bool DisableFormat { get; set; } = false;
     public bool ForceSave { get; set; } = true;
     public string? Output { get; set; }
     public Encoding OutputEncoding { get; set; } = Encoding.UTF8;
-
-    public static implicit operator ConverterOptions(OptionsViewModel optionsViewModel)
+    public IOptions MapToOptions()
     {
-        return new ConverterOptions(optionsViewModel.Input.Select(x => x.Path))
+        return new ConverterOptions(Input.Select(x => x.Path))
         {
-            DisableFormat = optionsViewModel.DisableFormat,
-            ForceSave = optionsViewModel.ForceSave,
-            InputEncoding = optionsViewModel.Input.Select(x => x.Encoding.CodePage),
-            Output = optionsViewModel.Output,
-            OutputEncoding = optionsViewModel.OutputEncoding.CodePage,
-            Delimiters = optionsViewModel.Input.Select(x => x.Delimiter),
-            Labels = optionsViewModel.Input.Select(x => x.Label),
+            DisableFormat = DisableFormat,
+            ForceSave = ForceSave,
+            InputEncoding = Input.Select(x => x.Encoding.CodePage),
+            Output = string.IsNullOrWhiteSpace(Output) ? null : Output,
+            OutputEncoding = OutputEncoding.CodePage,
+            Delimiters = Input.Select(x => x.Delimiter),
+            Labels = Input.Select(x => x.Label),
             SearchingDelimiters = new[] { ';', '|', '\t', ',' }
-        };
+        };      
     }
 }
