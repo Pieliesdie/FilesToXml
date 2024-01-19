@@ -16,13 +16,13 @@ public static partial class Program
     public static string Beautify(string xml) => XDocument.Parse(xml).ToString();
     
     [JSInvokable]
-    public static string Convert(test fileInformation)
+    public static string? Convert()
     {
         return null;
     }
 }
 
-public struct test
+public struct Test
 {
     public readonly string Path;
     public readonly string? Label;
@@ -31,7 +31,7 @@ public struct test
     public readonly string Delimiter;
     public readonly char[] SearchingDelimiters;
 
-    public test(string path,
+    public Test(string path,
         string? label,
         Encoding encoding,
         SupportedFileExt? type,

@@ -71,7 +71,7 @@ public class XlsxToXml : IConvertable
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
         var rows = ReadRows(sheet);
-        return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name!), new XAttribute("id", sheet.Id), rows) : null;
+        return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows) : null;
     }
     private static IEnumerable<XElement?> ReadRows(SheetModel sheet)
     {
@@ -114,11 +114,9 @@ public class XlsxToXml : IConvertable
                     sheet.NumberingFormats);
         }
 
-        if (!string.IsNullOrEmpty(cellValue))
-        {
-            return new XAttribute($"C{Extensions.ColumnIndex(cell.CellReference)}", cellValue);
-        }
-        return null;
+        if (string.IsNullOrEmpty(cellValue)) return null;
+        
+        return new XAttribute($"C{Extensions.ColumnIndex(cell.CellReference)}", cellValue);
 
         /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
          * Значение свойства DataType равно NULL для числовых типов и дат.
@@ -168,7 +166,7 @@ public class XlsxToXml : IConvertable
         return numFtd >= 14 && numFtd <= 22;
     }
 
-    private static IEnumerable<Row?> Read(WorksheetPart worksheetPart)
+    private static IEnumerable<Row?> Read(OpenXmlPart worksheetPart)
     {
         using var reader = OpenXmlReader.Create(worksheetPart);
         while (reader.Read())
@@ -179,7 +177,7 @@ public class XlsxToXml : IConvertable
             }
         }
     }
-    private static IEnumerable<Cell?> Read(Row row)
+    private static IEnumerable<Cell?> Read(OpenXmlElement row)
     {
         using var reader = OpenXmlReader.Create(row);
         while (reader.Read())

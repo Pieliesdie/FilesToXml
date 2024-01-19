@@ -20,7 +20,6 @@
     [Parameter] public string? Height { set; get; }
     /// <summary> User styles, applied on top of the component's own classes and styles.</summary>
     [Parameter] public string? Style { get; set; }
-    [Parameter] public bool ScrollToBottomOnUpdate { get; set; } = true;
     [Parameter] public EventCallback Changed { get; set; }
     
     private string? width;
@@ -30,7 +29,6 @@
     private const int DefaultConsoleHeight = 300;
     private bool isUpdatePending;
     private SemaphoreSlim semaphoreSlim = new(1);
-    private ElementReference rootDiv;
     private ElementReference logConsoleElement;
     private Virtualize<MudConsoleLine> outputVirtualizeComponent = null!;
     private List<MudConsoleLine> output = [];
@@ -84,6 +82,7 @@
             isUpdatePending = false;
         }
     }
+    public bool ScrollToBottomOnUpdate { get; set; } = true;
     public bool IsEmpty { get; private set; } = true;
     public async Task WriteToBegin(string content, Color color = Color.Default) => await Write([content], color, 0);
     public async Task WriteToBegin(IEnumerable<string> content, Color color = Color.Default) => await Write(content, color, 0);
@@ -117,6 +116,8 @@
             output.Clear();
             IsEmpty = true;
         });
+        
+        await outputVirtualizeComponent.RefreshDataAsync();
         await ThrottledStateHasChanged();
     }
     protected override void OnInitialized()
