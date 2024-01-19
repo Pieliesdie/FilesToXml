@@ -9,7 +9,7 @@
         Icon="icon-xml.png"
         WindowStartupLocation="CenterScreen"
         MinWidth="550"
-        Title="Files to xml" Height="450" Width="800">
+        Title="Files to xml" Height="650" Width="950">
     <Grid>
         <wpf:BlazorWebView HostPage="wwwroot\index.html" Services="{DynamicResource services}" Name="BlazorWebView">
             <wpf:BlazorWebView.RootComponents>

@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using System.Windows;
+using FilesToXml.WPF.Components;
+using FilesToXml.WPF.Components.MudConsole;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 using MudExtensions.Services;

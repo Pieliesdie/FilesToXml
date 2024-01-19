@@ -5,143 +5,101 @@
 @using FilesToXml.WPF.Helpers
 @using FilesToXml.WPF.Model
 @using System.Text
-@using System.Windows
 @using Microsoft.Win32
 @using System.IO
+@using FilesToXml.WPF.Components.MudConsole
 @inject ISnackbar Snackbar
-@using MudBlazor.Components
 
-<MudButton HtmlTag="label"
-           Variant="Variant.Filled"
-           Color="Color.Primary"
-           Style="height: 50px;min-width: 150px"
-           StartIcon="@Icons.Material.Filled.CloudUpload"
-           OnClick="UploadFiles">
-    Select source file
-</MudButton>
-
-<MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense="false">
-    <Columns>
-        <HierarchyColumn T="FileUpload"/>
-        <PropertyColumn Property="x => x.Name" Title="Name"/>
-        <PropertyColumn Property="x => x.Path" Title="Path"/>
-        <PropertyColumn Property="x => x.SizeInKb" Title="Size(kb)"/>
-        <PropertyColumn Property="x => x.Extension" Title="Extension"/>
-        <TemplateColumn StickyRight="true" Sortable="false">
-            <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="() => RemoveUpload(context.Item)"/>
-            </CellTemplate>
-        </TemplateColumn>
-    </Columns>
-    <ChildRowContent>
-        <MudStack Row="false" Spacing="1" AlignItems="AlignItems.Stretch">
-            <MudText Typo="Typo.body2">Input encoding</MudText>
-            <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="@context.Item.Encoding"
-                               T="Encoding" ToStringFunc="@FriendlyEncodingString"/>
-            <MudText Typo="Typo.body2">Dataset label</MudText>
-            <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text" Clearable="true"></MudTextField>
-            @if (context.Item.Extension == "csv")
-            {
-                <MudText Typo="Typo.body2">Csv delimiter</MudText>
-                <MudTextField T="string" @bind-Value="@context.Item.Delimiter" Variant="Variant.Text"></MudTextField>
-            }
-        </MudStack>
-    </ChildRowContent>
-</MudDataGrid>
-<MudExpansionPanels Class="mt-5">
-    <MudExpansionPanel Text="Settings">
-        <MudStack>
-            <MudCheckBox @bind-Checked="@ConvertOptions.DisableFormat">Disable output file formatting</MudCheckBox>
-            <MudCheckBox @bind-Checked="@ConvertOptions.ForceSave">Override output file</MudCheckBox>
-            <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="ConvertOptions.OutputEncoding"
-                               T="Encoding" ToStringFunc="@(new Func<Encoding, string>(FriendlyEncodingString))"
-                               Label="Output Encoding"/>
-        </MudStack>
-    </MudExpansionPanel>
-</MudExpansionPanels>
-<MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.End">
-    <MudButton Variant="Variant.Filled"
-               Color="Color.Primary"
-               Style="height: 50px;min-width: 160px"
-               StartIcon="@Icons.Material.Filled.Folder"
-               OnClick="SelectFolder">
-        Select output file
-    </MudButton>
-    <MudTextField FullWidth="true" T="string" @bind-Value="@ConvertOptions.Output" Label="Output file" Clearable="true"/>
-    <MudSpacer/>
-    <MudButton @bind-Disabled="@IsBusy"
+<div>
+    <MudButton HtmlTag="label"
                Variant="Variant.Filled"
-               Class="pa-5"
-               Style="height: 50px;min-width: 160px"
-               Color="Color.Info"
-               StartIcon="@Icons.Material.Filled.NotStarted"
-               OnClick="SaveResult">
-        Start convertation
+               Color="Color.Primary"
+               Style="height: 50px;width: 100%"
+               StartIcon="@Icons.Material.Filled.CloudUpload"
+               OnClick="UploadFiles">
+        Select source file
     </MudButton>
-</MudStack>
-<MudExpansionPanels Style="flex:1" Class="mt-5 mb-5">
-    <MudExpansionPanel Text="Logs">
-        <MudContainer style="width: 100%; max-height:300px; overflow:auto" MaxWidth="MaxWidth.False">
-            <Virtualize Context="message" ItemsProvider="OutputItemsProvider" ItemSize="20" @ref="outputVirtualizeComponent">
-                <ItemContent>
-                    <MudText Style="height:20px; white-space:pre" Typo="@Typo.body2" Color="@message.Color">@message.Content</MudText>
-                </ItemContent>
-                <Placeholder>
-                    <p>
-                        Loading&hellip;
-                    </p>
-                </Placeholder>
-            </Virtualize>
-        </MudContainer>
-        @if (OutputCount > 0)
-        {
-            <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
-                <MudCheckBox Class="mr-3" Style="height: 40px"  @bind-Checked="@ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
-                <MudSpacer/>
-                <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="CopyOutput">Copy</MudButton>
-                <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="ClearOutput">Clear</MudButton>
+    <MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense="false">
+        <Columns>
+            <HierarchyColumn T="FileUpload"/>
+            <PropertyColumn Property="x => x.Name" Title="Name"/>
+            <PropertyColumn Property="x => x.Path" Title="Path"/>
+            <PropertyColumn Property="x => x.SizeInKb" Title="Size(kb)"/>
+            <PropertyColumn Property="x => x.Extension" Title="Extension"/>
+            <TemplateColumn StickyRight="true" Sortable="false">
+                <CellTemplate>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="() => RemoveUpload(context.Item)"/>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <ChildRowContent>
+            <MudStack Row="false" Spacing="1" AlignItems="AlignItems.Stretch">
+                <MudText Typo="Typo.body2">Input encoding</MudText>
+                <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="@context.Item.Encoding"
+                                   T="Encoding" ToStringFunc="@EncodingTools.EncodingToFriendlyString"/>
+                <MudText Typo="Typo.body2">Dataset label</MudText>
+                <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text" Clearable="true"></MudTextField>
+                @if (context.Item.Extension == "csv")
+                {
+                    <MudText Typo="Typo.body2">Csv delimiter</MudText>
+                    <MudTextField T="string" @bind-Value="@context.Item.Delimiter" Variant="Variant.Text"></MudTextField>
+                }
             </MudStack>
-        }
-    </MudExpansionPanel>
-</MudExpansionPanels>
+        </ChildRowContent>
+    </MudDataGrid>
+    <MudExpansionPanels Class="mt-5">
+        <MudExpansionPanel Text="Settings">
+            <MudStack>
+                <MudCheckBox @bind-Checked="@ConvertOptions.DisableFormat">Disable output file formatting</MudCheckBox>
+                <MudCheckBox @bind-Checked="@ConvertOptions.ForceSave">Override output file</MudCheckBox>
+                <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="ConvertOptions.OutputEncoding"
+                                   T="Encoding" ToStringFunc="@EncodingTools.EncodingToFriendlyString"
+                                   Label="Output Encoding"/>
+            </MudStack>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+    <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.End">
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Style="height: 50px;min-width: 160px"
+                   StartIcon="@Icons.Material.Filled.Folder"
+                   OnClick="SelectFolder">
+            Select output file
+        </MudButton>
+        <MudTextField FullWidth="true" T="string" @bind-Value="@ConvertOptions.Output" Label="Output file" Clearable="true"/>
+        <MudSpacer/>
+        <MudButton @bind-Disabled="@IsBusy"
+                   Variant="Variant.Filled"
+                   Class="pa-5"
+                   Style="height: 50px;min-width: 160px"
+                   Color="Color.Info"
+                   StartIcon="@Icons.Material.Filled.NotStarted"
+                   OnClick="Convert">
+            Start convertation
+        </MudButton>
+    </MudStack>
+
+    <MudExpansionPanels Style="flex:auto" Class="mt-5 mb-5">
+        <MudExpansionPanel Text="Logs">
+            <MudConsole @ref="LogConsole" Style="overflow:auto;max-height: 300px" Changed="StateHasChanged"/>
+            @if (LogConsole is {IsEmpty: false})
+            {
+                <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
+                    <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Checked="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
+                    <MudSpacer/>
+                    <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="CopyConsole">Copy</MudButton>
+                    <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="ClearConsole">Clear</MudButton>
+                </MudStack>
+            }
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+</div>
 
 @code {
-
-    private record Line
-    {
-        public Line() { }
-        public Line(string content) => Content = content;
-        public string Content { get; set; } = string.Empty;
-        public Color Color { get; init; } = Color.Default;
-    }
-
+    private MudConsole? LogConsole { get; set; }
     private OptionsViewModel ConvertOptions { get; } = new();
-    private readonly List<Line> output = [];
-    private long OutputCount
-    {
-        get
-        {
-            lock (output)
-            {
-                return output.Count;
-            }
-        }
-    }
     private bool IsBusy { get; set; } = false;
     private readonly Encoding[] encodingInfo = Encoding.GetEncodings().Select(x => x.GetEncoding()).ToArray();
-    private Virtualize<Line> outputVirtualizeComponent = null!;
-    private ValueTask<ItemsProviderResult<Line>> OutputItemsProvider(ItemsProviderRequest request)
-    {
-        lock (output)
-        {
-            var items = output.Skip(request.StartIndex).Take(request.Count).ToList();
-            return new ValueTask<ItemsProviderResult<Line>>(new ItemsProviderResult<Line>(items, output.Count));
-        }
-    }
-    private static string FriendlyEncodingString(Encoding? tuple)
-    {
-        return tuple is null ? string.Empty : tuple.EncodingName + " - Code page: " + tuple.CodePage;
-    }
     private void UploadFiles()
     {
         var ofd = new OpenFileDialog
@@ -149,11 +107,10 @@
             Multiselect = true,
             Filter = "all files|*.*|" + Enum.GetNames(typeof(SupportedFileExt)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
         };
-
         if (ofd.ShowDialog() != true) return;
 
         var result = ofd.FileNames;
-        if (result is null || !result.Any()) return;
+        if (!result.Any()) return;
 
         foreach (var file in result)
         {
@@ -163,7 +120,7 @@
                 continue;
             }
 
-            ConvertOptions.Input.Add(new()
+            ConvertOptions.Input.Add(new FileUpload
             {
                 Path = file,
                 Name = Path.GetFileNameWithoutExtension(file),
@@ -184,8 +141,20 @@
         if (sfd.ShowDialog() != true) return;
         ConvertOptions.Output = sfd.FileName;
     }
-    private async Task SaveResult()
+    private async Task CopyConsole()
     {
+        if (LogConsole == null) return;
+        await LogConsole.CopyToClipboard();
+        Snackbar.Add("Copied to clipboard!", Severity.Success);
+    }
+    private async Task ClearConsole()
+    {
+        if (LogConsole == null) return;
+        await LogConsole.Clear();
+    }
+    private async Task Convert()
+    {
+        if (LogConsole == null) return;
         try
         {
             IsBusy = true;
@@ -195,12 +164,12 @@
                 return;
             }
 
-            ClearOutput();
+            await LogConsole.Clear();
 
             await using var resultStream = new LineStream(ConvertOptions.OutputEncoding);
             await using var errorStream = new LineStream(ConvertOptions.OutputEncoding);
-            resultStream.OnWriteLines += (lines) => WriteToOutput(lines);
-            //errorStream.OnWriteLines += (lines) => WriteToOutput(lines, Color.Error);
+            resultStream.OnWriteLines += async (lines) => await LogConsole.Write(lines);
+            errorStream.OnWriteLines += async (lines) => await LogConsole.WriteToBegin(lines, Color.Error);
             if (string.IsNullOrWhiteSpace(ConvertOptions.Output))
             {
                 Snackbar.Add($"Output folder is empty, print to logs", Severity.Warning);
@@ -215,71 +184,14 @@
             {
                 Snackbar.Add("Error", Severity.Error);
             }
-
-            await ThrottledStateHasChanged();
         }
         catch (Exception ex)
         {
-            WriteToOutput(ex.Message, Color.Error);
+            _ = LogConsole.WriteToBegin(ex.Message, Color.Error);
         }
         finally
         {
             IsBusy = false;
-        }
-    }
-    private void WriteToOutput(string content, Color color = Color.Default) => WriteToOutput([content], color);
-    private async void WriteToOutput(IEnumerable<string> content, Color color = Color.Default)
-    {
-        lock (output)
-        {
-            output.AddRange(content.Select(x => new Line(x) { Color = color }));
-        }
-
-        await ThrottledStateHasChanged();
-    }
-    private void CopyOutput()
-    {
-        lock (output)
-        {
-            Clipboard.SetText(string.Join(Environment.NewLine, output.Select(x => x.Content)));
-        }
-    }
-    private void ClearOutput()
-    {
-        lock (output)
-        {
-            output.Clear();
-        }
-
-        _ = ThrottledStateHasChanged();
-    }
-    private bool ScrollToBottomOnUpdate { get; set; } = true;
-    private bool isUpdatePending;
-    // Throttle interval in milliseconds
-    private readonly int throttleInterval = 1000;
-    private async Task ThrottledStateHasChanged()
-    {
-        // If an update is already pending, do nothing
-        if (isUpdatePending)
-        {
-            return;
-        }
-
-        // Set the flag to indicate that an update is pending
-        isUpdatePending = true;
-
-        try
-        {
-            // Delay for the specified interval
-            await Task.Delay(throttleInterval);
-
-            await outputVirtualizeComponent.RefreshDataAsync();
-            // Invoke StateHasChanged after the delay
-            await InvokeAsync(StateHasChanged);
-        }
-        finally
-        {
-            isUpdatePending = false;
         }
     }
 }

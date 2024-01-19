@@ -6,22 +6,44 @@ namespace FilesToXml.WPF.Helpers;
 public class LineStream : MemoryStream
 {
     private readonly Encoding encoding;
+    private readonly byte[] preamble;
     private readonly StringBuilder partialLineBuffer = new();
+
     public delegate void WriteLineEventHandler(string line);
+
     public event WriteLineEventHandler? OnWriteLine;
+
     public delegate void WriteLinesEventHandler(string[] lines);
+
     public event WriteLinesEventHandler? OnWriteLines;
     public LineStream(Encoding encoding)
     {
         this.encoding = encoding;
+        preamble = encoding.GetPreamble();
     }
     public override void Write(ReadOnlySpan<byte> buffer)
     {
         base.Write(buffer);
-        ProcessBuffer(buffer);
+        if (HasPreamble(buffer))
+        {
+            buffer = buffer.Slice(preamble.Length);
+        }
+
+        if (buffer.Length > 0)
+        {
+            ProcessBuffer(buffer);
+        }
+    }
+    private bool firstCheck = true;
+    private bool HasPreamble(ReadOnlySpan<byte> buffer)
+    {
+        if (!firstCheck) return false;
+        firstCheck = false;
+        return buffer.Slice(0, preamble.Length).SequenceEqual(preamble);
     }
     private void ProcessBuffer(ReadOnlySpan<byte> buffer)
     {
+        if (OnWriteLine is null && OnWriteLines is null) return;
         // Convert the buffer to a string
         string content = encoding.GetString(buffer);
 
@@ -39,19 +61,22 @@ public class LineStream : MemoryStream
             partialLineBuffer.Append(lines[^1]);
             lines = lines[..^1];
         }
-        
+
         // Process complete lines
         for (int i = 0; i < lines.Length - 1; i++)
         {
             OnWriteLine?.Invoke(lines[i]);
         }
+
         // Invoke the OnWriteLines event with all lines (including the potential partial line)
         if (lines.Length > 0)
         {
             OnWriteLines?.Invoke(lines);
         }
     }
+
     #region Disposing
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -63,8 +88,10 @@ public class LineStream : MemoryStream
                 OnWriteLine?.Invoke(nonFlushedString);
                 OnWriteLines?.Invoke([nonFlushedString]);
             }
+
             Cleanup();
         }
+
         base.Dispose(disposing);
     }
     private void Cleanup()
@@ -72,5 +99,6 @@ public class LineStream : MemoryStream
         OnWriteLine = null;
         OnWriteLines = null;
     }
+
     #endregion
 }

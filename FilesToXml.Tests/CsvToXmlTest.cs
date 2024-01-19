@@ -13,7 +13,7 @@ public class CsvToXmlTest
     public void CsvToXmlByFileTestNotNull()
     {
         var converter = new CsvToXml();
-        string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         string path = curDir + @"/Files/csv.csv";
 
         string result = converter.ConvertByFile(path).ToString();

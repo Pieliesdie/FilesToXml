@@ -7,6 +7,11 @@ namespace FilesToXml.WPF.Helpers;
 
 internal static class EncodingTools
 {
+    public static string EncodingToFriendlyString(this Encoding? tuple)
+    {
+        return tuple is null ? string.Empty : $"{tuple.EncodingName} - Code page: {tuple.CodePage}";
+    }
+    
     /// <summary>
     /// Determines a text file's encoding by analyzing its byte order mark (BOM).
     /// Defaults to ASCII when detection of the text file's endianness fails.

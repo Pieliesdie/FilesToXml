@@ -1,0 +1,136 @@
+﻿@using FilesToXml.WPF.Helpers
+@using System.Text.RegularExpressions
+@inject IJSRuntime JsRuntime
+
+<div style="@styleString" @ref="logConsoleElement">
+    <Virtualize Context="line" ItemsProvider="OutputItemsProvider" ItemSize="20" @ref="outputVirtualizeComponent">
+        <ItemContent>
+            <MudText Style="height:20px; white-space:pre" Typo="@MudBlazor.Typo.body2" Color="@line.Color">@line.Content</MudText>
+        </ItemContent>
+        <Placeholder>
+            <MudSkeleton Style="height: 20px;overflow: hidden;"/>
+        </Placeholder>
+    </Virtualize>
+</div>
+
+@code {
+    /// <summary>With defined in string, needs px or % or equal prefix.</summary>
+    [Parameter] public string? Width { set; get; }
+    /// <summary>Height defined in string, needs px or % or equal prefix.</summary>
+    [Parameter] public string? Height { set; get; }
+    /// <summary> User styles, applied on top of the component's own classes and styles.</summary>
+    [Parameter] public string? Style { get; set; }
+    [Parameter] public bool ScrollToBottomOnUpdate { get; set; } = true;
+    [Parameter] public EventCallback Changed { get; set; }
+    
+    private string? width;
+    private string? height;
+    private string? styleString;
+    private const int ThrottleInterval = 1000;
+    private const int DefaultConsoleHeight = 300;
+    private bool isUpdatePending;
+    private SemaphoreSlim semaphoreSlim = new(1);
+    private ElementReference rootDiv;
+    private ElementReference logConsoleElement;
+    private Virtualize<MudConsoleLine> outputVirtualizeComponent = null!;
+    private List<MudConsoleLine> output = [];
+    private async ValueTask<ItemsProviderResult<MudConsoleLine>> OutputItemsProvider(ItemsProviderRequest request)
+    {
+        if (IsEmpty)
+        {
+            return new ItemsProviderResult<MudConsoleLine>(Enumerable.Empty<MudConsoleLine>(), 0);
+        }
+        return await Task.Run(async () =>
+        {
+            return await semaphoreSlim.UseSemaphoreAsync(() =>
+            {
+                var items = output.Skip(request.StartIndex).Take(request.Count).ToList();
+                return new ItemsProviderResult<MudConsoleLine>(items, output.Count);
+            });
+        });
+    }
+    private async Task ScrollToBottom()
+    {
+        // Scroll to the bottom using JavaScript interop
+        await JsRuntime.InvokeVoidAsync("scrollToBottom", outputVirtualizeComponent);
+    }
+    // Throttle interval in milliseconds
+    private async Task ThrottledStateHasChanged()
+    {
+        // If an update is already pending, do nothing
+        if (isUpdatePending)
+        {
+            return;
+        }
+
+        // Set the flag to indicate that an update is pending
+        isUpdatePending = true;
+
+        try
+        {
+            // Delay for the specified interval
+            await Task.Delay(ThrottleInterval);
+            await outputVirtualizeComponent.RefreshDataAsync();
+            // Invoke StateHasChanged after the delay
+            await InvokeAsync(StateHasChanged);
+            await InvokeAsync(Changed.InvokeAsync);
+            if (ScrollToBottomOnUpdate && !IsEmpty)
+            {
+                await JsRuntime.InvokeVoidAsync("scrollToBottom", logConsoleElement);
+            }
+        }
+        finally
+        {
+            isUpdatePending = false;
+        }
+    }
+    public bool IsEmpty { get; private set; } = true;
+    public async Task WriteToBegin(string content, Color color = Color.Default) => await Write([content], color, 0);
+    public async Task WriteToBegin(IEnumerable<string> content, Color color = Color.Default) => await Write(content, color, 0);
+    public async Task Write(string content, Color color = Color.Default) => await Write([content], color);
+    public async Task Write(IEnumerable<string> content, Color color = Color.Default, int? position = null)
+    {
+        await semaphoreSlim.UseSemaphoreAsync(() =>
+        {
+            var lines = content.Select(x => new MudConsoleLine(x) {Color = color});
+            if (position is null)
+            {
+                output.AddRange(lines);
+            }
+            else
+            {
+                output.InsertRange((int) position, lines);
+            }
+            IsEmpty = !output.Any();
+        });
+        await ThrottledStateHasChanged();
+    }
+    public async Task CopyToClipboard()
+    {
+        var text = await semaphoreSlim.UseSemaphoreAsync(() => string.Join(Environment.NewLine, output.Select(x => x.Content)));
+        await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
+    }
+    public async Task Clear()
+    {
+        await semaphoreSlim.UseSemaphoreAsync(() =>
+        {
+            output.Clear();
+            IsEmpty = true;
+        });
+        await ThrottledStateHasChanged();
+    }
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrEmpty(Width))
+        {
+            width = $"width:{Width};";
+        }
+
+        if (!string.IsNullOrEmpty(Height))
+        {
+            height = $"height:{Height};";
+        }
+
+        styleString = $"{width}{height}{Style}";
+    }
+}
