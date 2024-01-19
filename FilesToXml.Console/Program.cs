@@ -29,7 +29,3 @@ Parser.Default.ParseArguments<Options>(args).WithParsed(parsedArgs =>
     Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     ConverterToXml.Convert(parsedArgs, Console.OpenStandardOutput(), Console.OpenStandardError());
 });
-
-#if DEBUG
-Console.ReadKey();
-#endif
