@@ -9,7 +9,7 @@ public struct FileInformation : IDisposable
     public readonly string Path;
     public readonly string? Label;
     public readonly Encoding Encoding;
-    public readonly SupportedFileExt? Type;
+    public readonly Filetype Type;
     public readonly string Delimiter;
     public readonly char[] SearchingDelimiters;
     private Stream? stream;
@@ -17,7 +17,7 @@ public struct FileInformation : IDisposable
     public FileInformation(string path,
         string? label,
         Encoding encoding,
-        SupportedFileExt? type,
+        Filetype type,
         string delimiter,
         char[] searchingDelimiters)
     {

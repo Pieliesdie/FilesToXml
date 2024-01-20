@@ -27,14 +27,14 @@ public struct Test
     public readonly string Path;
     public readonly string? Label;
     public readonly Encoding Encoding;
-    public SupportedFileExt? Type;
+    public Filetype? Type;
     public readonly string Delimiter;
     public readonly char[] SearchingDelimiters;
 
     public Test(string path,
         string? label,
         Encoding encoding,
-        SupportedFileExt? type,
+        Filetype? type,
         string delimiter,
         char[] searchingDelimiters)
     {

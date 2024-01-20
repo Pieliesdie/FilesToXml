@@ -39,7 +39,7 @@ public static class ConverterToXml
             filePath.RelativePathToAbsoluteIfNeed(),
             options.Labels?.ElementAtOrDefault(index),
             Encoding.GetEncoding(options.InputEncoding.ToList().ElementAtOrLast(index)),
-            filePath.GetExtFromPath(),
+            filePath.ToSupportedFile(),
             PopOrPeekDelimiter(filePath, delimeters),
             options.SearchingDelimiters?.ToArray() ?? [';', '|', '\t', ',']
         )).ToList();
@@ -72,7 +72,7 @@ public static class ConverterToXml
 
         static string PopOrPeekDelimiter(string path, Queue<string> delimiters)
         {
-            if (path.GetExtFromPath() == SupportedFileExt.Csv) return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
+            if (path.ToSupportedFile() == Filetype.Csv) return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
 
             return ";";
         }
@@ -93,20 +93,20 @@ public static class ConverterToXml
         {
             IConvertable convertor = fileInformation.Type switch
             {
-                SupportedFileExt.Xls => new XlsToXml(),
-                SupportedFileExt.Xlsx => new XlsxToXml(),
-                SupportedFileExt.Txt => new TxtToXml(),
-                SupportedFileExt.Csv => new CsvToXml(),
-                SupportedFileExt.Docx => new DocxToXml(),
-                SupportedFileExt.Doc => new DocToXml(),
-                SupportedFileExt.Xml => new XmlToXml(),
-                SupportedFileExt.Json => new JsonToXml(),
-                SupportedFileExt.Tsv => new TsvToXml(),
-                SupportedFileExt.Dbf => new DbfToXml(),
+                Filetype.Xls => new XlsToXml(),
+                Filetype.Xlsx => new XlsxToXml(),
+                Filetype.Txt => new TxtToXml(),
+                Filetype.Csv => new CsvToXml(),
+                Filetype.Docx => new DocxToXml(),
+                Filetype.Doc => new DocToXml(),
+                Filetype.Xml => new XmlToXml(),
+                Filetype.Json => new JsonToXml(),
+                Filetype.Tsv => new TsvToXml(),
+                Filetype.Dbf => new DbfToXml(),
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/
-                _ => throw new NotImplementedException("Unsupported type")
+                Filetype.Unknown or _ => throw new NotImplementedException("Unsupported type")
             };
 
             var additionalInfo = new List<XObject>

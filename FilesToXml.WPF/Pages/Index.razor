@@ -106,7 +106,7 @@
         var ofd = new OpenFileDialog
         {
             Multiselect = true,
-            Filter = "all files|*.*|" + Enum.GetNames(typeof(SupportedFileExt)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
+            Filter = "all files|*.*|" + Enum.GetNames(typeof(Filetype)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
         };
         if (ofd.ShowDialog() != true) return;
 
@@ -115,7 +115,7 @@
 
         foreach (var file in result)
         {
-            if (file.GetExtFromPath() is null)
+            if (file.ToSupportedFile() == Filetype.Unknown)
             {
                 Snackbar.Add($"{file} not supported", Severity.Error);
                 continue;

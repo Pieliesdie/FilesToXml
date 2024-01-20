@@ -9,7 +9,7 @@ using FilesToXml.Core;
 var isSupportCommand = args.FirstOrDefault(x => x == "--support") is not null;
 if (isSupportCommand)
 {
-    var supportedTypes = Enum.GetNames(typeof(SupportedFileExt)).Aggregate((x, y) => $"{x}, {y}");
+    var supportedTypes = Enum.GetNames(typeof(Filetype)).Aggregate((x, y) => $"{x}, {y}");
     Console.WriteLine($"Supported types: {supportedTypes}");
     return;
 }

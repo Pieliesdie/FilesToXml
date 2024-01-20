@@ -7,7 +7,7 @@ namespace FilesToXml.WPF.Model;
 
 public record FileUpload
 {
-    private string filePath = string.Empty;
+    private readonly string filePath = string.Empty;
 
     public FileUpload()
     {
@@ -19,7 +19,7 @@ public record FileUpload
         init
         {
             filePath = value;
-            Extension = Path.GetExtFromPath()?.ToFriendlyString() ?? "Unsupported";
+            Extension = Path.ToSupportedFile().ToFriendlyString();
             Encoding = EncodingTools.GetEncoding(filePath);
         }
     }

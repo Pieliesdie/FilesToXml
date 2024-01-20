@@ -6,15 +6,15 @@ namespace FilesToXml.Core.Extensions;
 
 public static class PathExtensions
 {
-    public static SupportedFileExt? GetExtFromPath(this string? path)
+    public static Filetype ToSupportedFile(this string? path)
     {
         var extension = Path.GetExtension(path);
         if (extension is null || extension.Length <= 1)
-            return null;
+            return Filetype.Unknown;
 
-        if (Enum.TryParse<SupportedFileExt>(extension[1..], true, out var supportedFileExt)) return supportedFileExt;
+        if (Enum.TryParse<Filetype>(extension[1..], true, out var supportedFileExt)) return supportedFileExt;
 
-        return null;
+        return Filetype.Unknown;
     }
     public static IEnumerable<string> UnpackFolders(this IEnumerable<string> pathList)
     {
