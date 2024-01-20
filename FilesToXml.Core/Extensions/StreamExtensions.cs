@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace FilesToXml.Core;
+namespace FilesToXml.Core.Extensions;
 
 public static class StreamExtensions
 {

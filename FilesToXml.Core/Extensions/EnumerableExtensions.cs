@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FilesToXml.Core;
+namespace FilesToXml.Core.Extensions;
 
 public static class EnumerableExtensions
 {
