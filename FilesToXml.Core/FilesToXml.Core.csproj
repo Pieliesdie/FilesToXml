@@ -22,7 +22,7 @@
 	<ItemGroup>
 		<PackageReference Include="CsvTextFieldParser" Version="1.2.2" />
 		<PackageReference Include="DbfDataReader" Version="0.9.0" />
-		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NPOI" Version="2.6.2" />
 		<PackageReference Include="PolySharp" Version="1.14.1">
