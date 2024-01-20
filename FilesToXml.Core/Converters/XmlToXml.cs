@@ -5,19 +5,24 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
+
 public class XmlToXml : IEncodingConvertable
 {
-    public XStreamingElement Convert(Stream stream, params object?[] rootContent) 
-        => Convert(stream, Encoding.UTF8, rootContent);
-
-    public XElement ConvertByFile(string path, params object?[] rootContent) 
-        => ConvertByFile(path, Encoding.UTF8, rootContent);
-
+    public XStreamingElement Convert(Stream stream, params object?[] rootContent)
+    {
+        return Convert(stream, Encoding.UTF8, rootContent);
+    }
+    public XElement ConvertByFile(string path, params object?[] rootContent)
+    {
+        return ConvertByFile(path, Encoding.UTF8, rootContent);
+    }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
-        => new ("DATASET", rootContent, ParseXML(XmlReader.Create(new StreamReader(stream,encoding))));
-    
+    {
+        return new XStreamingElement("DATASET", rootContent, ParseXML(XmlReader.Create(new StreamReader(stream, encoding))));
+    }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
         path = path.RelativePathToAbsoluteIfNeed();
@@ -27,7 +32,6 @@ public class XmlToXml : IEncodingConvertable
     private static IEnumerable<object> ParseXML(XmlReader reader)
     {
         while (reader.Read())
-        { 
             switch (reader.NodeType)
             {
                 case XmlNodeType.Element:
@@ -51,7 +55,6 @@ public class XmlToXml : IEncodingConvertable
                     yield return reader.Value;
                     break;
             }
-        }
     }
     private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
     {
@@ -60,8 +63,8 @@ public class XmlToXml : IEncodingConvertable
             do
             {
                 yield return new XAttribute(reader.Name, reader.Value);
-            }
-            while (reader.MoveToNextAttribute());
+            } while (reader.MoveToNextAttribute());
+
             reader.MoveToElement();
         }
     }

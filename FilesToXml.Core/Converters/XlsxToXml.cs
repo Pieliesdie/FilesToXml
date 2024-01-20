@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,46 +9,38 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FilesToXml.Core.Converters.Interfaces;
-using NumberingFormats = System.Collections.Immutable.ImmutableArray<DocumentFormat.OpenXml.Spreadsheet.NumberingFormat>;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
 public class XlsxToXml : IConvertable
 {
-    public XStreamingElement Convert(Stream memStream, params object?[] rootContent) => SpreadsheetProcess(memStream, rootContent);
+    private const int BuiltinExcelFormats = 164;
+    public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
+    {
+        return SpreadsheetProcess(memStream, rootContent);
+    }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         path = path.RelativePathToAbsoluteIfNeed();
-        using FileStream fs = File.OpenRead(path);
+        using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
-
-    private readonly struct SheetModel
-    {
-        public SheetModel() { }
-        public int Id { get; init; }
-        public string Name { get; init; } = string.Empty;
-        public required WorksheetPart SheetData { get; init; }
-        public required OpenXmlElement[] SharedStringTable { get; init; }
-        public required CellFormat[] CellFormats { get; init; }
-        public required NumberingFormat[] NumberingFormats { get; init; }
-    }
-
     /// <summary>
-    /// Method of processing xlsx document
+    ///     Method of processing xlsx document
     /// </summary>
     /// <param name="memStream"></param>
     /// <param name="rootContent"></param>
     /// <returns></returns>
     private static XStreamingElement SpreadsheetProcess(Stream memStream, params object?[] rootContent)
     {
-        SpreadsheetDocument doc = SpreadsheetDocument.Open(memStream, false);
+        var doc = SpreadsheetDocument.Open(memStream, false);
         memStream.Position = 0;
-        var sharedStringTable = (doc.WorkbookPart?.SharedStringTablePart?.SharedStringTable).ToArrayOrEmpty();
-        var cellFormats = (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.CellFormats?.OfType<CellFormat>()).ToArrayOrEmpty();
-        var numberingFormats = (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>()).ToArrayOrEmpty();
+        OpenXmlElement[] sharedStringTable = (doc.WorkbookPart?.SharedStringTablePart?.SharedStringTable).ToArrayOrEmpty();
+        CellFormat[] cellFormats = (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.CellFormats?.OfType<CellFormat>()).ToArrayOrEmpty();
+        NumberingFormat[] numberingFormats = (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>()).ToArrayOrEmpty();
 
-        var sheets = doc?.WorkbookPart?
+        IEnumerable<XStreamingElement?>? sheets = doc?.WorkbookPart?
             .Workbook
             .Descendants<Sheet>()
             .Select((sheet, index) => new SheetModel
@@ -67,13 +58,13 @@ public class XlsxToXml : IConvertable
     }
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
-        var rows = ReadRows(sheet);
+        IEnumerable<XElement?> rows = ReadRows(sheet);
         return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows) : null;
     }
     private static IEnumerable<XElement?> ReadRows(SheetModel sheet)
     {
         int rowCount = 0, cellCount = 0;
-        var rows = Read(sheet.SheetData).Select(row => row == null ? null : RowProcess(row, sheet)).Where(row => row != null);
+        IEnumerable<XElement?> rows = Read(sheet.SheetData).Select(row => row == null ? null : RowProcess(row, sheet)).Where(row => row != null);
         foreach (var row in rows)
         {
             rowCount++;
@@ -85,7 +76,7 @@ public class XlsxToXml : IConvertable
     }
     private static XElement? RowProcess(Row row, SheetModel sheet)
     {
-        var cells = Read(row)
+        List<XAttribute?> cells = Read(row)
             .Select(cell => cell == null ? null : CellProcess(cell, sheet))
             .Where(cell => cell is not null)
             .ToList();
@@ -93,27 +84,21 @@ public class XlsxToXml : IConvertable
     }
     private static XAttribute? CellProcess(CellType cell, SheetModel sheet)
     {
-        string cellValue = cell.CellFormula == null ? cell.InnerText : (cell.CellValue?.InnerText) ?? cell.CellFormula.InnerText;
-        var dataType = cell.DataType?.Value;
+        var cellValue = cell.CellFormula == null ? cell.InnerText : cell.CellValue?.InnerText ?? cell.CellFormula.InnerText;
+        CellValues? dataType = cell.DataType?.Value;
 
         if (dataType == CellValues.SharedString)
-        {
             cellValue = sheet.SharedStringTable[int.Parse(cellValue)].InnerText;
-        }
         else if (dataType == CellValues.Boolean)
-        {
             cellValue = cellValue == "0" ? "False" : "True";
-        }
         else if (dataType == null && !IsNullValue(cell.StyleIndex))
-        {
             cellValue = FormatNullTypeCell(
                 cellValue,
                 sheet.CellFormats[(int) cell.StyleIndex!.Value].NumberFormatId ?? 0,
                 sheet.NumberingFormats);
-        }
 
         var isEmptyCell = string.IsNullOrEmpty(cellValue);
-        return isEmptyCell ? null : new XAttribute($"C{Extensions.ColumnIndex(cell.CellReference)}", cellValue);
+        return isEmptyCell ? null : new XAttribute($"C{ColumnIndex(cell.CellReference)}", cellValue);
 
         /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
          * Значение свойства DataType равно NULL для числовых типов и дат.
@@ -125,10 +110,7 @@ public class XlsxToXml : IConvertable
             if (!decimal.TryParse(cellValue, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
                 return cellValue;
 
-            if (!IsNumFmtDate(numFmt) && !IsFormatLooksLikeDate(numFmt, numberingFormats))
-            {
-                return number.ToString(CultureInfo.InvariantCulture);
-            }
+            if (!IsNumFmtDate(numFmt) && !IsFormatLooksLikeDate(numFmt, numberingFormats)) return number.ToString(CultureInfo.InvariantCulture);
 
             try
             {
@@ -140,7 +122,15 @@ public class XlsxToXml : IConvertable
             }
         }
     }
-    private const int BuiltinExcelFormats = 164;
+    public static int ColumnIndex(string? reference)
+    {
+        if (reference == null) return -1;
+        var ci = 0;
+        reference = reference.ToUpper();
+        for (var ix = 0; ix < reference.Length && reference[ix] >= 'A'; ix++)
+            ci = ci * 26 + (reference[ix] - 64);
+        return ci;
+    }
     private static bool IsFormatLooksLikeDate(uint numFmt, IEnumerable<NumberingFormat> numberingFormats)
     {
         if (numFmt < BuiltinExcelFormats) return false;
@@ -163,17 +153,30 @@ public class XlsxToXml : IConvertable
     {
         return numFtd >= 14 && numFtd <= 22;
     }
-    private static IEnumerable<Row?> Read(OpenXmlPart worksheetPart) => Read<Row>(() => OpenXmlReader.Create(worksheetPart));
-    private static IEnumerable<Cell?> Read(OpenXmlElement row) => Read<Cell>(() => OpenXmlReader.Create(row));
+    private static IEnumerable<Row?> Read(OpenXmlPart worksheetPart)
+    {
+        return Read<Row>(() => OpenXmlReader.Create(worksheetPart));
+    }
+    private static IEnumerable<Cell?> Read(OpenXmlElement row)
+    {
+        return Read<Cell>(() => OpenXmlReader.Create(row));
+    }
     private static IEnumerable<T?> Read<T>(Func<OpenXmlReader> readerFunc) where T : class
     {
         using var reader = readerFunc();
         while (reader.Read())
-        {
             if (reader.ElementType == typeof(T))
-            {
                 yield return reader.LoadCurrentElement() as T;
-            }
-        }
+    }
+
+    private readonly struct SheetModel
+    {
+        public SheetModel() { }
+        public int Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public required WorksheetPart SheetData { get; init; }
+        public required OpenXmlElement[] SharedStringTable { get; init; }
+        public required CellFormat[] CellFormats { get; init; }
+        public required NumberingFormat[] NumberingFormats { get; init; }
     }
 }

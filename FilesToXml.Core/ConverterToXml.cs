@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core;
 
@@ -15,14 +16,14 @@ public static class ConverterToXml
     {
         var encoding = Encoding.GetEncoding(options.OutputEncoding);
         var outputPath = options.Output?.RelativePathToAbsoluteIfNeed();
-        
+
         using var errorSw = CreateDefaulStreamWriter(errorStream, encoding);
-        if (options is { Output: not null, ForceSave: false } && File.Exists(outputPath))
+        if (options is {Output: not null, ForceSave: false} && File.Exists(outputPath))
         {
             errorSw?.WriteLine("Output file already exist and ForceSave is false");
             return false;
         }
-        
+
         var writeResultToStream = string.IsNullOrWhiteSpace(outputPath);
         using var outputSw = writeResultToStream
             ? CreateDefaulStreamWriter(outputStream, encoding)
@@ -30,20 +31,20 @@ public static class ConverterToXml
         using var logSw = writeResultToStream
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(outputStream, encoding);
-        
-        options.Input = Extensions.UnpackFolders(options.Input).ToArray();
+
+        options.Input = options.Input.UnpackFolders().ToArray();
         Queue<string> delimeters = new(options.Delimiters);
 
-        var files = options.Input.Select((filePath, index) => new FileInformation(
-            path: filePath.RelativePathToAbsoluteIfNeed(),
-            label: options.Labels?.ElementAtOrDefault(index),
-            encoding: Encoding.GetEncoding(options.InputEncoding.ToList().ElementAtOrLast(index)),
-            type: filePath.GetExtFromPath(),
-            delimiter: PopOrPeekDelimiter(filePath, delimeters),
-            searchingDelimiters: options.SearchingDelimiters?.ToArray() ?? [';', '|', '\t', ',']
+        List<FileInformation> files = options.Input.Select((filePath, index) => new FileInformation(
+            filePath.RelativePathToAbsoluteIfNeed(),
+            options.Labels?.ElementAtOrDefault(index),
+            Encoding.GetEncoding(options.InputEncoding.ToList().ElementAtOrLast(index)),
+            filePath.GetExtFromPath(),
+            PopOrPeekDelimiter(filePath, delimeters),
+            options.SearchingDelimiters?.ToArray() ?? [';', '|', '\t', ',']
         )).ToList();
 
-        var datasets = files
+        List<XStreamingElement?>? datasets = files
             .AsParallel()
             .AsUnordered()
             // ReSharper disable AccessToDisposedClosure
@@ -71,10 +72,7 @@ public static class ConverterToXml
 
         static string PopOrPeekDelimiter(string path, Queue<string> delimiters)
         {
-            if (path.GetExtFromPath() == SupportedFileExt.Csv)
-            {
-                return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
-            }
+            if (path.GetExtFromPath() == SupportedFileExt.Csv) return delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
 
             return ";";
         }
@@ -108,7 +106,7 @@ public static class ConverterToXml
                 /*SupportedFileExt.rtf => new RtfToXml(),
                 SupportedFileExt.odt => new OdsToXml(),
                 SupportedFileExt.ods => new OdsToXml(),*/
-                _ => throw new NotImplementedException($"Unsupported type")
+                _ => throw new NotImplementedException("Unsupported type")
             };
 
             var additionalInfo = new List<XObject>
@@ -117,10 +115,7 @@ public static class ConverterToXml
                 new XAttribute("path", fileInformation.Path),
                 new XAttribute("filename", Path.GetFileName(fileInformation.Path))
             };
-            if (!string.IsNullOrEmpty(fileInformation.Label))
-            {
-                additionalInfo.Add(new XAttribute("label", fileInformation.Label));
-            }
+            if (!string.IsNullOrEmpty(fileInformation.Label)) additionalInfo.Add(new XAttribute("label", fileInformation.Label));
 
             var stream = fileInformation.Stream;
             var xml = convertor switch
@@ -145,21 +140,17 @@ public static class ConverterToXml
     private static StreamWriter CreateDefaulStreamWriter(string path, Encoding encoding)
     {
         return new StreamWriter(path, false, encoding)
-            { AutoFlush = true };
+            {AutoFlush = true};
     }
     private static StreamWriter CreateDefaulStreamWriter(Stream stream, Encoding encoding)
     {
         return new StreamWriter(stream, encoding, -1, true)
-            { AutoFlush = true };
+            {AutoFlush = true};
     }
     private static void ResetStream(params StreamWriter[] streams)
     {
         foreach (var stream in streams)
-        {
             if (stream.BaseStream.CanSeek)
-            {
                 stream.BaseStream.Position = 0;
-            }
-        }
     }
 }

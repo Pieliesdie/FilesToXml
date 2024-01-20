@@ -2,18 +2,19 @@
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Converters.OfficeConverters;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
+
 public class DocToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        DocToDocx docToDocx = new DocToDocx();
-        MemoryStream ms = docToDocx.ConvertFromStreamToDocxMemoryStream(stream);
+        var docToDocx = new DocToDocx();
+        var ms = docToDocx.ConvertFromStreamToDocxMemoryStream(stream);
         var docxToXml = new DocxToXml();
-        return (docxToXml.Convert(ms, rootContent));
+        return docxToXml.Convert(ms, rootContent);
     }
-
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         path = path.RelativePathToAbsoluteIfNeed();

@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
@@ -14,28 +15,33 @@ public class DocxToXml : IConvertable
     public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
     {
         memStream.Position = 0;
-        WordprocessingDocument doc = WordprocessingDocument.Open(memStream, false);
-        Body? docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
+        var doc = WordprocessingDocument.Open(memStream, false);
+        var docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
         return new XStreamingElement("DATASET", rootContent, ReadLines(docBody).ToList());
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         path = path.RelativePathToAbsoluteIfNeed();
-        using FileStream fs = File.OpenRead(path);
+        using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
-    private static XStreamingElement GetNewRow(int rowIndex, params object[] values) =>
-        new("R",
+    private static XStreamingElement GetNewRow(int rowIndex, params object[] values)
+    {
+        return new XStreamingElement("R",
             new XAttribute("id", rowIndex),
             values.Select((x, index) => new XAttribute($"C{index + 1}", x)).Where(x => !string.IsNullOrEmpty(x.Value)));
+    }
     /// <summary>
-    /// Расстановка простых параграфов
+    ///     Расстановка простых параграфов
     /// </summary>
     /// <param name="sb"></param>
     /// <param name="p"></param>
-    private static XStreamingElement SimpleParagraph(Paragraph p, int rowIndex) => GetNewRow(rowIndex, p.InnerText);
+    private static XStreamingElement SimpleParagraph(Paragraph p, int rowIndex)
+    {
+        return GetNewRow(rowIndex, p.InnerText);
+    }
     /// <summary>
-    /// Обработка элементов списка
+    ///     Обработка элементов списка
     /// </summary>
     /// <param name="sb"></param>
     /// <param name="p"></param>
@@ -52,7 +58,7 @@ public class DocxToXml : IConvertable
         return row;
     }
     /// <summary>
-    /// Обработка таблицы
+    ///     Обработка таблицы
     /// </summary>
     /// <param name="sb"></param>
     /// <param name="table"></param>
@@ -76,17 +82,14 @@ public class DocxToXml : IConvertable
     }
     private static IEnumerable<XElement> ReadLines(Body? docBody)
     {
-        if (docBody == null)
-        {
-            yield break;
-        }
+        if (docBody == null) yield break;
 
         XElement? textNode = null;
         var index = 0;
         var rowIndex = 1;
         foreach (var element in docBody.ChildElements)
         {
-            string type = element.GetType().ToString();
+            var type = element.GetType().ToString();
 
             switch (type)
             {
@@ -102,17 +105,16 @@ public class DocxToXml : IConvertable
                     if (element.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>() !=
                         null) // список / не список
                     {
-                        textNode.Add(ListParagraph((Paragraph)element, rowIndex++));
+                        textNode.Add(ListParagraph((Paragraph) element, rowIndex++));
                         continue;
                     }
-                    else // не список
-                    {
-                        textNode.Add(SimpleParagraph((Paragraph)element, rowIndex++));
-                        continue;
-                    }
+
+                    // не список
+                    textNode.Add(SimpleParagraph((Paragraph) element, rowIndex++));
+                    continue;
                 case "DocumentFormat.OpenXml.Wordprocessing.Table":
                     textNode = null;
-                    yield return (Table((Table)element, index++));
+                    yield return Table((Table) element, index++);
                     continue;
             }
         }

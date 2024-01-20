@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace FilesToXml.Core;
+
 public interface IOptions
 {
     IEnumerable<string> Delimiters { get; }
-    bool DisableFormat { get;  }
-    bool ForceSave { get;  } 
+    bool DisableFormat { get; }
+    bool ForceSave { get; }
     IEnumerable<string> Input { get; set; }
     IEnumerable<int> InputEncoding { get; }
     IEnumerable<string>? Labels { get; }

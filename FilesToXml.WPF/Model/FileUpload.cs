@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using FilesToXml.Core;
+using FilesToXml.Core.Extensions;
 using FilesToXml.WPF.Helpers;
 
 namespace FilesToXml.WPF.Model;

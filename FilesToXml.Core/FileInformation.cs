@@ -15,11 +15,11 @@ public struct FileInformation : IDisposable
     private Stream? stream;
     public Stream Stream => stream ??= File.OpenRead(Path);
     public FileInformation(string path,
-                      string? label,
-                      Encoding encoding,
-                      SupportedFileExt? type,
-                      string delimiter,
-                      char[] searchingDelimiters)
+        string? label,
+        Encoding encoding,
+        SupportedFileExt? type,
+        string delimiter,
+        char[] searchingDelimiters)
     {
         Path = path;
         Label = label;
@@ -28,7 +28,8 @@ public struct FileInformation : IDisposable
         Delimiter = delimiter;
         SearchingDelimiters = searchingDelimiters;
     }
-
-    public void Dispose() => stream?.Dispose();
+    public void Dispose()
+    {
+        stream?.Dispose();
+    }
 }
-
