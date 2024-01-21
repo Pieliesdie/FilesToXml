@@ -19,7 +19,7 @@ public record FileUpload
         init
         {
             filePath = value;
-            Extension = Path.ToSupportedFile().ToFriendlyString();
+            Extension = Path.ToFiletype().ToFriendlyString();
             Encoding = EncodingTools.GetEncoding(filePath);
         }
     }

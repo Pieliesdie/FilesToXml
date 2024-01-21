@@ -115,7 +115,7 @@
 
         foreach (var file in result)
         {
-            if (file.ToSupportedFile() == Filetype.Unknown)
+            if (file.ToFiletype() == Filetype.Unknown)
             {
                 Snackbar.Add($"{file} not supported", Severity.Error);
                 continue;

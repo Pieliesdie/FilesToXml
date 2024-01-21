@@ -6,7 +6,7 @@ namespace FilesToXml.Core.Extensions;
 
 public static class PathExtensions
 {
-    public static Filetype ToSupportedFile(this string? path)
+    public static Filetype ToFiletype(this string? path)
     {
         var extension = Path.GetExtension(path);
         if (extension is null || extension.Length <= 1)

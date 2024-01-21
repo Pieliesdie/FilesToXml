@@ -90,7 +90,7 @@ public static class ConverterToXml
     {
         hasErrors = false;
         var input = options.Input.UnpackFolders().ToArray();
-        Queue<string> delimiters = new(options.Delimiters.DefaultIfEmpty(Defaults.Delimiter));
+        var delimiters = new Queue<string>(options.Delimiters.DefaultIfEmpty(Defaults.Delimiter));
         List<FileInformation> files = [];
         var index = 0;
         foreach (var inputPath in input)
@@ -98,17 +98,16 @@ public static class ConverterToXml
             index++;
             if (!File.Exists(inputPath))
             {
-                errorSw.WriteLine($"Input file {inputPath} doesn't exist");
-                hasErrors = true;
+                Error($"Input file {inputPath} doesn't exist", ref hasErrors);
                 continue;
             }
 
             var filename = Path.GetFileName(inputPath);
-            var fileType = inputPath.ToSupportedFile();
+            var fileType = inputPath.ToFiletype();
             if (!TryGetEncoding(options.InputEncoding.ToList().ElementAtOrLast(index), out var encoding, out var error))
             {
-                errorSw.WriteLine($"'{filename}': {error}");
-                errorSw.WriteLine($"Using default encoding for '{filename}': {Defaults.Encoding.CodePage} ({Defaults.Encoding.WebName})");
+                Error($"'{filename}': {error}",ref hasErrors );
+                Error($"Using default encoding for '{filename}': {Defaults.Encoding.CodePage} ({Defaults.Encoding.WebName})", ref hasErrors);
                 encoding = Defaults.Encoding;
             }
 
@@ -117,9 +116,9 @@ public static class ConverterToXml
             {
                 stream = File.OpenRead(inputPath.RelativePathToAbsoluteIfNeed());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                errorSw.WriteLine($"'{filename}': {ex.Message}");
+                Error($"'{filename}': {ex.Message}", ref hasErrors);
                 continue;
             }
 
@@ -129,7 +128,7 @@ public static class ConverterToXml
                 Name = filename,
                 Stream = stream,
                 Encoding = encoding,
-                Type = inputPath.ToSupportedFile(),
+                Type = inputPath.ToFiletype(),
                 Label = options.Labels?.ElementAtOrDefault(index)
             };
             if (fileType == Filetype.Csv)
@@ -142,40 +141,50 @@ public static class ConverterToXml
         }
 
         return files;
+
+        void Error(string message, ref bool error)
+        {
+            errorSw.WriteLine(message);
+            error = true;
+        }
     }
-    private static XStreamingElement? ProcessFile(FileInformation fileInformation, TextWriter? errorWriter = null, TextWriter? logWriter = null)
+    private static XStreamingElement? ProcessFile(FileInformation fileInfo, TextWriter? errorWriter = null, TextWriter? logWriter = null)
     {
         try
         {
-            IConvertable converter = FindConverter(fileInformation.Type);
-            var additionalInfo = new List<XObject>
-            {
-                new XAttribute("ext", fileInformation.Type.ToString()!.ToLower()),
-                new XAttribute("name", fileInformation.Name),
-            };
-            if (!string.IsNullOrEmpty(fileInformation.Path))
-                additionalInfo.Add(new XAttribute("path", fileInformation.Path));
-
-            if (!string.IsNullOrEmpty(fileInformation.Label))
-                additionalInfo.Add(new XAttribute("label", fileInformation.Label));
-
-            var stream = fileInformation.Stream;
+            IConvertable converter = FindConverter(fileInfo.Type);
+            var additionalInfo = CreateAdditionalInfo(fileInfo);
             var xml = converter switch
             {
-                IDelimiterConvertable c when fileInformation.Delimiter == "auto" => c.Convert(stream, fileInformation.SearchingDelimiters ?? Defaults.SearchingDelimiters, fileInformation.Encoding, additionalInfo),
-                IDelimiterConvertable c => c.Convert(stream, fileInformation.Delimiter ?? Defaults.Delimiter, fileInformation.Encoding, additionalInfo),
-                IEncodingConvertable c => c.Convert(stream, fileInformation.Encoding, additionalInfo),
-                _ => converter.Convert(stream, additionalInfo)
+                IDelimiterConvertable c when fileInfo.IsAutoDelimiter
+                    => c.Convert(fileInfo.Stream, fileInfo.SearchingDelimiters ?? Defaults.SearchingDelimiters, fileInfo.Encoding, additionalInfo),
+                IDelimiterConvertable c => c.Convert(fileInfo.Stream, fileInfo.Delimiter ?? Defaults.Delimiter, fileInfo.Encoding, additionalInfo),
+                IEncodingConvertable c => c.Convert(fileInfo.Stream, fileInfo.Encoding, additionalInfo),
+                _ => converter.Convert(fileInfo.Stream, additionalInfo)
             };
 
-            logWriter?.WriteLine($"Succesful start converting file: {fileInformation.Name}");
+            logWriter?.WriteLine($"Succesful start converting file: {fileInfo.Name}");
             return xml;
         }
         catch (Exception e)
         {
-            errorWriter?.WriteLine($"Failed convert file: {fileInformation.Name}, {e.Message}");
+            errorWriter?.WriteLine($"Failed convert file: {fileInfo.Name}, {e.Message}");
             return null;
         }
+    }
+    private static List<XObject> CreateAdditionalInfo(FileInformation fileInfo)
+    {
+        var additionalInfo = new List<XObject>
+        {
+            new XAttribute("ext", fileInfo.Type.ToString()!.ToLower()),
+            new XAttribute("name", fileInfo.Name),
+        };
+        if (!string.IsNullOrEmpty(fileInfo.Path))
+            additionalInfo.Add(new XAttribute("path", fileInfo.Path));
+
+        if (!string.IsNullOrEmpty(fileInfo.Label))
+            additionalInfo.Add(new XAttribute("label", fileInfo.Label));
+        return additionalInfo;
     }
     private static IConvertable FindConverter(Filetype type)
     {
