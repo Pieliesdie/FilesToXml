@@ -16,7 +16,7 @@
 
     "csv": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv -e 1251 -E 1251 -o D:\\test.xml -s"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx.xlsx -e 1251 -E 866"
     },
 
     "xlsx": {

@@ -84,8 +84,9 @@ public static class ConverterToXml
         hasErrors = false;
         var delimiters = new Queue<string>(options.Delimiters.DefaultIfEmpty(Defaults.Delimiter));
         List<FileInformation> files = [];
+        var inputs = options.Input.UnpackFolders().Select(x => x.RelativePathToAbsoluteIfNeed());
         var index = 0;
-        foreach (var inputPath in options.Input.UnpackFolders())
+        foreach (var inputPath in inputs)
         {
             index++;
             if (!TryParsePath(inputPath, errorSw, out var parsedPath))
