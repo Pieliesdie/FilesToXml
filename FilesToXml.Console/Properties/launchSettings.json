@@ -4,6 +4,11 @@
       "commandName": "Project",
       "commandLineArgs": "--codepages -i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv"
     },
+    "null": {
+      "commandName": "Project",
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\docxqwe.docx -e 1251 -E 1251 -o .\\test.xml -s"
+    },
+    
     "docx": {
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\docx.docx -e 1251 -E 1251 -o .\\test.xml -s"
@@ -16,7 +21,7 @@
 
     "xlsx": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 1251 -E 866 -s -o .\\test.xml"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 9999 -E 866 -s -o .\\test.xml"
     },
     "txt": {
       "commandName": "Project",

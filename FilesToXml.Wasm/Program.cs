@@ -26,21 +26,21 @@ public struct Test
 {
     public readonly string Path;
     public readonly string? Label;
-    public readonly Encoding Encoding;
+    public readonly string EncodingName;
     public Filetype? Type;
     public readonly string Delimiter;
     public readonly char[] SearchingDelimiters;
 
     public Test(string path,
         string? label,
-        Encoding encoding,
+        string encoding,
         Filetype? type,
         string delimiter,
         char[] searchingDelimiters)
     {
         Path = path;
         Label = label;
-        Encoding = encoding;
+        EncodingName = encoding;
         Type = type;
         Delimiter = delimiter;
         SearchingDelimiters = searchingDelimiters;

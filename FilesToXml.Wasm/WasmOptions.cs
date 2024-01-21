@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-
+using FilesToXml.Core;
 
 namespace FilesToXml.Wasm;
 
-public class WasmOptions //: IOptions
+public class WasmOptions : IOptions
 {
     public WasmOptions(IEnumerable<string> input)
     {
@@ -13,7 +13,7 @@ public class WasmOptions //: IOptions
     public IEnumerable<string> Delimiters { get; set; } = new[] { "auto" };
     public bool DisableFormat { get; set; } = false;
     public bool ForceSave { get; set; } = false;
-    public IEnumerable<string> Input { get; set; }
+    public required IEnumerable<string> Input { get; set; }
     public IEnumerable<int> InputEncoding { get; set; } = new[] { 65001 };
     public IEnumerable<string>? Labels { get; set; }
     public string? Output { get; set; }

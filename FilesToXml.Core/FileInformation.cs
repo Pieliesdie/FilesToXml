@@ -6,30 +6,18 @@ namespace FilesToXml.Core;
 
 public struct FileInformation : IDisposable
 {
-    public readonly string Path;
-    public readonly string? Label;
-    public readonly Encoding Encoding;
-    public readonly Filetype Type;
-    public readonly string Delimiter;
-    public readonly char[] SearchingDelimiters;
-    private Stream? stream;
-    public Stream Stream => stream ??= File.OpenRead(Path);
-    public FileInformation(string path,
-        string? label,
-        Encoding encoding,
-        Filetype type,
-        string delimiter,
-        char[] searchingDelimiters)
-    {
-        Path = path;
-        Label = label;
-        Encoding = encoding;
-        Type = type;
-        Delimiter = delimiter;
-        SearchingDelimiters = searchingDelimiters;
-    }
+    public required string Name { get; init; }
+    public required Stream Stream { get; init; }
+    public required Filetype Type { get; init; }
+    public required Encoding Encoding { get; init; }
+    public string? Label { get; set; }
+    public string? Delimiter { get; set; }
+    public char[]? SearchingDelimiters { get; set; }
+    public string? Path { get; set; }
+    
+    public FileInformation() {}
     public void Dispose()
     {
-        stream?.Dispose();
+        Stream?.Dispose();
     }
 }

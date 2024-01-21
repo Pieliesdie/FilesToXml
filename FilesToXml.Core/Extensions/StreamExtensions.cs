@@ -20,4 +20,5 @@ public static class StreamExtensions
             yield return Environment.NewLine;
         }
     }
+    
 }

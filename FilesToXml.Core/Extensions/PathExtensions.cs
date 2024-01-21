@@ -12,7 +12,8 @@ public static class PathExtensions
         if (extension is null || extension.Length <= 1)
             return Filetype.Unknown;
 
-        if (Enum.TryParse<Filetype>(extension[1..], true, out var supportedFileExt)) return supportedFileExt;
+        if (Enum.TryParse<Filetype>(extension[1..], true, out var supportedFileExt)) 
+            return supportedFileExt;
 
         return Filetype.Unknown;
     }
