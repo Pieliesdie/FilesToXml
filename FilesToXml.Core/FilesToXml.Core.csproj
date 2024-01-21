@@ -1,42 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;</TargetFrameworks>
-		<DebugType>portable</DebugType>
-		<Nullable>enable</Nullable>
-		<LangVersion>latest</LangVersion>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;</TargetFrameworks>
+        <DebugType>portable</DebugType>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-		<PlatformTarget>x64</PlatformTarget>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<PlatformTarget>x64</PlatformTarget>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="CsvTextFieldParser" Version="1.2.2" />
-		<PackageReference Include="DbfDataReader" Version="0.9.0" />
-		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="NPOI" Version="2.6.2" />
-		<PackageReference Include="PolySharp" Version="1.14.1">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CsvTextFieldParser" Version="1.2.2"/>
+        <PackageReference Include="DbfDataReader" Version="0.9.0"/>
+        <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="NPOI" Version="2.6.2"/>
+        <PackageReference Include="PolySharp" Version="1.14.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="System.Collections.Immutable" Version="8.0.0"/>
+        <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0"/>
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\b2xtranslator\Common\b2xtranslator.csproj" />
-		<ProjectReference Include="..\b2xtranslator\Doc\b2xtranslator.doc.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\b2xtranslator\Common\b2xtranslator.csproj"/>
+        <ProjectReference Include="..\b2xtranslator\Doc\b2xtranslator.doc.csproj"/>
+    </ItemGroup>
 
 </Project>

@@ -21,7 +21,7 @@
 
     "xlsx": {
       "commandName": "Project",
-      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 9999 -E 866 -s -o .\\test.xml"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 1251 -E 866 -s -o .\\test.xml"
     },
     "txt": {
       "commandName": "Project",

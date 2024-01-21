@@ -20,5 +20,10 @@ public static class StreamExtensions
             yield return Environment.NewLine;
         }
     }
-    
+    public static void ResetStream(params StreamWriter[] streams)
+    {
+        foreach (var stream in streams)
+            if (stream.BaseStream.CanSeek)
+                stream.BaseStream.Position = 0;
+    }
 }

@@ -59,6 +59,7 @@ public class XlsxToXml : IConvertable
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
         IEnumerable<XElement?> rows = ReadRows(sheet);
+        //TODO: try rows.ToLookup ?
         return rows.Any() ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows) : null;
     }
     private static IEnumerable<XElement?> ReadRows(SheetModel sheet)
