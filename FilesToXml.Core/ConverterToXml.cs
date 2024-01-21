@@ -44,7 +44,7 @@ public static class ConverterToXml
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(outputStream, encoding);
 
-        List<FileInformation> files = ExtractInfo(options, errorSw, out var hasErrors);
+        List<FileInformation> files = ParseOptions(options, errorSw, out var hasErrors);
         List<XStreamingElement?> datasets = files
             .AsParallel()
             .AsUnordered()
@@ -86,7 +86,7 @@ public static class ConverterToXml
             return false;
         }
     }
-    private static List<FileInformation> ExtractInfo(IOptions options, TextWriter errorSw, out bool hasErrors)
+    private static List<FileInformation> ParseOptions(IOptions options, TextWriter errorSw, out bool hasErrors)
     {
         hasErrors = false;
         var input = options.Input.UnpackFolders().ToArray();
