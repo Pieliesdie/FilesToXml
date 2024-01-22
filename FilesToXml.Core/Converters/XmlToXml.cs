@@ -21,7 +21,7 @@ public class XmlToXml : IEncodingConvertable
     }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent, ParseXML(XmlReader.Create(new StreamReader(stream, encoding))));
+        return new XStreamingElement("DATASET", rootContent, ParseXml(XmlReader.Create(new StreamReader(stream, encoding))));
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
@@ -29,15 +29,16 @@ public class XmlToXml : IEncodingConvertable
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, encoding, rootContent));
     }
-    private static IEnumerable<object> ParseXML(XmlReader reader)
+    private static IEnumerable<object> ParseXml(XmlReader reader)
     {
         while (reader.Read())
+        {
             switch (reader.NodeType)
             {
                 case XmlNodeType.Element:
                     var rd = reader.ReadSubtree();
                     rd.MoveToContent();
-                    yield return new XStreamingElement(reader.Name, ReadAttributes(reader).ToList(), ParseXML(rd));
+                    yield return new XStreamingElement(reader.Name, ReadAttributes(reader).ToList(), ParseXml(rd));
                     break;
                 case XmlNodeType.Text:
                     yield return new XText(reader.Value);
@@ -55,6 +56,7 @@ public class XmlToXml : IEncodingConvertable
                     yield return reader.Value;
                     break;
             }
+        }
     }
     private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
     {
