@@ -1,7 +1,6 @@
 # FilesToXml
 
 This is a console app for converting office/text files to xml.<br />
-Realeses: https://github.com/Pieliesdie/FilesToXml/releases<br />
 Supported types for now:
 <ul>
   <li>xlsx</li>
