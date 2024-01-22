@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace FilesToXml.Test
+namespace FilesToXml.Tests
 {
     public class JsonToXmlTest
     {
@@ -11,8 +11,7 @@ namespace FilesToXml.Test
         public void JsonToXmlTestNotNull()
         {
             var converter = new JsonToXml();
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/json.json";
+            string path = "./Files/json.json";
 
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
@@ -22,8 +21,7 @@ namespace FilesToXml.Test
         public void JsonToXmlConvertTestNotNull()
         {
             var converter = new JsonToXml();
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/json.json";
+            string path = "./Files/json.json";
             using var fs = File.OpenRead(path);
             string result = converter.Convert(fs).ToString();
             Assert.NotNull(result);
@@ -33,8 +31,7 @@ namespace FilesToXml.Test
         public void JsonToXmlConvertRandomRead()
         {
             var converter = new JsonToXml();
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/json.json";
+            string path = "./Files/json.json";
             using var fs = File.OpenRead(path);
             var ds = new XElement(converter.Convert(fs));
             var result = ds.Element("ROOT").Element("items").Element("address").Element("region").Attribute("guid").Value;

@@ -20,8 +20,8 @@ public class CsvToXml : IDelimiterConvertable
     public XStreamingElement Convert(Stream stream, char[] searchingDelimiters, Encoding encoding,
         params object?[] rootContent)
     {
-        if (searchingDelimiters is null) throw new NullReferenceException(nameof(searchingDelimiters));
-        if (stream is null) throw new ArgumentNullException(nameof(stream));
+        searchingDelimiters = searchingDelimiters ?? throw new NullReferenceException(nameof(searchingDelimiters));
+        stream = stream ?? throw new ArgumentNullException(nameof(stream));
 
         var sr = new StreamReader(stream);
         var lines = sr.ReadAllLines().Take(100).ToArray();

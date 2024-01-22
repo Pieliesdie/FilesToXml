@@ -6,7 +6,6 @@ namespace FilesToXml.WPF.Helpers;
 public class LineStream : MemoryStream
 {
     private readonly Encoding encoding;
-    private readonly byte[] preamble;
     private readonly StringBuilder partialLineBuffer = new();
 
     public delegate void WriteLineEventHandler(string line);
@@ -19,28 +18,21 @@ public class LineStream : MemoryStream
     public LineStream(Encoding encoding)
     {
         this.encoding = encoding;
-        preamble = encoding.GetPreamble();
+        var preamble = encoding.GetPreamble();
+        if (preamble.Length > 0)
+        {
+            base.Write(preamble);
+        }
     }
     public override void Write(ReadOnlySpan<byte> buffer)
     {
         base.Write(buffer);
-        if (HasPreamble(buffer))
-        {
-            buffer = buffer.Slice(preamble.Length);
-        }
-
         if (buffer.Length > 0)
         {
             ProcessBuffer(buffer);
         }
     }
-    private bool firstCheck = true;
-    private bool HasPreamble(ReadOnlySpan<byte> buffer)
-    {
-        if (!firstCheck) return false;
-        firstCheck = false;
-        return buffer.Slice(0, preamble.Length).SequenceEqual(preamble);
-    }
+
     private void ProcessBuffer(ReadOnlySpan<byte> buffer)
     {
         if (OnWriteLine is null && OnWriteLines is null) return;

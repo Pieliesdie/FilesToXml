@@ -2,7 +2,7 @@
 using FilesToXml.Core.Converters.OfficeConverters;
 using Xunit;
 
-namespace FilesToXml.Test
+namespace FilesToXml.Tests
 {
     [Collection("XlsToXml")]
     public class XlsToXlsxTest
