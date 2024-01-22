@@ -2,7 +2,7 @@
 using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace FilesToXml.Test
+namespace FilesToXml.Tests
 {
     public class DocxToXmlTest
     {
@@ -10,8 +10,7 @@ namespace FilesToXml.Test
         public void DocxConverterTestNotNull()
         {
             DocxToXml converter = new DocxToXml();
-            string curDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/docx.docx";
+            string path = "./Files/docx.docx";
 
             string result = converter.ConvertByFile(path).ToString();
             Assert.NotNull(result);
@@ -21,8 +20,7 @@ namespace FilesToXml.Test
         public void DocxConvertToXmlNotNull()
         {
             var converter = new DocxToXml();
-            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"\Files\docx.docx";
+            string path = "./Files/docx.docx";
             using var fs = File.OpenRead(path);
             string result = converter.Convert(fs).ToString();
             Assert.NotNull(result);

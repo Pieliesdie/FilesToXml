@@ -1,50 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
-		<Description>
-			Convert files of types:
-			xls , xlsx, txt, csv, doc, docx
-		</Description>
-		<Company>Infostandart</Company>
-		<Authors>Ponomarev Oleg pov@infostandart.com</Authors>
-		<NeutralLanguage />
-		<RepositoryUrl>https://github.com/Pieliesdie/FilesToXml</RepositoryUrl>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Nullable>enable</Nullable>
-		<AssemblyName>Convertor</AssemblyName>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+        <Description>
+            Convert files of types:
+            xls , xlsx, txt, csv, doc, docx
+        </Description>
+        <Company>Infostandart</Company>
+        <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
+        <NeutralLanguage/>
+        <RepositoryUrl>https://github.com/Pieliesdie/FilesToXml</RepositoryUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Convertor</AssemblyName>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net8.0|Release'">
-		<PublishAot>true</PublishAot>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net8.0|Release'">
+        <PublishAot>true</PublishAot>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">	
-		<InvariantGlobalization>true</InvariantGlobalization>
-		<DebuggerSupport>false</DebuggerSupport>
-		<EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
-		<EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
-		<EventSourceSupport>false</EventSourceSupport>
-		<HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
-		<MetadataUpdaterSupport>false</MetadataUpdaterSupport>
-		<UseNativeHttpHandler>true</UseNativeHttpHandler>
-		<TrimMode>partial</TrimMode>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include="..\README.md"/>
-	</ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <DebuggerSupport>false</DebuggerSupport>
+        <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+        <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+        <EventSourceSupport>false</EventSourceSupport>
+        <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+        <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+        <UseNativeHttpHandler>true</UseNativeHttpHandler>
+        <TrimMode>partial</TrimMode>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\README.md"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj"/>
+    </ItemGroup>
 
 </Project>

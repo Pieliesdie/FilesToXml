@@ -2,7 +2,7 @@
 using FilesToXml.Core.Converters.OfficeConverters;
 using Xunit;
 
-namespace FilesToXml.Test
+namespace FilesToXml.Tests
 {
     [Collection("DocToXml")]
     public class DocToDocxTest
@@ -11,10 +11,9 @@ namespace FilesToXml.Test
         public void DocToDocxConvertToDocxNotNull()
         {
             DocToDocx converter = new DocToDocx();
-            string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string path = curDir + @"/Files/doc1.doc";
-            converter.ConvertFromFileToDocxFile(path, curDir + @"/Files/Result.docx");
-            Assert.True(File.Exists(curDir + @"/Files/Result.docx"));
+            string path = "./Files/doc1.doc";
+            converter.ConvertFromFileToDocxFile(path, "./Files/Result.docx");
+            Assert.True(File.Exists("./Files/Result.docx"));
         }
 
     }

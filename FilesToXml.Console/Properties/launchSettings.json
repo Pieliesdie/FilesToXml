@@ -8,17 +8,14 @@
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\docxqwe.docx -e 1251 -E 1251 -o .\\test.xml -s"
     },
-    
     "docx": {
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\docx.docx -e 1251 -E 1251 -o .\\test.xml -s"
     },
-
     "csv": {
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\csv.csv ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx.xlsx -e 1251 -E 866"
     },
-
     "xlsx": {
       "commandName": "Project",
       "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xlsx2.xlsx -e 1251 -E 866 -s -o .\\test.xml"

@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace FilesToXml.Test
+namespace FilesToXml.Tests
 {
     public class OdsToXmlTest
     {

@@ -5,16 +5,14 @@ using System.Xml.Linq;
 using FilesToXml.Core.Converters;
 using Xunit;
 
-namespace FilesToXml.Test;
+namespace FilesToXml.Tests;
 public class TsvToXmlTest
 {
+    TsvToXml converter = new();
     [Fact]
     public void TsvToXmlByFileTestNotNull()
     {
-        var converter = new TsvToXml();
-        string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        string path = curDir + @"/Files/tsv.tsv";
-
+        string path = "./Files/tsv.tsv";
         string result = converter.ConvertByFile(path).ToString();
         Assert.NotNull(result);
     }
@@ -22,9 +20,7 @@ public class TsvToXmlTest
     [Fact]
     public void TsvConvertToXmlNotNull()
     {
-        var converter = new TsvToXml();
-        string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        string path = curDir + @"\Files\tsv.tsv";
+        string path = "./Files/tsv.tsv";
         using var fs = File.OpenRead(path);
         string result = converter.Convert(fs).ToString();
         Assert.NotNull(result);
@@ -34,12 +30,9 @@ public class TsvToXmlTest
     public void TsvToXmlTestReadFirstLine()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var converter = new TsvToXml();
-        string curDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        string path = curDir + @"/Files/tsv.tsv";
-
+        string path = "./Files/tsv.tsv";
         var result = converter.ConvertByFile(path);
-        Assert.Equal("rice", Enumerable.First<XElement>(result.Elements()).Elements().First().Attribute("C6").Value);
+        Assert.Equal("rice", Enumerable.First(result.Elements()).Elements().First().Attribute("C6").Value);
     }
 
 }
