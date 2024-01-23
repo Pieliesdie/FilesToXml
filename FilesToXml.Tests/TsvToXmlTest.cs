@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using FilesToXml.Core.Converters;
 using Xunit;
 

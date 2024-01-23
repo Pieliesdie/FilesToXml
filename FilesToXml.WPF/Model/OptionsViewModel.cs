@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 using FilesToXml.Core;
+using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.WPF.Model;
 
@@ -17,7 +18,7 @@ public record OptionsViewModel
         {
             DisableFormat = DisableFormat,
             ForceSave = ForceSave,
-            InputEncoding = Input.Select(x => x.Encoding.CodePage),
+            InputEncoding = Input.Select(x => x.Encoding.CodePage ),
             Output = string.IsNullOrWhiteSpace(Output) ? null : Output,
             OutputEncoding = OutputEncoding.CodePage,
             Delimiters = Input.Select(x => x.Delimiter),

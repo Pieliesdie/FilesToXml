@@ -34,10 +34,10 @@
             </TemplateColumn>
         </Columns>
         <ChildRowContent>
-            <MudStack Row="false" Spacing="1" AlignItems="AlignItems.Stretch">
+            <MudStack Row="false" Spacing="1">
                 <MudText Typo="Typo.body2">Input encoding</MudText>
                 <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="@context.Item.Encoding"
-                                   T="Encoding" ToStringFunc="@EncodingTools.EncodingToFriendlyString"/>
+                                   T="Encoding" ToStringFunc="EncodingTools.EncodingToFriendlyString"/>
                 <MudText Typo="Typo.body2">Dataset label</MudText>
                 <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text" Clearable="true"></MudTextField>
                 @if (context.Item.Extension == "csv")
@@ -83,7 +83,7 @@
     <MudExpansionPanels Style="flex:auto" Class="mt-5 mb-5">
         <MudExpansionPanel Text="Logs">
             <MudConsole @ref="LogConsole" Style="overflow:auto;max-height: 300px" Changed="StateHasChanged"/>
-            @if (LogConsole is {IsEmpty: false})
+            @if (LogConsole is { IsEmpty: false })
             {
                 <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
                     <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Checked="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>

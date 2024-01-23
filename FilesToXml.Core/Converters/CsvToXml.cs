@@ -23,7 +23,7 @@ public class CsvToXml : IDelimiterConvertable
         searchingDelimiters = searchingDelimiters ?? throw new NullReferenceException(nameof(searchingDelimiters));
         stream = stream ?? throw new ArgumentNullException(nameof(stream));
 
-        var sr = new StreamReader(stream);
+        using var sr = new StreamReader(stream, encoding, true, -1, true);
         var lines = sr.ReadAllLines().Take(100).ToArray();
         var delimiter = DetectSeparator(lines, searchingDelimiters).ToString();
         sr.DiscardBufferedData();
@@ -68,12 +68,10 @@ public class CsvToXml : IDelimiterConvertable
     }
     private static IEnumerable<XStreamingElement> ReadLines(Stream stream, string delimiter, Encoding encoding)
     {
-        var csvParser = new CsvTextFieldParser(stream, encoding)
-        {
-            //CommentTokens = new[] { "#" },
-            Delimiters = [delimiter],
-            HasFieldsEnclosedInQuotes = true
-        };
+        using var csvParser = new CsvTextFieldParser(stream, encoding);
+        //csvParser.CommentTokens = new[] { "#" },
+        csvParser.Delimiters = [delimiter];
+        csvParser.HasFieldsEnclosedInQuotes = true;
         long maxLineNumber = 0;
         long maxColumnNumber = 0;
         while (!csvParser.EndOfData)
@@ -92,13 +90,14 @@ public class CsvToXml : IDelimiterConvertable
             yield return row;
         }
 
-        yield return new XStreamingElement("METADATA", new XAttribute("columns", maxColumnNumber),
+        yield return new XStreamingElement("METADATA",
+            new XAttribute("columns", maxColumnNumber),
             new XAttribute("rows", maxLineNumber));
     }
-    private static char DetectSeparator(string[] lines, char[] separatorChars)
+    private static char DetectSeparator(string[] lines, IEnumerable<char> separatorChars)
     {
         var q = separatorChars.Select(sep => new
-                {Separator = sep, Found = lines.GroupBy(line => line.Count(ch => ch == sep))})
+                { Separator = sep, Found = lines.GroupBy(line => line.Count(ch => ch == sep)) })
             .OrderByDescending(res => res.Found.Count(grp => grp.Key > 0))
             .ThenBy(res => res.Found.Count())
             .ToList();

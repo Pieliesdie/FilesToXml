@@ -4,26 +4,26 @@ using System.Text;
 using CommandLine;
 using FilesToXml.Console;
 using FilesToXml.Core;
+using FilesToXml.Core.Extensions;
 
-var isSupportCommand = args.FirstOrDefault(x => x == "--support") is not null;
+var isSupportCommand = args.Any(x => x == "--support");
 if (isSupportCommand)
 {
-    var supportedTypes = Enum.GetNames(typeof(Filetype)).Aggregate((x, y) => $"{x}, {y}");
-    Console.WriteLine($"Supported types: {supportedTypes}");
+    Console.WriteLine("Supported types:");
+    Enum.GetNames<Filetype>().ForEach(Console.WriteLine);
     return;
 }
 
-var isPrintCodepages = args.FirstOrDefault(x => x == "--codepages") is not null;
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+var isPrintCodepages = args.Any(x => x == "--codepages");
 if (isPrintCodepages)
 {
-    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-    Console.WriteLine("codepages: ");
-    foreach (var encodingInfo in Encoding.GetEncodings()) Console.WriteLine($"{encodingInfo.CodePage} - {encodingInfo.Name} - {encodingInfo.DisplayName}");
+    Console.WriteLine("Codepages: ");
+    Encoding.GetEncodings().ForEach(encod => Console.WriteLine($"{encod.CodePage} - {encod.Name} - {encod.DisplayName}"));
     return;
 }
 
 Parser.Default.ParseArguments<Options>(args).WithParsed(parsedArgs =>
 {
-    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     ConverterToXml.Convert(parsedArgs, Console.OpenStandardOutput(), Console.OpenStandardError());
 });

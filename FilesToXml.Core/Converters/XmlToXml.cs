@@ -21,7 +21,7 @@ public class XmlToXml : IEncodingConvertable
     }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent, ParseXml(XmlReader.Create(new StreamReader(stream, encoding))));
+        return new XStreamingElement("DATASET", rootContent, Read(stream, encoding));
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
@@ -29,10 +29,15 @@ public class XmlToXml : IEncodingConvertable
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, encoding, rootContent));
     }
+    private static IEnumerable<object> Read(Stream stream, Encoding encoding)
+    {
+        using var sr = new StreamReader(stream, encoding);
+        using var reader = XmlReader.Create(sr);
+        foreach (var obj in ParseXml(reader)) yield return obj;
+    }
     private static IEnumerable<object> ParseXml(XmlReader reader)
     {
         while (reader.Read())
-        {
             switch (reader.NodeType)
             {
                 case XmlNodeType.Element:
@@ -49,25 +54,18 @@ public class XmlToXml : IEncodingConvertable
                 case XmlNodeType.Comment:
                     yield return new XComment(reader.Value);
                     break;
-                case XmlNodeType.Whitespace:
-                    yield return reader.Value;
-                    break;
-                case XmlNodeType.SignificantWhitespace:
-                    yield return reader.Value;
-                    break;
+                default:
+                    continue;
             }
-        }
     }
     private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
     {
-        if (reader.MoveToFirstAttribute())
+        if (!reader.MoveToFirstAttribute()) yield break;
+        do
         {
-            do
-            {
-                yield return new XAttribute(reader.Name, reader.Value);
-            } while (reader.MoveToNextAttribute());
+            yield return new XAttribute(reader.Name, reader.Value);
+        } while (reader.MoveToNextAttribute());
 
-            reader.MoveToElement();
-        }
+        reader.MoveToElement();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FilesToXml.Core.Converters.Interfaces;
@@ -12,12 +13,10 @@ namespace FilesToXml.Core.Converters;
 
 public class DocxToXml : IConvertable
 {
-    public XStreamingElement Convert(Stream memStream, params object?[] rootContent)
+    public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        memStream.Position = 0;
-        var doc = WordprocessingDocument.Open(memStream, false);
-        var docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
-        return new XStreamingElement("DATASET", rootContent, ReadLines(docBody).ToList());
+        stream.Position = 0;
+        return new XStreamingElement("DATASET", rootContent, ReadLines(stream));
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
@@ -25,7 +24,7 @@ public class DocxToXml : IConvertable
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
-    private static XStreamingElement GetNewRow(int rowIndex, params object[] values)
+    private static XStreamingElement GetNewRow(int rowIndex, params string[] values)
     {
         return new XStreamingElement("R",
             new XAttribute("id", rowIndex),
@@ -34,18 +33,14 @@ public class DocxToXml : IConvertable
     /// <summary>
     ///     Расстановка простых параграфов
     /// </summary>
-    /// <param name="sb"></param>
-    /// <param name="p"></param>
-    private static XStreamingElement SimpleParagraph(Paragraph p, int rowIndex)
+    private static XStreamingElement SimpleParagraph(OpenXmlElement p, int rowIndex)
     {
         return GetNewRow(rowIndex, p.InnerText);
     }
     /// <summary>
     ///     Обработка элементов списка
     /// </summary>
-    /// <param name="sb"></param>
-    /// <param name="p"></param>
-    private static XStreamingElement ListParagraph(Paragraph p, int rowIndex)
+    private static XStreamingElement ListParagraph(OpenXmlElement p, int rowIndex)
     {
         // уровень списка
         var level = p.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>()
@@ -60,9 +55,7 @@ public class DocxToXml : IConvertable
     /// <summary>
     ///     Обработка таблицы
     /// </summary>
-    /// <param name="sb"></param>
-    /// <param name="table"></param>
-    private static XElement Table(Table table, int index)
+    private static XElement Table(OpenXmlElement table, int index)
     {
         var root = new XElement("TABLE", new XAttribute("id", index));
         var rowIndex = 1;
@@ -75,13 +68,16 @@ public class DocxToXml : IConvertable
             root.Add(row);
         }
 
-        var metadata = new XElement("METADATA", new XAttribute("columns", maxColumnNumber),
+        var metadata = new XElement("METADATA",
+            new XAttribute("columns", maxColumnNumber),
             new XAttribute("rows", rowIndex - 1));
         root.Add(metadata);
         return root;
     }
-    private static IEnumerable<XElement> ReadLines(Body? docBody)
+    private static IEnumerable<XElement> ReadLines(Stream stream)
     {
+        using var doc = WordprocessingDocument.Open(stream, false);
+        var docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
         if (docBody == null) yield break;
 
         XElement? textNode = null;
@@ -105,16 +101,16 @@ public class DocxToXml : IConvertable
                     if (element.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>() !=
                         null) // список / не список
                     {
-                        textNode.Add(ListParagraph((Paragraph) element, rowIndex++));
+                        textNode.Add(ListParagraph((Paragraph)element, rowIndex++));
                         continue;
                     }
 
                     // не список
-                    textNode.Add(SimpleParagraph((Paragraph) element, rowIndex++));
+                    textNode.Add(SimpleParagraph((Paragraph)element, rowIndex++));
                     continue;
                 case "DocumentFormat.OpenXml.Wordprocessing.Table":
                     textNode = null;
-                    yield return Table((Table) element, index++);
+                    yield return Table((Table)element, index++);
                     continue;
             }
         }

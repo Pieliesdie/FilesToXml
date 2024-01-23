@@ -27,9 +27,9 @@ public class JsonToXml : IEncodingConvertable
     {
         try
         {
-            var reader = new JsonTextReader(new StreamReader(stream, encoding)) {SupportMultipleContent = true};
+            using var reader = new JsonTextReader(new StreamReader(stream, encoding)) { SupportMultipleContent = true };
             var ds = JToken.ReadFrom(reader);
-            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJSON(ds)));
+            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJson(ds)));
         }
         catch (Exception ex)
         {
@@ -50,7 +50,8 @@ public class JsonToXml : IEncodingConvertable
     {
         return ConvertByFile(path, Encoding.UTF8, rootContent);
     }
-    private IEnumerable<object> ParseJSON(JToken reader, string nodeName = "ROOT", JTokenType parentType = JTokenType.Object)
+    private IEnumerable<XObject> ParseJson(JToken reader, string nodeName = "ROOT",
+        JTokenType parentType = JTokenType.Object)
     {
         lastProcessedNode = reader.Path;
         foreach (var token in reader.OrderByDescending(x => x.Type))
@@ -64,7 +65,7 @@ public class JsonToXml : IEncodingConvertable
                 case JTokenType.Guid:
                 case JTokenType.Uri:
                 case JTokenType.TimeSpan:
-                    if (token is JValue {Value: not null} jValue)
+                    if (token is JValue { Value: not null } jValue)
                     {
                         if (nodeName.Contains('$'))
                         {
@@ -81,18 +82,19 @@ public class JsonToXml : IEncodingConvertable
 
                     break;
                 case JTokenType.Object:
-                    yield return new XElement(EncodeXmlName(nodeName), ParseJSON(token, nodeName, token.Type).ToList());
+                    yield return new XElement(EncodeXmlName(nodeName), ParseJson(token, nodeName, token.Type).ToList());
                     break;
                 case JTokenType.Array:
-                    yield return ParseJSON(token, nodeName, token.Type).ToList();
+                    foreach (var xobj in ParseJson(token, nodeName, token.Type)) yield return xobj;
                     break;
                 case JTokenType.Property:
-                    yield return ParseJSON(token, (token as JProperty)?.Name ?? "ROOT", token.Type).ToList();
+                    foreach (var xobj in ParseJson(token, (token as JProperty)?.Name ?? "ROOT", token.Type))
+                        yield return xobj;
                     break;
             }
     }
-    private string EncodeXmlName(string name)
+    private static string EncodeXmlName(string name)
     {
-        return XmlConvert.EncodeName(name.Replace("@", "").Replace("$", ""));
+        return XmlConvert.EncodeName(name.Replace("@", "").Replace("$", "")) ?? string.Empty;
     }
 }

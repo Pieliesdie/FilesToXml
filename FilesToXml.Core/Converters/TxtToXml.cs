@@ -14,8 +14,8 @@ public class TxtToXml : IEncodingConvertable
     }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        var sr = new StreamReader(stream, encoding);
-        return new XStreamingElement("DATASET", rootContent, new XStreamingElement("TEXT", sr.ReadAllLinesWithNewLine()));
+        return new XStreamingElement("DATASET", rootContent,
+            new XStreamingElement("TEXT", stream.ReadAllLinesWithNewLine(encoding)));
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {

@@ -17,12 +17,7 @@ public class LineStream : MemoryStream
     public event WriteLinesEventHandler? OnWriteLines;
     public LineStream(Encoding encoding)
     {
-        this.encoding = encoding;
-        var preamble = encoding.GetPreamble();
-        if (preamble.Length > 0)
-        {
-            base.Write(preamble);
-        }
+        this.encoding = encoding.RemovePreamble();
     }
     public override void Write(ReadOnlySpan<byte> buffer)
     {

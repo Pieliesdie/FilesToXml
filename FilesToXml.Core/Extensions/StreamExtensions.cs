@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace FilesToXml.Core.Extensions;
 
 public static class StreamExtensions
 {
-    public static IEnumerable<string> ReadAllLines(this StreamReader reader)
+    public static IEnumerable<string?> ReadAllLines(this StreamReader reader)
     {
         while (!reader.EndOfStream)
-            // yield return AsyncHelpers.RunSync(() => reader.ReadLineAsync())!;
-            yield return reader.ReadLine()!;
+            yield return reader.ReadLine();
     }
-    public static IEnumerable<string> ReadAllLinesWithNewLine(this StreamReader reader)
+    public static IEnumerable<string?> ReadAllLinesWithNewLine(this Stream stream, Encoding encoding)
     {
-        foreach (var line in reader.ReadAllLines())
+        using var sr = new StreamReader(stream, encoding);
+        while (!sr.EndOfStream)
         {
-            yield return line;
+            yield return sr.ReadLine();
             yield return Environment.NewLine;
         }
     }
@@ -25,5 +26,17 @@ public static class StreamExtensions
         foreach (var stream in streams)
             if (stream.BaseStream.CanSeek)
                 stream.BaseStream.Position = 0;
+    }
+    public static void WriteTo(this Stream source, Stream destination, int bufferSize = 1024, bool leaveOpen = false)
+    {
+        // Create a buffer to store the read data
+        var buffer = new byte[bufferSize];
+
+        // Read from the source stream and write to the destination stream
+        int bytesRead;
+        while ((bytesRead = source.Read(buffer, 0, bufferSize)) > 0) destination.Write(buffer, 0, bytesRead);
+
+        if (!leaveOpen)
+            source.Dispose();
     }
 }

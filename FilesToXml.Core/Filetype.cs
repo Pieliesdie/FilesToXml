@@ -18,11 +18,3 @@ public enum Filetype
     ods = 9,
     odt = 10*/
 }
-
-public static class SupportedFileExtExtensions
-{
-    public static string ToFriendlyString(this Filetype ext)
-    {
-        return ext.ToString().ToLower();
-    }
-}

@@ -7,6 +7,15 @@ namespace FilesToXml.WPF.Helpers;
 
 internal static class EncodingTools
 {
+    public static Encoding RemovePreamble(this Encoding encoding)
+    {
+        if (encoding.Preamble.Length == 0)
+        {
+            return encoding;
+        }
+        return new ConsoleEncoding(encoding);
+    }
+    
     public static string EncodingToFriendlyString(this Encoding? tuple)
     {
         return tuple is null ? string.Empty : $"{tuple.EncodingName} - Code page: {tuple.CodePage}";

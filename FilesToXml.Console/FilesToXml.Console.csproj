@@ -2,9 +2,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
-        <Description>
-            Convert files of types:
-            xls , xlsx, txt, csv, doc, docx
+        <Description>Converts files to xml
         </Description>
         <Company>Infostandart</Company>
         <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
@@ -14,7 +12,13 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Nullable>enable</Nullable>
         <AssemblyName>Convertor</AssemblyName>
+        <PackageId>Converter</PackageId>
+        <Product>Converter</Product>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include ="FilesToXml.Tests"/>
+    </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <PlatformTarget>AnyCPU</PlatformTarget>

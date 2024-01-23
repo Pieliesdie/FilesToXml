@@ -10,10 +10,9 @@ public class DocToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        var docToDocx = new DocToDocx();
-        var ms = docToDocx.ConvertFromStreamToDocxMemoryStream(stream);
-        var docxToXml = new DocxToXml();
-        return docxToXml.Convert(ms, rootContent);
+        var ms = DocToDocx.ConvertFromStreamToDocxMemoryStream(stream);
+        ms.Position = 0;
+        return new DocxToXml().Convert(ms, rootContent);
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
