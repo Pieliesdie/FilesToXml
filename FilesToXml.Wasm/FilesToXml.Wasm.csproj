@@ -13,7 +13,7 @@
 		<BootsharpEmbedBinaries>true</BootsharpEmbedBinaries>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="Bootsharp" Version="0.1.3" />
+	  <PackageReference Include="Bootsharp" Version="0.2.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj" />

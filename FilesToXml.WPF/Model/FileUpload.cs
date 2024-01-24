@@ -8,11 +8,6 @@ namespace FilesToXml.WPF.Model;
 public record FileUpload
 {
     private readonly string filePath = string.Empty;
-
-    public FileUpload()
-    {
-    }
-
     public string Path
     {
         get => filePath;

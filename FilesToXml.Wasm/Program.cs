@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
@@ -10,39 +11,30 @@ public static partial class Program
     public static void Main () { }
     
     [JSInvokable]
-    public static string GetBackendName() => $"hello from .NET {Environment.Version}";
+    public static string GetBackendName() => $".NET {Environment.Version}";
     
     [JSInvokable]
     public static string Beautify(string xml) => XDocument.Parse(xml).ToString();
     
     [JSInvokable]
-    public static string? Convert()
+    public static string? Convert(Options options)
     {
         return null;
     }
 }
-
-public struct Test
+public record FileOption
 {
-    public readonly string Path;
-    public readonly string? Label;
-    public readonly string EncodingName;
-    public Filetype? Type;
-    public readonly string Delimiter;
-    public readonly char[] SearchingDelimiters;
-
-    public Test(string path,
-        string? label,
-        string encoding,
-        Filetype? type,
-        string delimiter,
-        char[] searchingDelimiters)
-    {
-        Path = path;
-        Label = label;
-        EncodingName = encoding;
-        Type = type;
-        Delimiter = delimiter;
-        SearchingDelimiters = searchingDelimiters;
-    }
+    public required string Path { get; set; }
+    public string Label { get; set; } = string.Empty;
+    public int Codepage { get; set; } = 65001;
+    public string Delimiter { get; set; } = "auto";
+}
+public struct Options
+{
+    public required IEnumerable<FileOption> Input { get; set; }
+    public string Output { get; set; }
+    public int OutputCodepage { get; set; }
+    public bool ForceSave { get; set; }
+    public bool DisableFormat { get; set; }
+    public string[] SearchingDelimiters { get; set; }
 }

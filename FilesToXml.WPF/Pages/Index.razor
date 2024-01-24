@@ -12,40 +12,55 @@
 @inject ISnackbar Snackbar
 
 <div>
-    <MudButton HtmlTag="label"
-               Variant="Variant.Filled"
-               Color="Color.Primary"
-               Style="height: 50px;width: 100%"
-               StartIcon="@Icons.Material.Filled.CloudUpload"
-               OnClick="UploadFiles">
-        Select source file
-    </MudButton>
-    <MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense="false">
+    <MudDataGrid Items="@ConvertOptions.Input" Class="mt-5" Dense="false" Filterable="true" ShowColumnOptions="false">
+        <ToolBarContent>
+            <MudText Class="mr-3" Typo="Typo.h6">Selected files</MudText>
+            <MudSpacer/>
+            <MudIconButton
+                Color="Color.Primary"
+                Size="Size.Small"
+                Class="mr-3"
+                Variant="Variant.Outlined"
+                Icon="@Icons.Material.Filled.Add"
+                OnClick="UploadFiles">
+            </MudIconButton>
+            <MudIconButton HtmlTag="label"
+                           Color="Color.Primary"
+                           Variant="Variant.Outlined"
+                           Size="Size.Small"
+                           Icon="@Icons.Material.Filled.ClearAll"
+                           OnClick="() => ConvertOptions.Input.Clear()">
+            </MudIconButton>
+        </ToolBarContent>
         <Columns>
             <HierarchyColumn T="FileUpload"/>
             <PropertyColumn Property="x => x.Name" Title="Name"/>
-            <PropertyColumn Property="x => x.Path" Title="Path"/>
-            <PropertyColumn Property="x => x.SizeInKb" Title="Size(kb)"/>
             <PropertyColumn Property="x => x.Extension" Title="Extension"/>
-            <TemplateColumn StickyRight="true" Sortable="false">
+            <PropertyColumn Property="x => x.Path" Title="Path" Filterable="false"/>
+            <PropertyColumn Property="x => x.SizeInKb" Title="Size(kb)" Filterable="false"/>
+            <TemplateColumn StickyRight="true" Sortable="false" Filterable="false">
                 <CellTemplate>
                     <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" Color="Color.Error" OnClick="() => RemoveUpload(context.Item)"/>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
         <ChildRowContent>
-            <MudStack Row="false" Spacing="1">
-                <MudText Typo="Typo.body2">Input encoding</MudText>
-                <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="@context.Item.Encoding"
-                                   T="Encoding" ToStringFunc="EncodingTools.EncodingToFriendlyString"/>
-                <MudText Typo="Typo.body2">Dataset label</MudText>
-                <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text" Clearable="true"></MudTextField>
-                @if (context.Item.Extension == "csv")
-                {
-                    <MudText Typo="Typo.body2">Csv delimiter</MudText>
-                    <MudTextField T="string" @bind-Value="@context.Item.Delimiter" Variant="Variant.Text"></MudTextField>
-                }
-            </MudStack>
+            <MudCard Style="width: 100%">
+                <MudCardContent>
+                    <MudStack Row="false" Spacing="1">
+                        <MudText Typo="Typo.body2">Input encoding</MudText>
+                        <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="@context.Item.Encoding"
+                                           T="Encoding" ToStringFunc="EncodingTools.EncodingToFriendlyString"/>
+                        <MudText Typo="Typo.body2">Dataset label</MudText>
+                        <MudTextField T="string" @bind-Value="@context.Item.Label" Variant="Variant.Text" Clearable="true"></MudTextField>
+                        @if (context.Item.Extension == "csv")
+                        {
+                            <MudText Typo="Typo.body2">Csv delimiter</MudText>
+                            <MudTextField T="string" @bind-Value="@context.Item.Delimiter" Variant="Variant.Text"></MudTextField>
+                        }
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
         </ChildRowContent>
     </MudDataGrid>
     <MudExpansionPanels Class="mt-5">
@@ -59,24 +74,24 @@
             </MudStack>
         </MudExpansionPanel>
     </MudExpansionPanels>
-    <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.End">
+    <MudStack Row="true" Class="mt-2" Style="max-height: 100px;" AlignItems="AlignItems.End">
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
-                   Style="height: 50px;min-width: 160px"
+                   Style="height: 40px;min-width: 160px"
                    StartIcon="@Icons.Material.Filled.Folder"
                    OnClick="SelectFolder">
-            Select output file
+            Output file
         </MudButton>
         <MudTextField FullWidth="true" T="string" @bind-Value="@ConvertOptions.Output" Label="Output file" Clearable="true"/>
         <MudSpacer/>
         <MudButton @bind-Disabled="@IsBusy"
                    Variant="Variant.Filled"
                    Class="pa-5"
-                   Style="height: 50px;min-width: 160px"
+                   Style="height: 40px;min-width: 160px"
                    Color="Color.Info"
                    StartIcon="@Icons.Material.Filled.NotStarted"
                    OnClick="Convert">
-            Start convertation
+            Start
         </MudButton>
     </MudStack>
 

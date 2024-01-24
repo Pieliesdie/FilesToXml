@@ -42,7 +42,7 @@ public class XlsxToXml : IConvertable
             (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>())
             .ToArrayOrEmpty();
 
-        IEnumerable<XStreamingElement>? sheets = doc.WorkbookPart?
+        var sheets = doc.WorkbookPart?
             .Workbook
             .Descendants<Sheet>()
             .Select((sheet, index) => new SheetModel
@@ -58,7 +58,7 @@ public class XlsxToXml : IConvertable
             .Where(sheet => sheet != null);
 
         foreach (var sheet in sheets ?? Enumerable.Empty<XStreamingElement>())
-            yield return sheet;
+            yield return sheet!;
     }
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
