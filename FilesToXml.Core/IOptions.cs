@@ -2,15 +2,20 @@
 
 namespace FilesToXml.Core;
 
-public interface IOptions
+public interface IOptions : IFileOptions, IOutputOptions { }
+
+public interface IFileOptions
 {
     IEnumerable<string> Delimiters { get; }
-    bool DisableFormat { get; }
-    bool ForceSave { get; }
     IEnumerable<string> Input { get; set; }
     IEnumerable<int> InputEncoding { get; }
     IEnumerable<string>? Labels { get; }
+    IEnumerable<char> SearchingDelimiters { get; }
+}
+public interface IOutputOptions
+{
+    bool DisableFormat { get; }
+    bool ForceSave { get; }
     string? Output { get; }
     int OutputEncoding { get; }
-    IEnumerable<char> SearchingDelimiters { get; }
 }

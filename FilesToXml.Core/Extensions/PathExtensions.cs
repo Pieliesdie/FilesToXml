@@ -12,7 +12,7 @@ public static class PathExtensions
         if (extension is null || extension.Length <= 1)
             return Filetype.Unknown;
 
-        if (Enum.TryParse<Filetype>(extension[1..], true, out var supportedFileExt))
+        if (Enum.TryParse<Filetype>(extension.Substring(1), true, out var supportedFileExt))
             return supportedFileExt;
 
         return Filetype.Unknown;
@@ -31,7 +31,10 @@ public static class PathExtensions
             if (pathInfo.HasFlag(FileAttributes.Directory))
             {
                 var files = Directory.GetFiles(path);
-                foreach (var file in files) yield return file;
+                foreach (var file in files)
+                {
+                    yield return file;
+                }
             }
             else
             {
@@ -39,9 +42,9 @@ public static class PathExtensions
             }
         }
     }
-    public static string RelativePathToAbsoluteIfNeed(this string path)
-    {
-        if (!Path.IsPathFullyQualified(path)) path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+    public static string ToAbsolutePath(this string path)
+    { 
+        if (!Path.IsPathFullyQualified(path)) path = Path.Combine(Directory.GetCurrentDirectory(), path);
         return Path.GetFullPath(path);
     }
 }

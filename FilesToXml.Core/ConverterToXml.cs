@@ -14,11 +14,6 @@ namespace FilesToXml.Core;
 
 public static class ConverterToXml
 {
-    public static XStreamingElement? Convert(FileInformation fileInformation, StreamWriter? errorWriter = null,
-        StreamWriter? logWriter = null)
-    {
-        return ProcessFile(fileInformation, errorWriter ?? StreamWriter.Null, logWriter ?? StreamWriter.Null);
-    }
     public static bool Convert(IOptions options, Stream outputStream, Stream errorStream)
     {
         if (!EncodingExtensions.TryGetEncoding(options.OutputEncoding, out var encoding, out var encodingError))
@@ -30,7 +25,7 @@ public static class ConverterToXml
             return false;
         }
 
-        var outputPath = options.Output?.RelativePathToAbsoluteIfNeed();
+        var outputPath = options.Output?.ToAbsolutePath();
 
         using var errorSw = CreateDefaulStreamWriter(errorStream, encoding);
         if (options is { Output: not null, ForceSave: false } && File.Exists(outputPath))
@@ -47,23 +42,25 @@ public static class ConverterToXml
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(outputStream, encoding);
 
-        return ParseAndSave(options, outputSw, errorSw, logSw);
+        IEnumerable<FileInformation> files = ParseOptions(options, errorSw).ToList();
+        var result = Convert(files, options, outputSw, errorSw, logSw);
+        files.ForEach(file => file.Dispose());
+        return result;
     }
-    private static bool ParseAndSave(IOptions options, StreamWriter outputSw, StreamWriter errorSw, StreamWriter logSw)
+    public static bool Convert(
+        IEnumerable<FileInformation> files,
+        IOutputOptions options,
+        StreamWriter outputSw,
+        StreamWriter errorSw, 
+        StreamWriter logSw)
     {
         try
         {
-            List<FileInformation> files = ParseOptions(options, errorSw, out var hasErrors);
-            List<XStreamingElement?> datasets = Convert(files, errorSw, logSw);
-            var xDoc = new XStreamingElement("DATA", datasets);
-            var saveOptions = options.DisableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
-            xDoc.Save(outputSw, saveOptions);
-            files.ForEach(file => file.Dispose());
+            var datasets = Convert(files, errorSw, logSw);
+            Save(outputSw, datasets, options.DisableFormat);
             StreamExtensions.ResetStream(outputSw, logSw, errorSw);
-            var outputPath = options.Output?.RelativePathToAbsoluteIfNeed();
-            logSw.WriteLine(datasets.Any(x => x is null) || hasErrors
-                ? "Converted all files with some errors"
-                : $"Successfully converted all files to {outputPath}");
+            var outputPath = options.Output?.ToAbsolutePath();
+            logSw.WriteLine($"Сonverted all files to {outputPath}");
         }
         catch (Exception e)
         {
@@ -73,35 +70,36 @@ public static class ConverterToXml
 
         return true;
     }
-    private static List<XStreamingElement?> Convert(IEnumerable<FileInformation> filesInformation,
-        TextWriter errorWriter, TextWriter logWriter)
+    private static void Save(TextWriter outputSw, object? content, bool disableFormat)
+    {
+        var xDoc = new XStreamingElement("DATA", content);
+        var saveOptions = disableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
+        xDoc.Save(outputSw, saveOptions);
+    }
+    private static IEnumerable<XStreamingElement?> Convert(
+        IEnumerable<FileInformation> filesInformation,
+        TextWriter errorWriter,
+        TextWriter logWriter)
     {
         return filesInformation
             .AsParallel()
             .AsUnordered()
-            .Select(file => ProcessFile(file, errorWriter, logWriter))
-            .ToList();
+            .Select(file => ProcessFile(file, errorWriter, logWriter));
     }
-    private static List<FileInformation> ParseOptions(IOptions options, TextWriter errorSw, out bool hasErrors)
+    private static IEnumerable<FileInformation> ParseOptions(IFileOptions options, TextWriter errorSw)
     {
-        hasErrors = false;
         var delimiters = new Queue<string>(options.Delimiters.DefaultIfEmpty(Defaults.Delimiter));
-        List<FileInformation> files = [];
-        IEnumerable<string> inputs = options.Input.UnpackFolders().Select(x => x.RelativePathToAbsoluteIfNeed());
-        var index = 0;
-        foreach (var inputPath in inputs)
+        IEnumerable<string> inputs = options.Input.UnpackFolders().Select(x => x.ToAbsolutePath());
+        foreach (var inputItem in inputs.WithIndex())
         {
-            index++;
-            if (!TryParsePath(inputPath, errorSw, out var parsedPath))
+            if (!TryParsePath(inputItem.item, errorSw, out var parsedPath))
             {
-                hasErrors = true;
                 continue;
             }
 
-            var codepage = options.InputEncoding.ToList().ElementAtOrLast(index);
+            var codepage = options.InputEncoding.ToList().ElementAtOrLast(inputItem.index);
             if (!EncodingExtensions.TryGetEncoding(codepage, out var encoding, out var error))
             {
-                hasErrors = true;
                 errorSw.WriteLine($"'{parsedPath.Filename}': {error}");
                 errorSw.WriteLine(
                     $"Using default encoding for '{parsedPath.Filename}': {Defaults.Encoding.CodePage} ({Defaults.Encoding.WebName})");
@@ -110,12 +108,12 @@ public static class ConverterToXml
 
             var fileInfo = new FileInformation
             {
-                Path = inputPath,
+                Path = inputItem.item,
                 Name = parsedPath.Filename,
                 Stream = parsedPath.Stream,
                 Encoding = encoding,
-                Type = inputPath.ToFiletype(),
-                Label = options.Labels?.ElementAtOrDefault(index)
+                Type = inputItem.item.ToFiletype(),
+                Label = options.Labels?.ElementAtOrDefault(inputItem.index)
             };
             if (parsedPath.Filetype == Filetype.Csv)
             {
@@ -123,12 +121,12 @@ public static class ConverterToXml
                 fileInfo.SearchingDelimiters = options.SearchingDelimiters?.ToArray() ?? Defaults.SearchingDelimiters;
             }
 
-            files.Add(fileInfo);
+            yield return fileInfo;
         }
-
-        return files;
     }
-    private static bool TryParsePath(string inputPath, TextWriter errorWriter,
+    private static bool TryParsePath(
+        string inputPath,
+        TextWriter errorWriter,
         [NotNullWhen(true)] out ParsePathResult? parsePathResult)
     {
         parsePathResult = null;
@@ -143,7 +141,7 @@ public static class ConverterToXml
         Stream stream;
         try
         {
-            stream = File.OpenRead(inputPath.RelativePathToAbsoluteIfNeed());
+            stream = File.OpenRead(inputPath);
         }
         catch (Exception ex)
         {
@@ -154,7 +152,9 @@ public static class ConverterToXml
         parsePathResult = new ParsePathResult(filename, stream, fileType);
         return true;
     }
-    private static XStreamingElement? ProcessFile(FileInformation fileInfo, TextWriter errorWriter,
+    private static XStreamingElement? ProcessFile(
+        FileInformation fileInfo,
+        TextWriter errorWriter,
         TextWriter logWriter)
     {
         try

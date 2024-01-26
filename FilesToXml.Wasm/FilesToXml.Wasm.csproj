@@ -1,21 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
-		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
-		<GenerateLibraryLayout>true</GenerateLibraryLayout>
-		<Nullable>enable</Nullable>
-		<!-- Disabling non-essential .NET features reduces minimal build size by ~35%. -->
-		<BootsharpAggressiveTrimming>true</BootsharpAggressiveTrimming>
-		<!-- Specify custom name for the generated JavaScript module. -->
-		<BootsharpName>filesToXml</BootsharpName>
-		<!-- Don't embed the C# solution binaries to the JavaScript module. -->
-		<BootsharpEmbedBinaries>true</BootsharpEmbedBinaries>
-	</PropertyGroup>
-	<ItemGroup>
-	  <PackageReference Include="Bootsharp" Version="0.2.0" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj" />
-	</ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateLibraryLayout>true</GenerateLibraryLayout>
+        <Nullable>enable</Nullable>
+        <!-- Disabling non-essential .NET features reduces minimal build size by ~35%. -->
+        <BootsharpAggressiveTrimming>true</BootsharpAggressiveTrimming>
+        <!-- Specify custom name for the generated JavaScript module. -->
+        <BootsharpName>filesToXml</BootsharpName>
+        <!-- Don't embed the C# solution binaries to the JavaScript module. -->
+        <BootsharpEmbedBinaries>true</BootsharpEmbedBinaries>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Bootsharp" Version="0.2.0"/>
+        <PackageReference Include="Bootsharp.Inject" Version="0.2.0"/>
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj"/>
+    </ItemGroup>
 </Project>

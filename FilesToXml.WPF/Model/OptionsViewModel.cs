@@ -14,16 +14,19 @@ public record OptionsViewModel
     public Encoding OutputEncoding { get; set; } = Encoding.UTF8;
     public IOptions MapToOptions()
     {
-        return new ConverterOptions(Input.Select(x => x.Path))
+        return new Options()
         {
+            Input = Input.Select(x => x.Path),
             DisableFormat = DisableFormat,
             ForceSave = ForceSave,
-            InputEncoding = Input.Select(x => x.Encoding.CodePage ),
+            InputEncoding = Input.Select(x => x.Encoding.CodePage),
             Output = string.IsNullOrWhiteSpace(Output) ? null : Output,
             OutputEncoding = OutputEncoding.CodePage,
             Delimiters = Input.Select(x => x.Delimiter),
             Labels = Input.Select(x => x.Label),
             SearchingDelimiters = new[] { ';', '|', '\t', ',' }
-        };      
+        };
     }
+
+    private class Options : DefaultOptions { }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FilesToXml.Core;
 
-public struct FileInformation : IDisposable
+public class FileInformation : IDisposable
 {
     public required string Name { get; init; }
     public required Stream Stream { get; init; }
@@ -15,9 +15,5 @@ public struct FileInformation : IDisposable
     public bool IsAutoDelimiter => Delimiter == "auto";
     public char[]? SearchingDelimiters { get; set; }
     public string? Path { get; set; }
-    public FileInformation() { }
-    public void Dispose()
-    {
-        Stream?.Dispose();
-    }
+    public void Dispose() => Stream?.Dispose();
 }

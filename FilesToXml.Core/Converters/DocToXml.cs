@@ -16,7 +16,7 @@ public class DocToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
+        path = path.ToAbsolutePath();
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, rootContent));
     }

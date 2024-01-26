@@ -36,11 +36,11 @@ public class CsvToXml : IDelimiterConvertable
     }
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return Convert(stream, ";", rootContent);
+        return Convert(stream, Defaults.Delimiter, rootContent);
     }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return Convert(stream, ";", encoding, rootContent);
+        return Convert(stream, Defaults.Delimiter, encoding, rootContent);
     }
     public XElement ConvertByFile(string path, char[] searchingDelimiters, Encoding encoding,
         params object?[] rootContent)
@@ -50,7 +50,7 @@ public class CsvToXml : IDelimiterConvertable
     }
     public XElement ConvertByFile(string path, string delimiter, Encoding encoding, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
+        path = path.ToAbsolutePath();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, delimiter, encoding, rootContent));
     }
@@ -60,11 +60,11 @@ public class CsvToXml : IDelimiterConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        return ConvertByFile(path, ";", rootContent);
+        return ConvertByFile(path, Defaults.Delimiter, rootContent);
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        return ConvertByFile(path, ";", encoding, rootContent);
+        return ConvertByFile(path, Defaults.Delimiter, encoding, rootContent);
     }
     private static IEnumerable<XStreamingElement> ReadLines(Stream stream, string delimiter, Encoding encoding)
     {
