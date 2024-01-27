@@ -17,34 +17,4 @@ public static class PathExtensions
 
         return Filetype.Unknown;
     }
-    public static IEnumerable<string> UnpackFolders(this IEnumerable<string> pathList)
-    {
-        foreach (var path in pathList)
-        {
-            if (!File.Exists(path) && !Directory.Exists(path))
-            {
-                yield return path;
-                continue;
-            }
-
-            var pathInfo = File.GetAttributes(path);
-            if (pathInfo.HasFlag(FileAttributes.Directory))
-            {
-                var files = Directory.GetFiles(path);
-                foreach (var file in files)
-                {
-                    yield return file;
-                }
-            }
-            else
-            {
-                yield return path;
-            }
-        }
-    }
-    public static string ToAbsolutePath(this string path)
-    { 
-        if (!Path.IsPathFullyQualified(path)) path = Path.Combine(Directory.GetCurrentDirectory(), path);
-        return Path.GetFullPath(path);
-    }
 }

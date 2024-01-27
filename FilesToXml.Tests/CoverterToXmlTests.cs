@@ -28,7 +28,7 @@ public class CoverterToXmlTests
         using var errorStream = new MemoryStream();
 
         // Act
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         // Assert
         Assert.True(success);
@@ -56,7 +56,7 @@ public class CoverterToXmlTests
         using var outputStream = new MemoryStream();
         using var errorStream = new MemoryStream();
 
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         Assert.True(success);
 
@@ -87,7 +87,7 @@ public class CoverterToXmlTests
         using var outputStream = new MemoryStream();
         using var errorStream = new MemoryStream();
 
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         Assert.True(success);
 

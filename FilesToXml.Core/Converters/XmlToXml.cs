@@ -25,7 +25,6 @@ public class XmlToXml : IEncodingConvertable
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        path = path.ToAbsolutePath();
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, encoding, rootContent));
     }

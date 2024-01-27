@@ -23,7 +23,6 @@ public class TxtToXml : IEncodingConvertable
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        path = path.ToAbsolutePath();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, encoding, rootContent));
     }

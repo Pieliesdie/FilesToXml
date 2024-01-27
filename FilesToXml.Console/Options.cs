@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
-using FilesToXml.Core;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable once ClassNeverInstantiated.Global
 namespace FilesToXml.Console;
 
-public class Options : IOptions
+public class Options
 {
     [Option("support",
         Required = false,

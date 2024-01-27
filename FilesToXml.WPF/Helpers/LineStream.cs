@@ -27,7 +27,6 @@ public class LineStream : MemoryStream
             ProcessBuffer(buffer);
         }
     }
-
     private void ProcessBuffer(ReadOnlySpan<byte> buffer)
     {
         if (OnWriteLine is null && OnWriteLines is null) return;
@@ -46,6 +45,10 @@ public class LineStream : MemoryStream
         if (content[^1] != '\n')
         {
             partialLineBuffer.Append(lines[^1]);
+            lines = lines[..^1];
+        }
+        else if(content[^1] == '\n' && lines.LastOrDefault() == string.Empty)
+        {
             lines = lines[..^1];
         }
 

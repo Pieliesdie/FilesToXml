@@ -20,6 +20,7 @@
                 Color="Color.Primary"
                 Size="Size.Small"
                 Class="mr-3"
+                Title="Add"
                 Variant="Variant.Outlined"
                 Icon="@Icons.Material.Filled.Add"
                 OnClick="UploadFiles">
@@ -28,6 +29,7 @@
                            Color="Color.Primary"
                            Variant="Variant.Outlined"
                            Size="Size.Small"
+                           Title="Clear all"
                            Icon="@Icons.Material.Filled.ClearAll"
                            OnClick="() => ConvertOptions.Input.Clear()">
             </MudIconButton>
@@ -98,13 +100,13 @@
     <MudExpansionPanels Style="flex:auto" Class="mt-5 mb-5">
         <MudExpansionPanel Text="Logs">
             <MudConsole @ref="LogConsole" Style="overflow:auto;max-height: 300px" Changed="StateHasChanged"/>
-            @if (LogConsole is { IsEmpty: false })
+            @if (LogConsole is {IsEmpty: false})
             {
                 <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
                     <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Checked="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
                     <MudSpacer/>
-                    <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="CopyConsole">Copy</MudButton>
-                    <MudButton Style="width: 90px; height: 40px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="ClearConsole">Clear</MudButton>
+                    <MudButton Style="width: 90px; height: 30px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="CopyConsole">Copy</MudButton>
+                    <MudButton Style="width: 90px; height: 30px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="ClearConsole">Clear</MudButton>
                 </MudStack>
             }
         </MudExpansionPanel>

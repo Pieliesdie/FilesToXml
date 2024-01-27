@@ -10,6 +10,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Helpers;
 
 namespace FilesToXml.Core.Converters;
 
@@ -22,7 +23,6 @@ public class XlsxToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.ToAbsolutePath();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
@@ -62,8 +62,7 @@ public class XlsxToXml : IConvertable
     }
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
-        IEnumerable<XElement?> rows = ReadRows(sheet);
-        //TODO: try rows.ToLookup ?
+        IEnumerable<XElement?> rows = ReadRows(sheet).CacheFirstElement();
         return rows.Any()
             ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows)
             : null;

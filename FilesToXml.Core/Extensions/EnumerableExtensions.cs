@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FilesToXml.Core.Helpers;
 
 namespace FilesToXml.Core.Extensions;
 
@@ -21,4 +22,9 @@ public static class EnumerableExtensions
     }
     public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self)
         => self.Select((item, index) => (item, index));
+
+    public static IEnumerable<T?> CacheFirstElement<T>(this IEnumerable<T?> self)
+    {
+        return new CachingFirstElementEnumerable<T?>(self);
+    }
 }

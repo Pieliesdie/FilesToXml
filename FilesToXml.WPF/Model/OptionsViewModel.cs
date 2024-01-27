@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 using FilesToXml.Core;
+using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.WPF.Model;
@@ -14,19 +15,13 @@ public record OptionsViewModel
     public Encoding OutputEncoding { get; set; } = Encoding.UTF8;
     public IOptions MapToOptions()
     {
-        return new Options()
+        return new DefaultOptions()
         {
-            Input = Input.Select(x => x.Path),
+            FileOptions = Input.Select(x => x.MapToIFileOptions()),
             DisableFormat = DisableFormat,
             ForceSave = ForceSave,
-            InputEncoding = Input.Select(x => x.Encoding.CodePage),
             Output = string.IsNullOrWhiteSpace(Output) ? null : Output,
             OutputEncoding = OutputEncoding.CodePage,
-            Delimiters = Input.Select(x => x.Delimiter),
-            Labels = Input.Select(x => x.Label),
-            SearchingDelimiters = new[] { ';', '|', '\t', ',' }
         };
     }
-
-    private class Options : DefaultOptions { }
 }

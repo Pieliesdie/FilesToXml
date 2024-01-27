@@ -20,7 +20,6 @@ public class DocxToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.ToAbsolutePath();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommandLine;
@@ -23,7 +24,8 @@ if (isPrintCodepages)
     return;
 }
 
-Parser.Default.ParseArguments<Options>(args).WithParsed(parsedArgs =>
-{
-    ConverterToXml.Convert(parsedArgs, Console.OpenStandardOutput(), Console.OpenStandardError());
-});
+var outputStream = Console.OpenStandardOutput();
+var errorStream = Console.OpenStandardError();
+Parser.Default
+    .ParseArguments<Options>(args)
+    .WithParsed(parsedArgs => ConverterToXml.Convert(parsedArgs.MapToIOptions(), outputStream, errorStream));

@@ -2,15 +2,15 @@
 import fs from 'node:fs'
 import path from 'path'
 
-filesToXml.boot().then(() =>{
-    const options = {
-        input: [{
-            path: (`file://E://csv.csv`),
-            delimiter: "auto",
-            codepage: 65001
-        }],
-        outputCodepage : 65001,
-        searchingDelimiters: [';']
-    }
-    console.log(Converter.convert(options));
-})
+await filesToXml.boot();
+// const options = {
+//     input: [{
+//         path: (`file://E://csv.csv`),
+//         delimiter: "auto",
+//         codepage: 65001
+//     }],
+//     outputCodepage : 65001,
+//     searchingDelimiters: [';']
+// }
+// console.log(Converter.convert(options));  
+await filesToXml.exit();
