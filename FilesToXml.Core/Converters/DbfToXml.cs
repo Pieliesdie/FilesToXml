@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using DbfDataReader;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 

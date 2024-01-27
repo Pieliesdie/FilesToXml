@@ -21,8 +21,9 @@ public static class EnumerableExtensions
             action(element);
     }
     public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self)
-        => self.Select((item, index) => (item, index));
-
+    {
+        return self.Select((item, index) => (item, index));
+    }
     public static IEnumerable<T?> CacheFirstElement<T>(this IEnumerable<T?> self)
     {
         return new CachingFirstElementEnumerable<T?>(self);

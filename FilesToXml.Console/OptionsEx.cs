@@ -3,6 +3,7 @@ using System.Linq;
 using FilesToXml.Core;
 using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Interfaces;
 
 namespace FilesToXml.Console;
 
@@ -21,7 +22,7 @@ public static class OptionsEx
                 var fileInfo = new DefaultFileOptions
                 {
                     Path = unpackedFile,
-                    InputEncoding = encodings.ElementAtOrLast(inputItem.index),
+                    CodePage = encodings.ElementAtOrLast(inputItem.index),
                     Label = options.Labels?.ElementAtOrDefault(inputItem.index),
                 };
                 if (inputItem.item.ToFiletype() == Filetype.Csv)

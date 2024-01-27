@@ -8,6 +8,7 @@ using FilesToXml.Core.Converters;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Interfaces;
 using EncodingExtensions = FilesToXml.Core.Extensions.EncodingExtensions;
 
 namespace FilesToXml.Core;
@@ -41,24 +42,23 @@ public static class ConverterToXml
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(output, encoding);
 
-        var files = options.FileOptions;
+        IEnumerable<IFileOptions> files = options.FileOptions;
         var result = Convert(files, options, outputSw, errorSw, logSw);
         return result;
     }
-    private static bool Convert(IEnumerable<IFileOptions> files, IResultOptions options, StreamWriter output, StreamWriter err, StreamWriter log)
+    public static bool Convert(IEnumerable<IFileOptions> files, IResultOptions options, StreamWriter output, StreamWriter err, StreamWriter log)
     {
         try
         {
-            var datasets = ProcessFiles(files, err, log);
+            var inputFiles = files.ToList();
+            IEnumerable<XStreamingElement?> datasets = ProcessFiles(inputFiles, err, log);
             Save(output, datasets, options.DisableFormat);
+            inputFiles.ForEach(x => x.Dispose());
             StreamExtensions.ResetStream(output, log, err);
             log.WriteLine("All files converted to output");
         }
         catch (Exception e)
         {
-#if DEBUG
-            throw;
-#endif
             err.WriteLine($"Failed to convert result document: {e.Message}");
             return false;
         }
@@ -83,7 +83,7 @@ public static class ConverterToXml
         var filename = Path.GetFileName(file.Path);
         try
         {
-            if (!EncodingExtensions.TryGetEncoding(file.InputEncoding, out var encoding, out var error))
+            if (!EncodingExtensions.TryGetEncoding(file.CodePage, out var encoding, out var error))
             {
                 err.WriteLine($"'{file.Path}': {error}");
                 err.WriteLine(
@@ -91,13 +91,10 @@ public static class ConverterToXml
                 encoding = DefaultValue.Encoding;
             }
 
-            if (!file.TryGetData(err, out var stream))
-            {
-                return null;
-            }
+            if (!file.TryGetData(err, out var stream)) return null;
 
             var converter = FindConverter(file.Path.ToFiletype());
-            var additionalInfo = CreateAdditionalInfo(file);
+            IEnumerable<XObject> additionalInfo = CreateAdditionalInfo(file);
             var xml = converter switch
             {
                 IDelimiterConvertable c when file.Delimiter == "auto"
@@ -118,18 +115,14 @@ public static class ConverterToXml
             return null;
         }
     }
-    private static List<XObject> CreateAdditionalInfo(IFileOptions file)
+    private static IEnumerable<XObject> CreateAdditionalInfo(IFileOptions file)
     {
-        var additionalInfo = new List<XObject>
-        {
-            new XAttribute("ext", file.Path.ToFiletype().ToString().ToLower()),
-            new XAttribute("name", Path.GetFileName(file.Path)),
-            new XAttribute("path", file.Path)
-        };
+        yield return new XAttribute("ext", file.Path.ToFiletype().ToString().ToLower());
+        yield return new XAttribute("name", Path.GetFileName(file.Path));
+        yield return new XAttribute("path", file.Path);
 
         if (!string.IsNullOrEmpty(file.Label))
-            additionalInfo.Add(new XAttribute("label", file.Label));
-        return additionalInfo;
+            yield return new XAttribute("label", file.Label);
     }
     private static IConvertable FindConverter(Filetype type)
     {

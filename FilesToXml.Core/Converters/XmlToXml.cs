@@ -5,7 +5,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 

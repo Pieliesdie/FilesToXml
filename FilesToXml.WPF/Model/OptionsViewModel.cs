@@ -3,6 +3,7 @@ using System.Text;
 using FilesToXml.Core;
 using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Interfaces;
 
 namespace FilesToXml.WPF.Model;
 

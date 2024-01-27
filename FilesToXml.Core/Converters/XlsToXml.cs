@@ -3,7 +3,6 @@ using System.IO;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Converters.OfficeConverters;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 

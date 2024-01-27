@@ -2,6 +2,7 @@
 using FilesToXml.Core;
 using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Interfaces;
 using FilesToXml.WPF.Helpers;
 
 namespace FilesToXml.WPF.Model;
@@ -33,7 +34,7 @@ public record FileUpload
         {
             Path = Path,
             Delimiter = Delimiter,
-            InputEncoding = Encoding.CodePage,
+            CodePage = Encoding.CodePage,
             Label = Label,
             SearchingDelimiters = [';', '|', '\t', ',']
 

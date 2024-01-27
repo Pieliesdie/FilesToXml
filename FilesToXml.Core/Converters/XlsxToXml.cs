@@ -10,7 +10,6 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Extensions;
-using FilesToXml.Core.Helpers;
 
 namespace FilesToXml.Core.Converters;
 
@@ -42,14 +41,14 @@ public class XlsxToXml : IConvertable
             (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>())
             .ToArrayOrEmpty();
 
-        var sheets = doc.WorkbookPart?
+        IEnumerable<XStreamingElement?>? sheets = doc.WorkbookPart?
             .Workbook
             .Descendants<Sheet>()
             .Select((sheet, index) => new SheetModel
             {
                 Id = index,
                 Name = sheet.Name?.Value ?? string.Empty,
-                SheetData = (WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id!),
+                SheetData = (WorksheetPart) doc.WorkbookPart.GetPartById(sheet.Id!),
                 NumberingFormats = numberingFormats,
                 CellFormats = cellFormats,
                 SharedStringTable = sharedStringTable
@@ -105,7 +104,7 @@ public class XlsxToXml : IConvertable
         else if (dataType == null && !IsNullValue(cell.StyleIndex))
             cellValue = FormatNullTypeCell(
                 cellValue,
-                sheet.CellFormats[(int)cell.StyleIndex!.Value].NumberFormatId ?? 0,
+                sheet.CellFormats[(int) cell.StyleIndex!.Value].NumberFormatId ?? 0,
                 sheet.NumberingFormats);
 
         var isEmptyCell = string.IsNullOrEmpty(cellValue);
@@ -126,7 +125,7 @@ public class XlsxToXml : IConvertable
 
             try
             {
-                return DateTime.FromOADate((double)number).ToString("s");
+                return DateTime.FromOADate((double) number).ToString("s");
             }
             catch
             {
@@ -159,7 +158,7 @@ public class XlsxToXml : IConvertable
     }
     private static bool IsNullValue<T>(OpenXmlSimpleValue<T>? openXmlSimpleValue) where T : struct
     {
-        return openXmlSimpleValue is not { HasValue: true };
+        return openXmlSimpleValue is not {HasValue: true};
     }
     private static bool IsNumFmtDate(UInt32Value numFtd)
     {

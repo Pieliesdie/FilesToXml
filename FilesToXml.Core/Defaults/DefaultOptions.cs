@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FilesToXml.Core.Interfaces;
 
 namespace FilesToXml.Core.Defaults;
 
