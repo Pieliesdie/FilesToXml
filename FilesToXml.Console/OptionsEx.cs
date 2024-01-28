@@ -13,17 +13,17 @@ public static class OptionsEx
     {
         var delimiters = new Queue<string>(options.Delimiters.DefaultIfEmpty(DefaultValue.Delimiter));
         var encodings = options.InputEncoding.ToList();
-        var files = new List<DefaultFileOptions>();
+        var files = new List<DefaultFile>();
         foreach (var inputItem in options.Input.WithIndex())
         {
             var unpackedFiles = inputItem.item.UnpackFolders().Select(x => x.ToAbsolutePath());
             foreach (var unpackedFile in unpackedFiles)
             {
-                var fileInfo = new DefaultFileOptions
+                var fileInfo = new DefaultFile
                 {
                     Path = unpackedFile,
                     CodePage = encodings.ElementAtOrLast(inputItem.index),
-                    Label = options.Labels?.ElementAtOrDefault(inputItem.index),
+                    Label = options.Labels?.ElementAtOrDefault(inputItem.index)
                 };
                 if (inputItem.item.ToFiletype() == Filetype.Csv)
                 {
@@ -38,8 +38,8 @@ public static class OptionsEx
         return new DefaultOptions
         {
             DisableFormat = options.DisableFormat,
-            OutputEncoding = options.OutputEncoding,
-            FileOptions = files,
+            CodePage = options.OutputEncoding,
+            Files = files,
             ForceSave = options.ForceSave,
             Output = options.Output
         };

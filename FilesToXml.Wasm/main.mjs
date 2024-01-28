@@ -1,18 +1,14 @@
 ﻿import filesToXml, {Converter} from "./bin/filesToXml/index.mjs";
 import fs from 'node:fs'
-import path from 'path'
 
-console.log(fs.readFileSync(`F://csv.csv`));
+let path = "F:/git/FilesToXml/FilesToXml.Tests/Files/json.json";
+let data = new Uint8Array(await fs.readFileSync(path).buffer);
 await filesToXml.boot();
-const options = {
-    input: [{
-        path: `F://csv.csv`,
-        data: fs.readFileSync(`F://csv.csv`, {encoding: 'base64'}),
-        delimiter: "auto",
-        codepage: 65001
-    }],
-    outputCodepage : 65001,
-    searchingDelimiters: [';']
-}
-console.log(Converter.convert(options));  
+const options = [
+    {
+        i: [[1,2,3]],
+        k: 2
+    }
+]
+console.log(Converter.convert(data));
 await filesToXml.exit();

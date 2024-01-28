@@ -28,16 +28,15 @@ public record FileUpload
     public Encoding Encoding { get; set; } = Encoding.UTF8;
     public string Delimiter { get; set; } = "auto";
 
-    public IFileOptions MapToIFileOptions()
+    public IFile MapToIFile()
     {
-        return new DefaultFileOptions()
+        return new DefaultFile()
         {
             Path = Path,
             Delimiter = Delimiter,
             CodePage = Encoding.CodePage,
             Label = Label,
             SearchingDelimiters = [';', '|', '\t', ',']
-
         };
     }
 }

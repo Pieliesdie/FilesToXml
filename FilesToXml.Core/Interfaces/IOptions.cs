@@ -4,5 +4,5 @@ namespace FilesToXml.Core.Interfaces;
 
 public interface IOptions : IOutputOptions, IResultOptions
 {
-    IEnumerable<IFileOptions> FileOptions { get; }
+    IEnumerable<IFile> Files { get; }
 }

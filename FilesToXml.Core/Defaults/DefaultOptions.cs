@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FilesToXml.Core.Interfaces;
 
 namespace FilesToXml.Core.Defaults;
@@ -7,7 +8,7 @@ public class DefaultOptions : IOptions
 {
     public string? Output { get; init; }
     public bool ForceSave { get; set; } = false;
-    public required int OutputEncoding { get; init; }
+    public int CodePage { get; init; } = DefaultValue.Encoding.CodePage;
     public bool DisableFormat { get; init; } = false;
-    public required IEnumerable<IFileOptions> FileOptions { get; init; }
+    public IEnumerable<IFile> Files { get; init; } = Enumerable.Empty<IFile>();
 }

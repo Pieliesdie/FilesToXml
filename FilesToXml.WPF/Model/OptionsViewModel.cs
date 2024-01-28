@@ -10,19 +10,19 @@ namespace FilesToXml.WPF.Model;
 public record OptionsViewModel
 {
     public ObservableCollection<FileUpload> Input { get; set; } = [];
-    public bool DisableFormat { get; set; } = false;
+    public bool DisableFormat { get; set; }
     public bool ForceSave { get; set; } = true;
     public string? Output { get; set; }
     public Encoding OutputEncoding { get; set; } = Encoding.UTF8;
     public IOptions MapToOptions()
     {
-        return new DefaultOptions()
+        return new DefaultOptions
         {
-            FileOptions = Input.Select(x => x.MapToIFileOptions()),
+            Files = Input.Select(x => x.MapToIFile()),
             DisableFormat = DisableFormat,
             ForceSave = ForceSave,
             Output = string.IsNullOrWhiteSpace(Output) ? null : Output,
-            OutputEncoding = OutputEncoding.CodePage,
+            CodePage = OutputEncoding.CodePage,
         };
     }
 }

@@ -17,7 +17,7 @@ public static class ConverterToXml
 {
     public static bool Convert(IOptions options, Stream output, Stream error)
     {
-        if (!EncodingExtensions.TryGetEncoding(options.OutputEncoding, out var encoding, out var encodingError))
+        if (!EncodingExtensions.TryGetEncoding(options.CodePage, out var encoding, out var encodingError))
         {
             using var fallBackErrorSw = CreateDefaulStreamWriter(error, DefaultValue.Encoding);
             fallBackErrorSw.WriteLine($"{encodingError}");
@@ -42,11 +42,11 @@ public static class ConverterToXml
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(output, encoding);
 
-        IEnumerable<IFileOptions> files = options.FileOptions;
+        IEnumerable<IFile> files = options.Files;
         var result = Convert(files, options, outputSw, errorSw, logSw);
         return result;
     }
-    public static bool Convert(IEnumerable<IFileOptions> files, IResultOptions options, StreamWriter output, StreamWriter err, StreamWriter log)
+    public static bool Convert(IEnumerable<IFile> files, IResultOptions options, StreamWriter output, StreamWriter err, StreamWriter log)
     {
         try
         {
@@ -71,14 +71,14 @@ public static class ConverterToXml
         var saveOptions = disableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
         xDoc.Save(outputSw, saveOptions);
     }
-    private static IEnumerable<XStreamingElement?> ProcessFiles(IEnumerable<IFileOptions> files, TextWriter err, TextWriter log)
+    private static IEnumerable<XStreamingElement?> ProcessFiles(IEnumerable<IFile> files, TextWriter err, TextWriter log)
     {
         return files
             .AsParallel()
             .AsUnordered()
             .Select(file => ProcessFile(file, err, log));
     }
-    private static XStreamingElement? ProcessFile(IFileOptions file, TextWriter err, TextWriter log)
+    private static XStreamingElement? ProcessFile(IFile file, TextWriter err, TextWriter log)
     {
         var filename = Path.GetFileName(file.Path);
         try
@@ -91,16 +91,16 @@ public static class ConverterToXml
                 encoding = DefaultValue.Encoding;
             }
 
-            if (!file.TryGetData(err, out var stream)) return null;
+            if (!file.TryGetStream(err, out var stream)) return null;
 
             var converter = FindConverter(file.Path.ToFiletype());
             IEnumerable<XObject> additionalInfo = CreateAdditionalInfo(file);
             var xml = converter switch
             {
                 IDelimiterConvertable c when file.Delimiter == "auto"
-                    => c.Convert(stream, file.SearchingDelimiters ?? DefaultValue.SearchingDelimiters, encoding, additionalInfo),
+                    => c.Convert(stream, file.SearchingDelimiters, encoding, additionalInfo),
                 IDelimiterConvertable c
-                    => c.Convert(stream, file.Delimiter ?? DefaultValue.Delimiter, encoding, additionalInfo),
+                    => c.Convert(stream, file.Delimiter, encoding, additionalInfo),
                 IEncodingConvertable c
                     => c.Convert(stream, encoding, additionalInfo),
                 _ => converter.Convert(stream, additionalInfo)

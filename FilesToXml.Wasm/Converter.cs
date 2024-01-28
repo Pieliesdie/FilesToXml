@@ -10,46 +10,49 @@ public interface IConverter
 {
     string Beautify(string xml);
     string GetBackendName();
-    ConvertResult Convert(ConvertOptions options);
+    ConvertResult Convert(test data);
+    long Size(byte[] self);
 }
 
 public class Converter : IConverter
 {
     public string GetBackendName() => $".NET {Environment.Version}";
     public string Beautify(string xml) => XDocument.Parse(xml).ToString();
-    public ConvertResult Convert(ConvertOptions options)
+    public ConvertResult Convert(test data)
     {
+        Console.WriteLine(data.i == null);
+        Console.WriteLine(data.i?.Length);
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var outSw = new StreamWriter(new MemoryStream());
-        var errSw = new StreamWriter(new MemoryStream());
-        var logSw = new StreamWriter(new MemoryStream());
+        var outSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
+        var errSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
+        var logSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
 
-        _ = ConverterToXml.Convert(options.Input, options, outSw, errSw, logSw);
-        
-        var outSr = new StreamReader(outSw.BaseStream, Encoding.GetEncoding(options.OutputCodepage));
-        var errorSr = new StreamReader(errSw.BaseStream, Encoding.GetEncoding(options.OutputCodepage));
-        var logSr = new StreamReader(logSw.BaseStream, Encoding.GetEncoding(options.OutputCodepage));
+        // var files = data.Select(x => new File()
+        // {
+        //     
+        // });
+        //_ = ConverterToXml.Convert(data, new DefaultOptions(), outSw, errSw, logSw);
+
+        using var outSr = new StreamReader(outSw.BaseStream);
+        using var errorSr = new StreamReader(errSw.BaseStream);
+        using var logSr = new StreamReader(logSw.BaseStream);
         return new ConvertResult(outSr.ReadToEnd(), errorSr.ReadToEnd(), logSr.ReadToEnd());
     }
-}
-
-public record ConvertResult(string? Result, string? Error, string? Log);
-
-public class FileOption : DefaultFileOptions
-{
-    public required string Data { get; init; }
-    protected override bool TryOpenStream(string path, TextWriter err, out Stream? stream)
+    public long Size(byte[] self)
     {
-        stream = new MemoryStream(Convert.FromBase64String(Data));
-        return true;
+        return (new MemoryStream(self)).Length;
     }
 }
 
-public class ConvertOptions : IResultOptions
+public record test(byte[] i, int k);
+public record ConvertResult(string? Result, string? Error, string? Log);
+
+public class File
 {
-    public required FileOption[] Input { get; init; }
-    public string? Output { get; init; }
-    public int OutputCodepage { get; init; } = 65001;
-    public bool ForceSave { get; init; }
-    public bool DisableFormat { get; init; }
+    public byte[] Data { get; set; }
+    public string Path { get; set; }
+    public int CodePage { get;  set; }
+    public string? Label { get;  set; }
+    public string Delimiter { get; set;  }
+    public char[] SearchingDelimiters { get;  set; }
 }
