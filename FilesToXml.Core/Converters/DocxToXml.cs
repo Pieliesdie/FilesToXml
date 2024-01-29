@@ -99,16 +99,16 @@ public class DocxToXml : IConvertable
                     if (element.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>() !=
                         null) // список / не список
                     {
-                        textNode.Add(ListParagraph((Paragraph) element, rowIndex++));
+                        textNode.Add(ListParagraph((Paragraph)element, rowIndex++));
                         continue;
                     }
 
                     // не список
-                    textNode.Add(SimpleParagraph((Paragraph) element, rowIndex++));
+                    textNode.Add(SimpleParagraph((Paragraph)element, rowIndex++));
                     continue;
                 case "DocumentFormat.OpenXml.Wordprocessing.Table":
                     textNode = null;
-                    yield return Table((Table) element, index++);
+                    yield return Table((Table)element, index++);
                     continue;
             }
         }

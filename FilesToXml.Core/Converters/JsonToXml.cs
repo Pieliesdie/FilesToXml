@@ -26,7 +26,7 @@ public class JsonToXml : IEncodingConvertable
     {
         try
         {
-            using var reader = new JsonTextReader(new StreamReader(stream, encoding)) {SupportMultipleContent = true};
+            using var reader = new JsonTextReader(new StreamReader(stream, encoding)) { SupportMultipleContent = true };
             var ds = JToken.ReadFrom(reader);
             return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJson(ds)));
         }
@@ -63,7 +63,7 @@ public class JsonToXml : IEncodingConvertable
                 case JTokenType.Guid:
                 case JTokenType.Uri:
                 case JTokenType.TimeSpan:
-                    if (token is JValue {Value: not null} jValue)
+                    if (token is JValue { Value: not null } jValue)
                     {
                         if (nodeName.Contains('$'))
                         {

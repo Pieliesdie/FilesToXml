@@ -28,7 +28,7 @@ public static class ConverterToXml
 
         var outputPath = options.Output;
         using var errorSw = CreateDefaulStreamWriter(error, encoding);
-        if (options is {Output: not null, ForceSave: false} && File.Exists(outputPath))
+        if (options is { Output: not null, ForceSave: false } && File.Exists(outputPath))
         {
             errorSw.WriteLine("Output file already exists and ForceSave is false");
             return false;
@@ -50,11 +50,10 @@ public static class ConverterToXml
     {
         try
         {
-            var inputFiles = files.ToList();
+            List<IFile> inputFiles = files.ToList();
             IEnumerable<XStreamingElement?> datasets = ProcessFiles(inputFiles, err, log);
             Save(output, datasets, options.DisableFormat);
             inputFiles.ForEach(x => x.Dispose());
-            StreamExtensions.ResetStream(output, log, err);
             log.WriteLine("All files converted to output");
         }
         catch (Exception e)
@@ -63,6 +62,7 @@ public static class ConverterToXml
             return false;
         }
 
+        StreamExtensions.ResetStream(output, log, err);
         return true;
     }
     private static void Save(TextWriter outputSw, IEnumerable<XStreamingElement?> content, bool disableFormat)
@@ -148,10 +148,10 @@ public static class ConverterToXml
     }
     private static StreamWriter CreateDefaulStreamWriter(string path, Encoding encoding)
     {
-        return new StreamWriter(path, false, encoding) {AutoFlush = true};
+        return new StreamWriter(path, false, encoding) { AutoFlush = true };
     }
     private static StreamWriter CreateDefaulStreamWriter(Stream stream, Encoding encoding)
     {
-        return new StreamWriter(stream, encoding, -1, true) {AutoFlush = true};
+        return new StreamWriter(stream, encoding, -1, true) { AutoFlush = true };
     }
 }

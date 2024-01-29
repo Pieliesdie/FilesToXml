@@ -14,6 +14,7 @@ public class DefaultFile : DefaultFileOptions, IFile
         openedStream = stream;
         return opened;
     }
+    public void Dispose() => openedStream?.Dispose();
     protected virtual bool TryOpenStream(string path, TextWriter err, out Stream? stream)
     {
         stream = null;
@@ -27,9 +28,5 @@ public class DefaultFile : DefaultFileOptions, IFile
             err.WriteLine($"'{path}': {ex.Message}");
             return false;
         }
-    }
-    public void Dispose()
-    {
-        openedStream?.Dispose();
     }
 }

@@ -97,7 +97,7 @@ public class CsvToXml : IDelimiterConvertable
     private static char DetectSeparator(string[] lines, IEnumerable<char> separatorChars)
     {
         var q = separatorChars.Select(sep => new
-                {Separator = sep, Found = lines.GroupBy(line => line.Count(ch => ch == sep))})
+                { Separator = sep, Found = lines.GroupBy(line => line.Count(ch => ch == sep)) })
             .OrderByDescending(res => res.Found.Count(grp => grp.Key > 0))
             .ThenBy(res => res.Found.Count())
             .ToList();

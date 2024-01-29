@@ -1,14 +1,51 @@
-﻿import filesToXml, {Converter} from "./bin/filesToXml/index.mjs";
-import fs from 'node:fs'
+﻿import fs from 'node:fs'
 
-let path = "F:/git/FilesToXml/FilesToXml.Tests/Files/json.json";
-let data = new Uint8Array(await fs.readFileSync(path).buffer);
-await filesToXml.boot();
-const options = [
+let csvPath = "E:/git/FilesToXml/FilesToXml.Tests/Files/csv.csv";
+let xlsxPath = "E:/git/FilesToXml/FilesToXml.Tests/Files/xlsx.xlsx";
+const options =
     {
-        i: [[1,2,3]],
-        k: 2
+        disableFormat: false,
+        Files: [
+            {
+                path: csvPath,
+                data: fs.readFileSync(csvPath).toString('base64'),
+                codePage: 1251,
+                label: 'csv-file',
+                delimiter: 'auto'
+            },
+            {
+                path: xlsxPath,
+                data: fs.readFileSync(xlsxPath).toString('base64'),
+                codePage: 1251,
+                label: 'csv-file',
+                delimiter: 'auto'
+            }
+        ]
     }
-]
-console.log(Converter.convert(data));
-await filesToXml.exit();
+
+console.log(await convert(options));
+
+async function convert(options) {
+    let api = await loadApi();
+    return api.convert(options);
+    async function loadApi() {
+        const BootStatus = {
+            Standby: 0,
+            Booting: 1,
+            Booted: 2
+        };
+        const {default: filesToXml, Converter} = await import("./bin/filesToXml/index.mjs");
+        const bootStatus = filesToXml.getStatus();
+        if (bootStatus === BootStatus.Standby) {
+            await filesToXml.boot();
+        } else if (bootStatus === BootStatus.Booting) {
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            while (filesToXml.getStatus() === 1) {
+                await sleep(100);
+            }
+        } else if (bootStatus === BootStatus.Booted) {
+            // Already booted, no need to do anything
+        }
+        return Converter;
+    }
+}

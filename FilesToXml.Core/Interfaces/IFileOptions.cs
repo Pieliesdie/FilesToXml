@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FilesToXml.Core.Interfaces;
+﻿namespace FilesToXml.Core.Interfaces;
 
 public interface IFileOptions
 {

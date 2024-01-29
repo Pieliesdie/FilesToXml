@@ -48,8 +48,8 @@ public class XlsToXlsx
         // Копируем листы из xls и доабвляем в xlsx
         for (var i = 0; i < source.NumberOfSheets; i++)
         {
-            var xssfSheet = (XSSFSheet) destination.CreateSheet(source.GetSheetAt(i).SheetName);
-            var hssfSheet = (HSSFSheet) source.GetSheetAt(i);
+            var xssfSheet = (XSSFSheet)destination.CreateSheet(source.GetSheetAt(i).SheetName);
+            var hssfSheet = (HSSFSheet)source.GetSheetAt(i);
             CopyStyles(hssfSheet, xssfSheet);
             CopySheet(hssfSheet, xssfSheet);
         }
@@ -104,7 +104,7 @@ public class XlsToXlsx
         toCellStyle.TopBorderColor = fromCellStyle.TopBorderColor;
         toCellStyle.VerticalAlignment = fromCellStyle.VerticalAlignment;
         toCellStyle.WrapText = fromCellStyle.WrapText;
-        toCellStyle.SetFont(toWorkbook.GetFontAt((short) (fromCellStyle.GetFont(fromWorkbook).Index + 1)));
+        toCellStyle.SetFont(toWorkbook.GetFontAt((short)(fromCellStyle.GetFont(fromWorkbook).Index + 1)));
     }
     /// <summary>
     ///     Копипрование содержимого листа
@@ -117,8 +117,8 @@ public class XlsToXlsx
         var mergedRegions = new List<CellRangeAddress>();
         for (var i = source.FirstRowNum; i <= source.LastRowNum; i++)
         {
-            var srcRow = (HSSFRow) source.GetRow(i);
-            var destRow = (XSSFRow) destination.CreateRow(i);
+            var srcRow = (HSSFRow)source.GetRow(i);
+            var destRow = (XSSFRow)destination.CreateRow(i);
             if (srcRow == null) continue;
             CopyRow(source, destination, srcRow, destRow, mergedRegions);
             // поиск максимального номера ячейки в строке для копирования ширины столбцов
@@ -144,16 +144,16 @@ public class XlsToXlsx
 
         for (int j = srcRow.FirstCellNum; srcRow.LastCellNum >= 0 && j <= srcRow.LastCellNum; j++)
         {
-            var oldCell = (HSSFCell) srcRow.GetCell(j);
-            var newCell = (XSSFCell) destRow.GetCell(j);
+            var oldCell = (HSSFCell)srcRow.GetCell(j);
+            var newCell = (XSSFCell)destRow.GetCell(j);
             if (oldCell == null) continue;
             // создание новой ячейки в новой таблице
-            newCell ??= (XSSFCell) destRow.CreateCell(j);
+            newCell ??= (XSSFCell)destRow.CreateCell(j);
 
             CopyCell(oldCell, newCell);
             // Ниже идет обработка объединенных ячеек
             // Проверка на вхождение текущей ячейки в число объединенных
-            var mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short) oldCell.ColumnIndex);
+            var mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
             // Если ячейка является объединенное
             if (mergedRegion == null) continue;
             // Проверяем обработывали ли мы уже группу объединенных ячеек или нет
@@ -227,7 +227,7 @@ public class XlsToXlsx
     {
         if (oldCell.CellStyle == null)
             return;
-        newCell.CellStyle = newCell.Sheet.Workbook.GetCellStyleAt((short) (oldCell.CellStyle.Index + 1));
+        newCell.CellStyle = newCell.Sheet.Workbook.GetCellStyleAt((short)(oldCell.CellStyle.Index + 1));
     }
     /// <summary>
     ///     Поиск объединенных ячеек

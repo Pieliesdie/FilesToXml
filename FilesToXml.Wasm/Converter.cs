@@ -1,58 +1,29 @@
 ﻿using System.Text;
 using System.Xml.Linq;
 using FilesToXml.Core;
-using FilesToXml.Core.Defaults;
-using FilesToXml.Core.Interfaces;
 
 namespace FilesToXml.Wasm;
-
-public interface IConverter
-{
-    string Beautify(string xml);
-    string GetBackendName();
-    ConvertResult Convert(test data);
-    long Size(byte[] self);
-}
 
 public class Converter : IConverter
 {
     public string GetBackendName() => $".NET {Environment.Version}";
     public string Beautify(string xml) => XDocument.Parse(xml).ToString();
-    public ConvertResult Convert(test data)
+    public ConvertResult Convert(Input data)
     {
-        Console.WriteLine(data.i == null);
-        Console.WriteLine(data.i?.Length);
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var outSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
-        var errSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
-        var logSw = new StreamWriter(new MemoryStream(), leaveOpen: true);
+        using var outMs = new MemoryStream();
+        using var errMs = new MemoryStream();
+        using var logMs = new MemoryStream();
+        using var outSw = new StreamWriter(outMs, leaveOpen: true) { AutoFlush = true };
+        using var errSw = new StreamWriter(errMs, leaveOpen: true) { AutoFlush = true };
+        using var logSw = new StreamWriter(logMs, leaveOpen: true) { AutoFlush = true };
 
-        // var files = data.Select(x => new File()
-        // {
-        //     
-        // });
-        //_ = ConverterToXml.Convert(data, new DefaultOptions(), outSw, errSw, logSw);
+        _ = ConverterToXml.Convert(data.Files, data, outSw, errSw, logSw);
 
-        using var outSr = new StreamReader(outSw.BaseStream);
-        using var errorSr = new StreamReader(errSw.BaseStream);
-        using var logSr = new StreamReader(logSw.BaseStream);
+        using var outSr = new StreamReader(outMs);
+        using var errorSr = new StreamReader(errMs);
+        using var logSr = new StreamReader(logMs);
         return new ConvertResult(outSr.ReadToEnd(), errorSr.ReadToEnd(), logSr.ReadToEnd());
     }
-    public long Size(byte[] self)
-    {
-        return (new MemoryStream(self)).Length;
-    }
 }
-
-public record test(byte[] i, int k);
 public record ConvertResult(string? Result, string? Error, string? Log);
-
-public class File
-{
-    public byte[] Data { get; set; }
-    public string Path { get; set; }
-    public int CodePage { get;  set; }
-    public string? Label { get;  set; }
-    public string Delimiter { get; set;  }
-    public char[] SearchingDelimiters { get;  set; }
-}

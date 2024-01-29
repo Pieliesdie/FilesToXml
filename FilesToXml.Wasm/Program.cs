@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 [assembly: JSPreferences(Space = [".+", "Converter"])]
 // Generate C# -> JavaScript interop handlers for specified contracts.
 [assembly: JSExport(typeof(IConverter))]
-
 // Perform dependency injection.
 new ServiceCollection()
     .AddSingleton<IConverter, Converter>()
