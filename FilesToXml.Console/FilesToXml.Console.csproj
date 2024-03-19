@@ -3,8 +3,7 @@
         <LangVersion>latest</LangVersion>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net8.0;</TargetFrameworks>
-        <Description>Converts files to xml
-        </Description>
+        <Description>Converts files to xml</Description>
         <Company>Infostandart</Company>
         <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
         <NeutralLanguage/>
@@ -16,19 +15,12 @@
         <PackageId>Converter</PackageId>
         <Product>Converter</Product>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <InternalsVisibleTo Include ="FilesToXml.Tests"/>
+        <InternalsVisibleTo Include="FilesToXml.Tests"/>
     </ItemGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net8.0|Release'">
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
         <InvariantGlobalization>true</InvariantGlobalization>
         <DebuggerSupport>false</DebuggerSupport>
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
@@ -38,7 +30,9 @@
         <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
         <UseNativeHttpHandler>true</UseNativeHttpHandler>
         <TrimMode>partial</TrimMode>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="..\README.md"/>
     </ItemGroup>
@@ -49,6 +43,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Properties\PublishProfiles\" />
     </ItemGroup>
 
 </Project>

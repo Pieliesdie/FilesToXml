@@ -103,4 +103,9 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBB58B2D-DC21-42D2-AE2F-28F7CE785DCB}
 	EndGlobalSection
+	GlobalSection(RiderSharedRunConfigurations) = postSolution
+		File = FilesToXml.Console\Properties\PublishProfiles\linux-x64 publish.run.xml
+		File = FilesToXml.Console\Properties\PublishProfiles\osx-x64 publish.run.xml
+		File = FilesToXml.Console\Properties\PublishProfiles\windows-x64 publish.run.xml
+	EndGlobalSection
 EndGlobal
