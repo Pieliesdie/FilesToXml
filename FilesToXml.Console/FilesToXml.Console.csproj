@@ -2,7 +2,7 @@
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;</TargetFrameworks>
         <Description>Converts files to xml
         </Description>
         <Company>Infostandart</Company>
@@ -26,7 +26,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net8.0|Release'">
-        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

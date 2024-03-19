@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "ES6",
-    "module": "Node16",
-    "moduleResolution": "node"
-  },
-  "exclude": [ "node_modules"  ]
-}

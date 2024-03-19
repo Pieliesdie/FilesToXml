@@ -102,7 +102,7 @@ public class CoverterToXmlTests
         Assert.Equal(2, xdoc.XPathSelectElements("/DATA/DATASET").Count());
 
         var cellValue = xdoc
-            .XPathSelectElement("/DATA/DATASET/TABLE/R[@id=79]")?
+            .XPathSelectElement("/DATA/DATASET[@label='test1']/TABLE/R[@id=79]")?
             .Attribute("C5")?.Value;
         Assert.Equal("апрель", cellValue);
     }

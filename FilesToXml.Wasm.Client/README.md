@@ -1,3 +1,0 @@
-# FilesToXml.Wasm.Client
-
-

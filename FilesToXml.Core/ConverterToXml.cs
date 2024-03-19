@@ -58,7 +58,7 @@ public static class ConverterToXml
         }
         catch (Exception e)
         {
-            err.WriteLine($"Failed to convert result document: {e.Message}");
+            err.WriteLine($"Failed to convert result document: {e}");
             return false;
         }
 
@@ -111,7 +111,7 @@ public static class ConverterToXml
         }
         catch (Exception e)
         {
-            err.WriteLine($"Failed to convert file: {filename}, {e.Message}");
+            err.WriteLine($"Failed to convert file: {filename}, {e}");
             return null;
         }
     }

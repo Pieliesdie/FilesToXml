@@ -4,6 +4,7 @@
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
         <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
         <ImplicitUsings>enable</ImplicitUsings>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateLibraryLayout>true</GenerateLibraryLayout>
         <Nullable>enable</Nullable>
         <!-- Disabling non-essential .NET features reduces minimal build size by ~35%. -->

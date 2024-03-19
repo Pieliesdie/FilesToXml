@@ -7,18 +7,15 @@ const options =
         disableFormat: false,
         Files: [
             {
-                path: csvPath,
+                path: "csv.csv",
                 data: fs.readFileSync(csvPath).toString('base64'),
                 codePage: 1251,
                 label: 'csv-file',
                 delimiter: 'auto'
             },
             {
-                path: xlsxPath,
-                data: fs.readFileSync(xlsxPath).toString('base64'),
-                codePage: 1251,
-                label: 'csv-file',
-                delimiter: 'auto'
+                path: "xlsx.xlsx",
+                data: fs.readFileSync(xlsxPath).toString('base64')
             }
         ]
     }
@@ -28,6 +25,7 @@ console.log(await convert(options));
 async function convert(options) {
     let api = await loadApi();
     return api.convert(options);
+
     async function loadApi() {
         const BootStatus = {
             Standby: 0,
@@ -40,7 +38,7 @@ async function convert(options) {
             await filesToXml.boot();
         } else if (bootStatus === BootStatus.Booting) {
             const sleep = ms => new Promise(r => setTimeout(r, ms));
-            while (filesToXml.getStatus() === 1) {
+            while (filesToXml.getStatus() === BootStatus.Booting) {
                 await sleep(100);
             }
         } else if (bootStatus === BootStatus.Booted) {
