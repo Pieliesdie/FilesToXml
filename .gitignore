@@ -36,3 +36,4 @@ packages/
 *.dll
 */obj/*
 /.idea
+/FilesToXml.Wasm.Client/node_modules

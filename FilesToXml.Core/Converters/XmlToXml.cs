@@ -5,7 +5,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
@@ -25,7 +24,6 @@ public class XmlToXml : IEncodingConvertable
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, encoding, rootContent));
     }

@@ -22,7 +22,6 @@ public class XlsxToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
@@ -42,7 +41,7 @@ public class XlsxToXml : IConvertable
             (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>())
             .ToArrayOrEmpty();
 
-        IEnumerable<XStreamingElement>? sheets = doc.WorkbookPart?
+        IEnumerable<XStreamingElement?>? sheets = doc.WorkbookPart?
             .Workbook
             .Descendants<Sheet>()
             .Select((sheet, index) => new SheetModel
@@ -58,12 +57,11 @@ public class XlsxToXml : IConvertable
             .Where(sheet => sheet != null);
 
         foreach (var sheet in sheets ?? Enumerable.Empty<XStreamingElement>())
-            yield return sheet;
+            yield return sheet!;
     }
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
     {
-        IEnumerable<XElement?> rows = ReadRows(sheet);
-        //TODO: try rows.ToLookup ?
+        IEnumerable<XElement?> rows = ReadRows(sheet).CacheFirstElement();
         return rows.Any()
             ? new XStreamingElement("TABLE", new XAttribute("name", sheet.Name), new XAttribute("id", sheet.Id), rows)
             : null;

@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using FilesToXml.Core;
+using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Interfaces;
 using FilesToXml.WPF.Helpers;
 
 namespace FilesToXml.WPF.Model;
@@ -8,11 +10,6 @@ namespace FilesToXml.WPF.Model;
 public record FileUpload
 {
     private readonly string filePath = string.Empty;
-
-    public FileUpload()
-    {
-    }
-
     public string Path
     {
         get => filePath;
@@ -30,4 +27,16 @@ public record FileUpload
     public string Extension { get; private set; } = string.Empty;
     public Encoding Encoding { get; set; } = Encoding.UTF8;
     public string Delimiter { get; set; } = "auto";
+
+    public IFile MapToIFile()
+    {
+        return new DefaultFile()
+        {
+            Path = Path,
+            Delimiter = Delimiter,
+            CodePage = Encoding.CodePage,
+            Label = Label,
+            SearchingDelimiters = [';', '|', '\t', ',']
+        };
+    }
 }

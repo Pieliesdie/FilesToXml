@@ -7,7 +7,6 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
@@ -20,7 +19,6 @@ public class DocxToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }

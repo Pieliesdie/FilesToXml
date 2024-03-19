@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace FilesToXml.Core;
+namespace FilesToXml.Core.Defaults;
 
-public static class Defaults
+public static class DefaultValue
 {
     public static char[] SearchingDelimiters { get; } = [';', '|', '\t', ','];
     public static string Delimiter => ";";

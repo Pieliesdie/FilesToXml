@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CommandLine;
-using FilesToXml.Core;
+using FilesToXml.Core.Defaults;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable once ClassNeverInstantiated.Global
 namespace FilesToXml.Console;
 
-public class Options : IOptions
+public class Options
 {
     [Option("support",
         Required = false,
@@ -39,7 +40,7 @@ public class Options : IOptions
     [Option('D', "searchingDelimiters",
         Required = false,
         Default = new[] { ';', '|', '\t', ',' },
-        HelpText = "Set delimiters for auto-search in csv files")]
+        HelpText = "Set delimiters for auto-search in csv files when '-d' is set to 'auto'")]
     public IEnumerable<char> SearchingDelimiters { get; set; } = new[] { ';', '|', '\t', ',' };
     [Option('e', "inEncoding",
         Required = false,

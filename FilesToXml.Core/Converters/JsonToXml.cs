@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -42,7 +41,6 @@ public class JsonToXml : IEncodingConvertable
     }
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, encoding, rootContent));
     }

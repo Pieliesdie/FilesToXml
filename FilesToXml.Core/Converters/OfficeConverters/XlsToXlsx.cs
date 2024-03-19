@@ -29,16 +29,10 @@ public class XlsToXlsx
     /// <param name="destPath"></param>
     public void ConvertToXlsxFile(string xlsPath, string destPath)
     {
-        MemoryStream result;
-        using (var fs = new FileStream(xlsPath, FileMode.Open))
-        {
-            result = Convert(fs);
-        }
-
-        using (var fs = new FileStream(destPath, FileMode.OpenOrCreate))
-        {
-            fs.Write(result.ToArray());
-        }
+        using var fsSrc = new FileStream(xlsPath, FileMode.Open);
+        using var result = Convert(fsSrc);
+        using var fs = new FileStream(destPath, FileMode.OpenOrCreate);
+        fs.Write(result.ToArray());
     }
     /// <summary>
     ///     Метод инициализирует процесс конвертации

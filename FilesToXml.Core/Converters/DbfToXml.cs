@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml.Linq;
 using DbfDataReader;
 using FilesToXml.Core.Converters.Interfaces;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
@@ -17,7 +16,6 @@ public class DbfToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }

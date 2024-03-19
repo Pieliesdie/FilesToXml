@@ -28,7 +28,7 @@ public class CoverterToXmlTests
         using var errorStream = new MemoryStream();
 
         // Act
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         // Assert
         Assert.True(success);
@@ -56,7 +56,7 @@ public class CoverterToXmlTests
         using var outputStream = new MemoryStream();
         using var errorStream = new MemoryStream();
 
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         Assert.True(success);
 
@@ -87,7 +87,7 @@ public class CoverterToXmlTests
         using var outputStream = new MemoryStream();
         using var errorStream = new MemoryStream();
 
-        var success = ConverterToXml.Convert(options, outputStream, errorStream);
+        var success = ConverterToXml.Convert(options.MapToIOptions(), outputStream, errorStream);
 
         Assert.True(success);
 
@@ -102,7 +102,7 @@ public class CoverterToXmlTests
         Assert.Equal(2, xdoc.XPathSelectElements("/DATA/DATASET").Count());
 
         var cellValue = xdoc
-            .XPathSelectElement("/DATA/DATASET/TABLE/R[@id=79]")?
+            .XPathSelectElement("/DATA/DATASET[@label='test1']/TABLE/R[@id=79]")?
             .Attribute("C5")?.Value;
         Assert.Equal("апрель", cellValue);
     }

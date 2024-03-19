@@ -3,7 +3,6 @@ using System.IO;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Converters.OfficeConverters;
-using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
 
@@ -15,7 +14,6 @@ public class XlsToXml : IConvertable
     }
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
-        path = path.RelativePathToAbsoluteIfNeed();
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }

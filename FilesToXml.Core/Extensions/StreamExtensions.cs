@@ -7,17 +7,23 @@ namespace FilesToXml.Core.Extensions;
 
 public static class StreamExtensions
 {
-    public static IEnumerable<string?> ReadAllLines(this StreamReader reader)
+    public static IEnumerable<string> ReadAllLines(this StreamReader reader)
     {
         while (!reader.EndOfStream)
-            yield return reader.ReadLine();
+        {
+            var line = reader.ReadLine();
+            if (line is null) continue;
+            yield return line;
+        }
     }
-    public static IEnumerable<string?> ReadAllLinesWithNewLine(this Stream stream, Encoding encoding)
+    public static IEnumerable<string> ReadAllLinesWithNewLine(this Stream stream, Encoding encoding)
     {
         using var sr = new StreamReader(stream, encoding);
         while (!sr.EndOfStream)
         {
-            yield return sr.ReadLine();
+            var line = sr.ReadLine();
+            if (line is null) continue;
+            yield return line;
             yield return Environment.NewLine;
         }
     }
