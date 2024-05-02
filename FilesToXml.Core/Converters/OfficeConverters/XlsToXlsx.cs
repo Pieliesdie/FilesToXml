@@ -22,6 +22,7 @@ public class XlsToXlsx
         using var fs = new FileStream(path, FileMode.OpenOrCreate);
         fs.Write(result.ToArray());
     }
+    
     /// <summary>
     ///     Создание из файла xls файла xlsx по указанному пути
     /// </summary>
@@ -34,6 +35,7 @@ public class XlsToXlsx
         using var fs = new FileStream(destPath, FileMode.OpenOrCreate);
         fs.Write(result.ToArray());
     }
+    
     /// <summary>
     ///     Метод инициализирует процесс конвертации
     /// </summary>
@@ -53,20 +55,26 @@ public class XlsToXlsx
             CopyStyles(hssfSheet, xssfSheet);
             CopySheet(hssfSheet, xssfSheet);
         }
-
+        
         // Возвращаем сконвертированный результат
         var ms = new MemoryStream();
         destination.Write(ms, true);
         return ms;
     }
+    
     private static void CopyStyles(ISheet from, ISheet to)
     {
         for (short i = 0; i <= from.Workbook.NumberOfFonts; i++)
+        {
             CopyFont(to.Workbook.CreateFont(), from.Workbook.GetFontAt(i));
-
+        }
+        
         for (short i = 0; i < from.Workbook.NumCellStyles; i++)
+        {
             CopyStyle(to.Workbook.CreateCellStyle(), from.Workbook.GetCellStyleAt(i), to.Workbook, from.Workbook);
+        }
     }
+    
     private static void CopyFont(IFont toFront, IFont fontFrom)
     {
         toFront.IsBold = fontFrom.IsBold;
@@ -78,8 +86,13 @@ public class XlsToXlsx
         toFront.IsItalic = fontFrom.IsItalic;
         toFront.IsStrikeout = fontFrom.IsStrikeout;
     }
-    private static void CopyStyle(ICellStyle toCellStyle, ICellStyle fromCellStyle, IWorkbook toWorkbook,
-        IWorkbook fromWorkbook)
+    
+    private static void CopyStyle(
+        ICellStyle toCellStyle,
+        ICellStyle fromCellStyle,
+        IWorkbook toWorkbook,
+        IWorkbook fromWorkbook
+    )
     {
         toCellStyle.Alignment = fromCellStyle.Alignment;
         toCellStyle.BorderBottom = fromCellStyle.BorderBottom;
@@ -106,6 +119,7 @@ public class XlsToXlsx
         toCellStyle.WrapText = fromCellStyle.WrapText;
         toCellStyle.SetFont(toWorkbook.GetFontAt((short)(fromCellStyle.GetFont(fromWorkbook).Index + 1)));
     }
+    
     /// <summary>
     ///     Копипрование содержимого листа
     /// </summary>
@@ -119,15 +133,26 @@ public class XlsToXlsx
         {
             var srcRow = (HSSFRow)source.GetRow(i);
             var destRow = (XSSFRow)destination.CreateRow(i);
-            if (srcRow == null) continue;
+            if (srcRow == null)
+            {
+                continue;
+            }
+            
             CopyRow(source, destination, srcRow, destRow, mergedRegions);
             // поиск максимального номера ячейки в строке для копирования ширины столбцов
-            if (srcRow.LastCellNum > maxColumnNum) maxColumnNum = srcRow.LastCellNum;
+            if (srcRow.LastCellNum > maxColumnNum)
+            {
+                maxColumnNum = srcRow.LastCellNum;
+            }
         }
-
+        
         // копируем ширину столбцов исходного документа
-        for (var i = 0; i <= maxColumnNum; i++) destination.SetColumnWidth(i, source.GetColumnWidth(i));
+        for (var i = 0; i <= maxColumnNum; i++)
+        {
+            destination.SetColumnWidth(i, source.GetColumnWidth(i));
+        }
     }
+    
     /// <summary>
     ///     Копирование содежимого ячеек
     /// </summary>
@@ -136,35 +161,53 @@ public class XlsToXlsx
     /// <param name="srcRow"></param>
     /// <param name="destRow"></param>
     /// <param name="mergedRegions"></param>
-    private static void CopyRow(ISheet srcSheet, ISheet destSheet, IRow srcRow, IRow destRow,
-        ICollection<CellRangeAddress> mergedRegions)
+    private static void CopyRow(
+        ISheet srcSheet,
+        ISheet destSheet,
+        IRow srcRow,
+        IRow destRow,
+        ICollection<CellRangeAddress> mergedRegions
+    )
     {
         // Копирование высоты строки
         destRow.Height = srcRow.Height;
-
+        
         for (int j = srcRow.FirstCellNum; srcRow.LastCellNum >= 0 && j <= srcRow.LastCellNum; j++)
         {
             var oldCell = (HSSFCell)srcRow.GetCell(j);
             var newCell = (XSSFCell)destRow.GetCell(j);
-            if (oldCell == null) continue;
+            if (oldCell == null)
+            {
+                continue;
+            }
+            
             // создание новой ячейки в новой таблице
             newCell ??= (XSSFCell)destRow.CreateCell(j);
-
+            
             CopyCell(oldCell, newCell);
             // Ниже идет обработка объединенных ячеек
             // Проверка на вхождение текущей ячейки в число объединенных
             var mergedRegion = GetMergedRegion(srcSheet, srcRow.RowNum, (short)oldCell.ColumnIndex);
             // Если ячейка является объединенное
-            if (mergedRegion == null) continue;
+            if (mergedRegion == null)
+            {
+                continue;
+            }
+            
             // Проверяем обработывали ли мы уже группу объединенных ячеек или нет
             var newMergedRegion = new CellRangeAddress(mergedRegion.FirstRow,
                 mergedRegion.LastRow, mergedRegion.FirstColumn, mergedRegion.LastColumn);
             // Если не обрабатывали, то добавляем в текущий диапазон оъединенных ячеек текущую ячейку
-            if (!IsNewMergedRegion(newMergedRegion, mergedRegions)) continue;
+            if (!IsNewMergedRegion(newMergedRegion, mergedRegions))
+            {
+                continue;
+            }
+            
             mergedRegions.Add(newMergedRegion);
             destSheet.AddMergedRegion(newMergedRegion);
         }
     }
+    
     /// <summary>
     ///     Копирование ячеек
     /// </summary>
@@ -175,6 +218,7 @@ public class XlsToXlsx
         CopyCellStyle(oldCell, newCell);
         CopyCellValue(oldCell, newCell);
     }
+    
     /// <summary>
     ///     Копирование содержимого ячеек с соранением типа данных
     /// </summary>
@@ -219,16 +263,21 @@ public class XlsToXlsx
                         newCell.SetCellErrorValue(oldCell.ErrorCellValue);
                         break;
                 }
-
+                
                 break;
         }
     }
+    
     private static void CopyCellStyle(ICell oldCell, ICell newCell)
     {
         if (oldCell.CellStyle == null)
+        {
             return;
+        }
+        
         newCell.CellStyle = newCell.Sheet.Workbook.GetCellStyleAt((short)(oldCell.CellStyle.Index + 1));
     }
+    
     /// <summary>
     ///     Поиск объединенных ячеек
     /// </summary>
@@ -241,19 +290,25 @@ public class XlsToXlsx
         for (var i = 0; i < sheet.NumMergedRegions; i++)
         {
             var merged = sheet.GetMergedRegion(i);
-            if (merged.IsInRange(rowNum, cellNum)) return merged;
+            if (merged.IsInRange(rowNum, cellNum))
+            {
+                return merged;
+            }
         }
-
+        
         return null;
     }
+    
     /// <summary>
     ///     Проверка нахождения ячейки в новом объедененном поле, или в уже обработанном
     /// </summary>
     /// <param name="newMergedRegion"></param>
     /// <param name="mergedRegions"></param>
     /// <returns></returns>
-    private static bool IsNewMergedRegion(CellRangeAddressBase newMergedRegion,
-        IEnumerable<CellRangeAddress> mergedRegions)
+    private static bool IsNewMergedRegion(
+        CellRangeAddressBase newMergedRegion,
+        IEnumerable<CellRangeAddress> mergedRegions
+    )
     {
         return !mergedRegions.Any(r =>
             r.FirstColumn == newMergedRegion.FirstColumn &&

@@ -5,121 +5,119 @@ using System.Text;
 using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.doc.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat;
+
+public class StringTable :
+    IVisitable
 {
-    public class StringTable :
-        IVisitable
+    private Encoding _enc;
+    public ushort cbExtra;
+    public int cData;
+    public List<ByteStructure> Data;
+    public bool fExtend;
+    public List<string> Strings;
+    
+    public StringTable(Type dataType, VirtualStreamReader reader)
     {
-        public bool fExtend;
-
-        public int cData;
-
-        public ushort cbExtra;
-
-        public List<string> Strings;
-
-        public List<ByteStructure> Data;
-
-        Encoding _enc;
-
-        public StringTable(Type dataType, VirtualStreamReader reader)
+        Strings = new List<string>();
+        Data = new List<ByteStructure>();
+        
+        Parse(dataType, reader, (uint)reader.BaseStream.Position);
+    }
+    
+    public StringTable(Type dataType, VirtualStream tableStream, uint fc, uint lcb)
+    {
+        Strings = new List<string>();
+        Data = new List<ByteStructure>();
+        
+        if (lcb > 0)
         {
-            this.Strings = new List<string>();
-            this.Data = new List<ByteStructure>();
-
-            this.Parse(dataType, reader, (uint)reader.BaseStream.Position);
+            tableStream.Seek(fc, SeekOrigin.Begin);
+            Parse(dataType, new VirtualStreamReader(tableStream), fc);
         }
-
-        public StringTable(Type dataType, VirtualStream tableStream, uint fc, uint lcb)
+    }
+    
+    public void Convert<T>(T mapping)
+    {
+        ((IMapping<StringTable>)mapping).Apply(this);
+    }
+    
+    private void Parse(Type dataType, VirtualStreamReader reader, uint fc)
+    {
+        //read fExtend
+        if (reader.ReadUInt16() == 0xFFFF)
         {
-            this.Strings = new List<string>();
-            this.Data = new List<ByteStructure>();
-
-            if (lcb > 0)
-            {
-                tableStream.Seek((long)fc, SeekOrigin.Begin);
-                this.Parse(dataType, new VirtualStreamReader(tableStream), fc);
-            }
+            //if the first 2 bytes are 0xFFFF the STTB contains unicode characters
+            fExtend = true;
+            _enc = Encoding.Unicode;
         }
-
-        void Parse(Type dataType, VirtualStreamReader reader, uint fc)
+        else
         {
-            //read fExtend
-            if (reader.ReadUInt16() == 0xFFFF)
+            //else the STTB contains 1byte characters and the fExtend field is non-existend
+            //seek back to the beginning
+            fExtend = false;
+            _enc = Encoding.ASCII;
+            reader.BaseStream.Seek(fc, SeekOrigin.Begin);
+        }
+        
+        //read cData
+        var cDataStart = reader.BaseStream.Position;
+        var c = reader.ReadUInt16();
+        if (c != 0xFFFF)
+        {
+            //cData is a 2byte unsigned Integer and the read bytes are already cData
+            cData = c;
+        }
+        else
+        {
+            //cData is a 4byte signed Integer, so we need to seek back
+            reader.BaseStream.Seek(fc + cDataStart, SeekOrigin.Begin);
+            cData = reader.ReadInt32();
+        }
+        
+        //read cbExtra
+        cbExtra = reader.ReadUInt16();
+        
+        //read the strings and extra datas
+        for (var i = 0; i < cData; i++)
+        {
+            var cchData = 0;
+            var cbData = 0;
+            if (fExtend)
             {
-                //if the first 2 bytes are 0xFFFF the STTB contains unicode characters
-                this.fExtend = true;
-                this._enc = Encoding.Unicode;
+                cchData = reader.ReadUInt16();
+                cbData = cchData * 2;
             }
             else
             {
-                //else the STTB contains 1byte characters and the fExtend field is non-existend
-                //seek back to the beginning
-                this.fExtend = false;
-                this._enc = Encoding.ASCII;
-                reader.BaseStream.Seek((long)fc, SeekOrigin.Begin);
+                cchData = reader.ReadByte();
+                cbData = cchData;
             }
-
-            //read cData
-            long cDataStart = reader.BaseStream.Position;
-            ushort c = reader.ReadUInt16();
-            if (c != 0xFFFF)
+            
+            var posBeforeType = reader.BaseStream.Position;
+            
+            if (dataType == typeof(string))
             {
-                //cData is a 2byte unsigned Integer and the read bytes are already cData
-                this.cData = (int)c;
+                //It's a real string table
+                Strings.Add(_enc.GetString(reader.ReadBytes(cbData)));
             }
             else
             {
-                //cData is a 4byte signed Integer, so we need to seek back
-                reader.BaseStream.Seek((long)fc + cDataStart, SeekOrigin.Begin);
-                this.cData = reader.ReadInt32();
+                //It's a modified string table that contains custom data
+                var constructor = dataType.GetConstructor(new[] { typeof(VirtualStreamReader), typeof(int) });
+                var data = (ByteStructure)constructor.Invoke(new object[] { reader, cbData });
+                Data.Add(data);
             }
-
-            //read cbExtra
-            this.cbExtra = reader.ReadUInt16();
-
-            //read the strings and extra datas
-            for (int i = 0; i < this.cData; i++)
+            
+            reader.BaseStream.Seek(posBeforeType + cbData, SeekOrigin.Begin);
+            
+            //skip the extra byte
+            reader.ReadBytes(cbExtra);
+            
+            if (reader.BaseStream.Position == reader.BaseStream.Length)
             {
-                int cchData = 0;
-                int cbData = 0;
-                if (this.fExtend)
-                {
-                    cchData = (int)reader.ReadUInt16();
-                    cbData = cchData * 2;
-                }
-                else
-                {
-                    cchData = (int)reader.ReadByte();
-                    cbData = cchData;
-                }
-
-                long posBeforeType = reader.BaseStream.Position;
-
-                if (dataType == typeof(string))
-                {
-                    //It's a real string table
-                    this.Strings.Add(this._enc.GetString(reader.ReadBytes(cbData)));
-                }
-                else
-                {
-                    //It's a modified string table that contains custom data
-                    var constructor = dataType.GetConstructor(new Type[] { typeof(VirtualStreamReader), typeof(int) });
-                    var data = (ByteStructure)constructor.Invoke(new object[] { reader, cbData });
-                    this.Data.Add(data);
-                }
-
-                reader.BaseStream.Seek(posBeforeType + cbData, SeekOrigin.Begin);
-
-                //skip the extra byte
-                reader.ReadBytes(this.cbExtra);
-
-                if (reader.BaseStream.Position == reader.BaseStream.Length)
-                    break; // At EoF
+                break; // At EoF
             }
         }
-
-        public void Convert<T>(T mapping) =>
-            ((IMapping<StringTable>)mapping).Apply(this);
     }
 }

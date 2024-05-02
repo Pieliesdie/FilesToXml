@@ -1,89 +1,57 @@
-using b2xtranslator.StructuredStorage.Common;
 using System.IO;
+using b2xtranslator.StructuredStorage.Common;
 
-namespace b2xtranslator.StructuredStorage.Writer
+namespace b2xtranslator.StructuredStorage.Writer;
+
+/// <summary>
+///     Class which pools the different elements of a structured storage in a context.
+///     Author math.
+/// </summary>
+internal class StructuredStorageContext
 {
-
+    // The handler of the directory stream of this context.
+    
+    // The fat of this context.
+    
+    // The header of this context.
+    
+    // The internal bit converter of this context.
+    
+    // The mini fat of this context.
+    
+    // The root directroy entry of this context.
+    private uint _sidCounter;
+    
+    // The handler of the output stream of this context.
+    
     /// <summary>
-    /// Class which pools the different elements of a structured storage in a context.
-    /// Author math.
+    ///     Constructor.
     /// </summary>
-    internal class StructuredStorageContext
+    internal StructuredStorageContext()
     {
-        private uint _sidCounter = 0x0;
-
-        // The header of this context.
-        Header _header;
-        internal Header Header
-        {
-            get { return this._header; }            
-        }
-
-        // The fat of this context.
-        Fat _fat;
-        internal Fat Fat
-        {
-            get { return this._fat; }            
-        }
-
-        // The mini fat of this context.
-        MiniFat _miniFat;
-        internal MiniFat MiniFat
-        {
-            get { return this._miniFat; }            
-        }
-
-        // The handler of the output stream of this context.
-        OutputHandler _tempOutputStream;
-        internal OutputHandler TempOutputStream
-        {
-            get { return this._tempOutputStream; }            
-        }
-
-        // The handler of the directory stream of this context.
-        OutputHandler _directoryStream;
-        internal OutputHandler DirectoryStream
-        {
-            get { return this._directoryStream; }
-        }
-
-        // The internal bit converter of this context.
-        InternalBitConverter _internalBitConverter;
-        internal InternalBitConverter InternalBitConverter
-        {
-            get { return this._internalBitConverter; }
-        }
-
-        // The root directroy entry of this context.
-        private RootDirectoryEntry _rootDirectoryEntry;
-        public RootDirectoryEntry RootDirectoryEntry
-        {
-            get { return this._rootDirectoryEntry; }
-        }
-
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        internal StructuredStorageContext()
-        {
-            this._tempOutputStream = new OutputHandler(new MemoryStream());
-            this._directoryStream = new OutputHandler(new MemoryStream());
-            this._header = new Header(this);
-            this._internalBitConverter = new InternalBitConverter(true);
-            this._fat = new Fat(this);
-            this._miniFat = new MiniFat(this);
-            this._rootDirectoryEntry = new RootDirectoryEntry(this);
-        }
-
-
-        /// <summary>
-        ///  Returns a new sid for directory entries in this context.
-        /// </summary>
-        /// <returns>The new sid.</returns>
-        internal uint getNewSid()
-        {
-            return ++this._sidCounter;
-        }
+        TempOutputStream = new OutputHandler(new MemoryStream());
+        DirectoryStream = new OutputHandler(new MemoryStream());
+        Header = new Header(this);
+        InternalBitConverter = new InternalBitConverter(true);
+        Fat = new Fat(this);
+        MiniFat = new MiniFat(this);
+        RootDirectoryEntry = new RootDirectoryEntry(this);
+    }
+    
+    internal Header Header { get; }
+    internal Fat Fat { get; }
+    internal MiniFat MiniFat { get; }
+    internal OutputHandler TempOutputStream { get; }
+    internal OutputHandler DirectoryStream { get; }
+    internal InternalBitConverter InternalBitConverter { get; }
+    public RootDirectoryEntry RootDirectoryEntry { get; }
+    
+    /// <summary>
+    ///     Returns a new sid for directory entries in this context.
+    /// </summary>
+    /// <returns>The new sid.</returns>
+    internal uint getNewSid()
+    {
+        return ++_sidCounter;
     }
 }

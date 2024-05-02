@@ -9,11 +9,11 @@
     <ItemGroup>
         <PackageReference Include="CsvTextFieldParser" Version="1.2.2"/>
         <PackageReference Include="DbfDataReader" Version="0.9.0"/>
-        <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
+        <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
         <PackageReference Include="NPOI" Version="2.6.2"/>
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\b2xtranslator\Common\b2xtranslator.csproj"/>
         <ProjectReference Include="..\b2xtranslator\Doc\b2xtranslator.doc.csproj"/>

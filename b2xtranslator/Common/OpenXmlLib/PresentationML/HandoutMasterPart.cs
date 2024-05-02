@@ -1,24 +1,12 @@
-namespace b2xtranslator.OpenXmlLib.PresentationML
+namespace b2xtranslator.OpenXmlLib.PresentationML;
+
+public class HandoutMasterPart : SlideMasterPart
 {
-    public class HandoutMasterPart : SlideMasterPart
-    {
-        public HandoutMasterPart(OpenXmlPartContainer parent, int partIndex)
-            : base(parent, partIndex)
-        {
-        } 
-        
-        public override string ContentType
-        {
-            get { return PresentationMLContentTypes.HandoutMaster; }
-        }
-
-        public override string RelationshipType
-        {
-            get { return OpenXmlRelationshipTypes.HandoutMaster; }
-        }
-
-        public override string TargetName { get { return "handoutMaster" + this.PartIndex; } }
-        public override string TargetDirectory { get { return "handoutMasters"; } }
-
-    }
+    public HandoutMasterPart(OpenXmlPartContainer parent, int partIndex)
+        : base(parent, partIndex) { }
+    
+    public override string ContentType => PresentationMLContentTypes.HandoutMaster;
+    public override string RelationshipType => OpenXmlRelationshipTypes.HandoutMaster;
+    public override string TargetName => "handoutMaster" + PartIndex;
+    public override string TargetDirectory => "handoutMasters";
 }

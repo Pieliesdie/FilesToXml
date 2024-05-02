@@ -1,17 +1,14 @@
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+[OfficeShapeType(135)]
+internal class FlowChartDelayType : ShapeType
 {
-    [OfficeShapeType(135)]
-    class FlowChartDelayType : ShapeType
+    public FlowChartDelayType()
     {
-        public FlowChartDelayType()
-        {
-            this.ShapeConcentricFill = true;
-            this.Joins = JoinStyle.miter;
-            this.Path = "m10800,qx21600,10800,10800,21600l,21600,,xe";
-            this.ConnectorLocations = "Rectangle";
-            this.TextboxRectangle = "0,3163,18437,18437";
-        }
+        ShapeConcentricFill = true;
+        Joins = JoinStyle.miter;
+        Path = "m10800,qx21600,10800,10800,21600l,21600,,xe";
+        ConnectorLocations = "Rectangle";
+        TextboxRectangle = "0,3163,18437,18437";
     }
 }
-
-

@@ -9,6 +9,7 @@ public interface IConvertable
     ///     Convert some data from Stream
     /// </summary>
     XStreamingElement Convert(Stream stream, params object?[] rootContent);
+    
     /// <summary>
     ///     Convert some data from file
     /// </summary>

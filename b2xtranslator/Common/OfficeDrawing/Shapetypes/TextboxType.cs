@@ -1,15 +1,14 @@
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+[OfficeShapeType(202)]
+public class TextboxType : ShapeType
 {
-    [OfficeShapeType(202)]
-    public class TextboxType : ShapeType
+    public TextboxType()
     {
-        public TextboxType()
-        {
-            this.ShapeConcentricFill = true;
-
-            this.Joins = JoinStyle.miter;
-
-            this.Path = "m,l,21600r21600,l21600,xe";
-        }
+        ShapeConcentricFill = true;
+        
+        Joins = JoinStyle.miter;
+        
+        Path = "m,l,21600r21600,l21600,xe";
     }
 }

@@ -3,85 +3,83 @@ using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.OpenXmlLib;
 
-namespace b2xtranslator.doc.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping;
+
+public class CommandTableMapping : AbstractOpenXmlMapping,
+    IMapping<CommandTable>
 {
-    public class CommandTableMapping : AbstractOpenXmlMapping,
-        IMapping<CommandTable>
+    private readonly ConversionContext _ctx;
+    private CommandTable _tcg;
+    
+    public CommandTableMapping(ConversionContext ctx)
+        : base(XmlWriter.Create(ctx.Docx.MainDocumentPart.CustomizationsPart.GetStream(), ctx.WriterSettings))
     {
-        private CommandTable _tcg;
-        private ConversionContext _ctx;
-
-        public CommandTableMapping(ConversionContext ctx)
-            : base(XmlWriter.Create(ctx.Docx.MainDocumentPart.CustomizationsPart.GetStream(), ctx.WriterSettings))
+        _ctx = ctx;
+    }
+    
+    public void Apply(CommandTable tcg)
+    {
+        _tcg = tcg;
+        _writer.WriteStartElement("wne", "tcg", OpenXmlNamespaces.MicrosoftWordML);
+        
+        //write the keymaps
+        _writer.WriteStartElement("wne", "keymaps", OpenXmlNamespaces.MicrosoftWordML);
+        for (var i = 0; i < tcg.KeyMapEntries.Count; i++)
         {
-            this._ctx = ctx;
+            writeKeyMapEntry(tcg.KeyMapEntries[i]);
         }
-
-        public void Apply(CommandTable tcg)
+        
+        _writer.WriteEndElement();
+        
+        //write the toolbars
+        if (tcg.CustomToolbars != null)
         {
-            this._tcg = tcg;
-            this._writer.WriteStartElement("wne", "tcg", OpenXmlNamespaces.MicrosoftWordML);
-
-            //write the keymaps
-            this._writer.WriteStartElement("wne", "keymaps", OpenXmlNamespaces.MicrosoftWordML);
-            for (int i = 0; i < tcg.KeyMapEntries.Count; i++)
-            {
-                writeKeyMapEntry(tcg.KeyMapEntries[i]);
-            }
-            this._writer.WriteEndElement();
-
-            //write the toolbars
-            if (tcg.CustomToolbars != null)
-            {
-                this._writer.WriteStartElement("wne", "toolbars", OpenXmlNamespaces.MicrosoftWordML);
-                writeToolbar(tcg.CustomToolbars);
-                this._writer.WriteEndElement();
-            }
-
-            this._writer.WriteEndElement();
-
-            this._writer.Flush();
+            _writer.WriteStartElement("wne", "toolbars", OpenXmlNamespaces.MicrosoftWordML);
+            writeToolbar(tcg.CustomToolbars);
+            _writer.WriteEndElement();
         }
-
-
-        private void writeToolbar(CustomToolbarWrapper toolbars)
+        
+        _writer.WriteEndElement();
+        
+        _writer.Flush();
+    }
+    
+    private void writeToolbar(CustomToolbarWrapper toolbars)
+    {
+        //write the xml
+        _writer.WriteStartElement("wne", "toolbarData", OpenXmlNamespaces.MicrosoftWordML);
+        _writer.WriteAttributeString("r", "id",
+            OpenXmlNamespaces.Relationships,
+            _ctx.Docx.MainDocumentPart.CustomizationsPart.ToolbarsPart.RelIdToString
+        );
+        _writer.WriteEndElement();
+        
+        //copy the toolbar
+        var s = _ctx.Docx.MainDocumentPart.CustomizationsPart.ToolbarsPart.GetStream();
+        s.Write(toolbars.RawBytes, 0, toolbars.RawBytes.Length);
+    }
+    
+    private void writeKeyMapEntry(KeyMapEntry kme)
+    {
+        _writer.WriteStartElement("wne", "keymap", OpenXmlNamespaces.MicrosoftWordML);
+        
+        //primary KCM
+        if (kme.kcm1 > 0)
         {
-            //write the xml
-            this._writer.WriteStartElement("wne", "toolbarData", OpenXmlNamespaces.MicrosoftWordML);
-            this._writer.WriteAttributeString("r", "id", 
-                OpenXmlNamespaces.Relationships,
-                this._ctx.Docx.MainDocumentPart.CustomizationsPart.ToolbarsPart.RelIdToString
-             );
-            this._writer.WriteEndElement();
-
-            //copy the toolbar
-            var s = this._ctx.Docx.MainDocumentPart.CustomizationsPart.ToolbarsPart.GetStream();
-            s.Write(toolbars.RawBytes, 0, toolbars.RawBytes.Length);
-        }
-
-
-        private void writeKeyMapEntry(KeyMapEntry kme)
-        {
-            this._writer.WriteStartElement("wne", "keymap", OpenXmlNamespaces.MicrosoftWordML);
-
-            //primary KCM
-            if (kme.kcm1 > 0)
-            {
-                this._writer.WriteAttributeString("wne", "kcmPrimary",
-                    OpenXmlNamespaces.MicrosoftWordML,
-                    $"{kme.kcm1:x4}");
-            }
-
-            this._writer.WriteStartElement("wne", "macro", OpenXmlNamespaces.MicrosoftWordML);
-
-            this._writer.WriteAttributeString("wne", "macroName",
+            _writer.WriteAttributeString("wne", "kcmPrimary",
                 OpenXmlNamespaces.MicrosoftWordML,
-                this._tcg.MacroNames[kme.paramCid.ibstMacro]
-                );
-
-            this._writer.WriteEndElement();
-
-            this._writer.WriteEndElement();
+                $"{kme.kcm1:x4}");
         }
+        
+        _writer.WriteStartElement("wne", "macro", OpenXmlNamespaces.MicrosoftWordML);
+        
+        _writer.WriteAttributeString("wne", "macroName",
+            OpenXmlNamespaces.MicrosoftWordML,
+            _tcg.MacroNames[kme.paramCid.ibstMacro]
+        );
+        
+        _writer.WriteEndElement();
+        
+        _writer.WriteEndElement();
     }
 }

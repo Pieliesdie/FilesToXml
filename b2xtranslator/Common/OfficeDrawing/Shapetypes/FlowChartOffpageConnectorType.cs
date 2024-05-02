@@ -1,17 +1,14 @@
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+[OfficeShapeType(177)]
+internal class FlowChartOffpageConnectorType : ShapeType
 {
-    [OfficeShapeType(177)]
-    class FlowChartOffpageConnectorType : ShapeType
+    public FlowChartOffpageConnectorType()
     {
-        public FlowChartOffpageConnectorType()
-        {
-            this.ShapeConcentricFill = true;
-            this.Joins = JoinStyle.miter;
-            this.Path = "m,l21600,r,17255l10800,21600,,17255xe"; 
-            this.ConnectorLocations = "Rectangle";
-            this.TextboxRectangle = "0,0,21600,17255";
-        }
+        ShapeConcentricFill = true;
+        Joins = JoinStyle.miter;
+        Path = "m,l21600,r,17255l10800,21600,,17255xe";
+        ConnectorLocations = "Rectangle";
+        TextboxRectangle = "0,0,21600,17255";
     }
 }
-
-

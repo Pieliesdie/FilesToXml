@@ -2,32 +2,32 @@ using System.IO;
 using b2xtranslator.StructuredStorage.Reader;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.doc.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat;
+
+public abstract class ByteStructure
 {
-    public abstract class ByteStructure
+    public const int VARIABLE_LENGTH = int.MaxValue;
+    protected int _length;
+    protected byte[] _rawBytes;
+    protected VirtualStreamReader _reader;
+    
+    public ByteStructure(VirtualStreamReader reader, int length)
     {
-        protected VirtualStreamReader _reader;
-        protected int _length;
-        protected byte[] _rawBytes;
-        public const int VARIABLE_LENGTH = int.MaxValue;
-
-        public byte[] RawBytes => this._rawBytes;
-
-
-        public ByteStructure(VirtualStreamReader reader, int length) 
+        _reader = reader;
+        _length = length;
+        
+        //read the raw bytes
+        if (_length != VARIABLE_LENGTH)
         {
-            this._reader = reader;
-            this._length = length;
-
-            //read the raw bytes
-            if (this._length != VARIABLE_LENGTH)
-            {
-                this._rawBytes = this._reader.ReadBytes(this._length);
-                this._reader.BaseStream.Seek(-1 * this._length, SeekOrigin.Current);
-            }
+            _rawBytes = _reader.ReadBytes(_length);
+            _reader.BaseStream.Seek(-1 * _length, SeekOrigin.Current);
         }
-
-        public override string ToString() => 
-            Utils.GetHashDump(this._rawBytes);
+    }
+    
+    public byte[] RawBytes => _rawBytes;
+    
+    public override string ToString()
+    {
+        return Utils.GetHashDump(_rawBytes);
     }
 }

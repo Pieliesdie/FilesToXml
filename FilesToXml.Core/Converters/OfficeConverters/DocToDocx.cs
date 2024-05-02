@@ -16,6 +16,7 @@ public class DocToDocx
         using var docxFileStream = new FileStream(docxPath, FileMode.OpenOrCreate);
         docxFileStream.Write(docxMemoryStream.ToArray());
     }
+    
     public static MemoryStream ConvertFromStreamToDocxMemoryStream(Stream stream)
     {
         using var reader = new StructuredStorageReader(stream);

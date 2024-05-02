@@ -1,53 +1,14 @@
-﻿namespace b2xtranslator.OpenXmlLib
+﻿namespace b2xtranslator.OpenXmlLib;
+
+public class VmlPart : ContentPart
 {
-    public class VmlPart : ContentPart
-    {
-        
-
-        internal VmlPart(OpenXmlPartContainer parent, int partIndex)
-            : base(parent, partIndex)
-        {
-           
-        }
-
-        public override string ContentType
-        {
-            get 
-            {
-                return "application/vnd.openxmlformats-officedocument.vmlDrawing";
-            }
-        }
-
-        internal override bool HasDefaultContentType { get { return true; } }
-
-        public override string RelationshipType
-        {
-            get { return OpenXmlRelationshipTypes.Vml; }
-        }
-
-        public override string TargetName { get { return "vmlDrawing" + this.PartIndex; } }
-
-        private string targetdirectory = "drawings";
-        public override string TargetDirectory
-        {
-            get
-            {
-                return this.targetdirectory;
-            }
-
-            set
-            {
-                this.targetdirectory = value;
-            }
-
-        }
-
-        public override string TargetExt
-        {
-            get
-            {
-                return ".vml";
-            }
-        }
-    }
+    internal VmlPart(OpenXmlPartContainer parent, int partIndex)
+        : base(parent, partIndex) { }
+    
+    public override string ContentType => "application/vnd.openxmlformats-officedocument.vmlDrawing";
+    internal override bool HasDefaultContentType => true;
+    public override string RelationshipType => OpenXmlRelationshipTypes.Vml;
+    public override string TargetName => "vmlDrawing" + PartIndex;
+    public override string TargetDirectory { get; set; } = "drawings";
+    public override string TargetExt => ".vml";
 }

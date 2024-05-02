@@ -1,67 +1,67 @@
+using System;
 using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.Tools;
 
-namespace b2xtranslator.doc.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping;
+
+public class TableInfo
 {
-    public class TableInfo
+    /// <summary>
+    /// </summary>
+    public bool fInnerTableCell;
+    /// <summary>
+    /// </summary>
+    public bool fInnerTtp;
+    /// <summary>
+    /// </summary>
+    public bool fInTable;
+    /// <summary>
+    /// </summary>
+    public bool fTtp;
+    /// <summary>
+    /// </summary>
+    public uint iTap;
+    
+    public TableInfo(ParagraphPropertyExceptions papx)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool fInTable;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool fTtp;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool fInnerTtp;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool fInnerTableCell;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public uint iTap;
-
-        public TableInfo(ParagraphPropertyExceptions papx)
+        foreach (var sprm in papx.grpprl)
         {
-            foreach (var sprm in papx.grpprl)
+            if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInTable)
             {
-                if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInTable)
+                fInTable = Utils.ByteToBool(sprm.Arguments[0]);
+            }
+            
+            if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFTtp)
+            {
+                fTtp = Utils.ByteToBool(sprm.Arguments[0]);
+            }
+            
+            if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInnerTableCell)
+            {
+                fInnerTableCell = Utils.ByteToBool(sprm.Arguments[0]);
+            }
+            
+            if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInnerTtp)
+            {
+                fInnerTtp = Utils.ByteToBool(sprm.Arguments[0]);
+            }
+            
+            if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPItap)
+            {
+                iTap = BitConverter.ToUInt32(sprm.Arguments, 0);
+                if (iTap > 0)
                 {
-                    this.fInTable = Utils.ByteToBool(sprm.Arguments[0]);
+                    fInTable = true;
                 }
-                if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFTtp)
+            }
+            
+            if ((int)sprm.OpCode == 0x66A)
+            {
+                //add value!
+                iTap = BitConverter.ToUInt32(sprm.Arguments, 0);
+                if (iTap > 0)
                 {
-                    this.fTtp = Utils.ByteToBool(sprm.Arguments[0]);
-                }
-                if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInnerTableCell)
-                {
-                    this.fInnerTableCell = Utils.ByteToBool(sprm.Arguments[0]);
-                }
-                if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPFInnerTtp)
-                {
-                    this.fInnerTtp = Utils.ByteToBool(sprm.Arguments[0]);
-                }
-                if (sprm.OpCode == SinglePropertyModifier.OperationCode.sprmPItap)
-                {
-                    this.iTap = System.BitConverter.ToUInt32(sprm.Arguments, 0);
-                    if (this.iTap > 0)
-                        this.fInTable = true;
-                }
-                if ((int)sprm.OpCode == 0x66A)
-                {
-                    //add value!
-                    this.iTap = System.BitConverter.ToUInt32(sprm.Arguments, 0);
-                    if (this.iTap > 0)
-                        this.fInTable = true;
+                    fInTable = true;
                 }
             }
         }

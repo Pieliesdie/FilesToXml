@@ -6,8 +6,16 @@ namespace FilesToXml.Wasm;
 
 public class Converter : IConverter
 {
-    public string GetBackendName() => $".NET {Environment.Version}";
-    public string Beautify(string xml) => XDocument.Parse(xml).ToString();
+    public string GetBackendName()
+    {
+        return $".NET {Environment.Version}";
+    }
+    
+    public string Beautify(string xml)
+    {
+        return XDocument.Parse(xml).ToString();
+    }
+    
     public ConvertResult Convert(Input data)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -17,13 +25,14 @@ public class Converter : IConverter
         using var outSw = new StreamWriter(outMs, leaveOpen: true) { AutoFlush = true };
         using var errSw = new StreamWriter(errMs, leaveOpen: true) { AutoFlush = true };
         using var logSw = new StreamWriter(logMs, leaveOpen: true) { AutoFlush = true };
-
+        
         _ = ConverterToXml.Convert(data.Files, data, outSw, errSw, logSw);
-
+        
         using var outSr = new StreamReader(outMs);
         using var errorSr = new StreamReader(errMs);
         using var logSr = new StreamReader(logMs);
         return new ConvertResult(outSr.ReadToEnd(), errorSr.ReadToEnd(), logSr.ReadToEnd());
     }
 }
+
 public record ConvertResult(string? Result, string? Error, string? Log);

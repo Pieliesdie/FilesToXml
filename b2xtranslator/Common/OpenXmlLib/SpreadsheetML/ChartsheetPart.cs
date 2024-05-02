@@ -1,42 +1,30 @@
 ﻿using b2xtranslator.OpenXmlLib.DrawingML;
 
-namespace b2xtranslator.OpenXmlLib.SpreadsheetML
+namespace b2xtranslator.OpenXmlLib.SpreadsheetML;
+
+public class ChartsheetPart : OpenXmlPart
 {
-
-    public class ChartsheetPart : OpenXmlPart
+    private DrawingsPart _drawingsPart;
+    
+    public ChartsheetPart(WorkbookPart parent, int partIndex)
+        : base(parent, partIndex) { }
+    
+    public override string ContentType => SpreadsheetMLContentTypes.Chartsheet;
+    public override string RelationshipType => OpenXmlRelationshipTypes.Chartsheet;
+    public override string TargetName => "sheet" + PartIndex;
+    public override string TargetDirectory => "chartsheets";
+    
+    public DrawingsPart DrawingsPart
     {
-        private DrawingsPart _drawingsPart = null;
-        
-        public ChartsheetPart(WorkbookPart parent, int partIndex)
-            : base(parent, partIndex)
+        get
         {
-        }
-
-
-        public override string ContentType
-        {
-            get { return SpreadsheetMLContentTypes.Chartsheet; }
-        }
-
-        public override string RelationshipType
-        {
-            get { return OpenXmlRelationshipTypes.Chartsheet; }
-        }
-
-        public override string TargetName { get { return "sheet" + this.PartIndex.ToString(); } }
-        public override string TargetDirectory { get { return "chartsheets"; } }
-
-        public DrawingsPart DrawingsPart
-        {
-            get
+            if (_drawingsPart == null)
             {
-                if (this._drawingsPart == null)
-                {
-                    this._drawingsPart = this.AddPart(new DrawingsPart(this, ++((WorkbookPart)this.Parent).DrawingsNumber));
-                    //this._drawingsPart = ((WorkbookPart)this.Parent).AddDrawingsPart();
-                }
-                return this._drawingsPart;
+                _drawingsPart = AddPart(new DrawingsPart(this, ++((WorkbookPart)Parent).DrawingsNumber));
+                //this._drawingsPart = ((WorkbookPart)this.Parent).AddDrawingsPart();
             }
+            
+            return _drawingsPart;
         }
     }
 }

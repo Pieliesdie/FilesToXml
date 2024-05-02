@@ -1,17 +1,14 @@
-﻿
+﻿using b2xtranslator.StructuredStorage.Reader;
 
-using b2xtranslator.StructuredStorage.Reader;
+namespace b2xtranslator.OfficeGraph.BiffRecords;
 
-namespace b2xtranslator.OfficeGraph.BiffRecords
+public class UnknownGraphRecord : OfficeGraphBiffRecord
 {
-    public class UnknownGraphRecord : OfficeGraphBiffRecord
+    public byte[] Content;
+    
+    public UnknownGraphRecord(IStreamReader reader, ushort id, ushort length)
+        : base(reader, (GraphRecordNumber)id, length)
     {
-        public byte[] Content;
-
-        public UnknownGraphRecord(IStreamReader reader, ushort id, ushort length) 
-            : base(reader, (GraphRecordNumber)id, length)
-        {
-            this.Content = reader.ReadBytes((int)length);
-        }
+        Content = reader.ReadBytes(length);
     }
 }

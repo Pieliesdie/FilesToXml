@@ -1,39 +1,36 @@
 using System.Text;
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.doc.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat;
+
+public sealed class AnnotationReferenceDescriptor : ByteStructure
 {
-    public sealed class AnnotationReferenceDescriptor : ByteStructure
+    /// <summary>
+    ///     An index into the string table of comment author names.
+    /// </summary>
+    public ushort AuthorIndex;
+    /// <summary>
+    ///     Identifies a bookmark.
+    /// </summary>
+    public int BookmarkId;
+    /// <summary>
+    ///     The initials of the user who left the annotation.
+    /// </summary>
+    public string UserInitials;
+    
+    public AnnotationReferenceDescriptor(VirtualStreamReader reader, int length)
+        : base(reader, length)
     {
-        /// <summary>
-        /// The initials of the user who left the annotation.
-        /// </summary>
-        public string UserInitials;
-
-        /// <summary>
-        /// An index into the string table of comment author names.
-        /// </summary>
-        public ushort AuthorIndex;
-
-        /// <summary>
-        /// Identifies a bookmark.
-        /// </summary>
-        public int BookmarkId;
-
-        public AnnotationReferenceDescriptor(VirtualStreamReader reader, int length)
-            : base(reader, length)
-        {
-            //read the user initials (LPXCharBuffer9)
-            short cch = this._reader.ReadInt16( );
-            var chars = this._reader.ReadBytes(18);
-            this.UserInitials = Encoding.Unicode.GetString(chars, 0, cch * 2);
-
-            this.AuthorIndex = this._reader.ReadUInt16();
-
-            //skip 4 bytes
-            this._reader.ReadBytes(4);
-
-            this.BookmarkId = this._reader.ReadInt32();
-        }
+        //read the user initials (LPXCharBuffer9)
+        var cch = _reader.ReadInt16();
+        var chars = _reader.ReadBytes(18);
+        UserInitials = Encoding.Unicode.GetString(chars, 0, cch * 2);
+        
+        AuthorIndex = _reader.ReadUInt16();
+        
+        //skip 4 bytes
+        _reader.ReadBytes(4);
+        
+        BookmarkId = _reader.ReadInt32();
     }
 }

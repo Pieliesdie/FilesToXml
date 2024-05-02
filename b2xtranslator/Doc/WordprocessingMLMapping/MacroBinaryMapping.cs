@@ -2,54 +2,53 @@ using System;
 using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.StructuredStorage.Writer;
 
-namespace b2xtranslator.doc.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping;
+
+public class MacroBinaryMapping : DocumentMapping
 {
-    public class MacroBinaryMapping : DocumentMapping
+    public MacroBinaryMapping(ConversionContext ctx)
+        : base(ctx, ctx.Docx.MainDocumentPart.VbaProjectPart)
     {
-        public MacroBinaryMapping(ConversionContext ctx)
-            : base(ctx, ctx.Docx.MainDocumentPart.VbaProjectPart)
+        _ctx = ctx;
+    }
+    
+    public override void Apply(WordDocument doc)
+    {
+        //get the Class IDs of the directories
+        var macroClsid = new Guid();
+        var vbaClsid = new Guid();
+        foreach (var entry in doc.Storage.AllEntries)
         {
-            this._ctx = ctx;
+            if (entry.Path == "\\Macros")
+            {
+                macroClsid = entry.ClsId;
+            }
+            else if (entry.Path == "\\Macros\\VBA")
+            {
+                vbaClsid = entry.ClsId;
+            }
         }
-
-        public override void Apply(WordDocument doc)
+        
+        //create a new storage
+        var storage = new StructuredStorageWriter();
+        storage.RootDirectoryEntry.setClsId(macroClsid);
+        
+        //copy the VBA directory
+        var vba = storage.RootDirectoryEntry.AddStorageDirectoryEntry("VBA");
+        vba.setClsId(vbaClsid);
+        foreach (var entry in doc.Storage.AllStreamEntries)
         {
-            //get the Class IDs of the directories
-            var macroClsid = new Guid();
-            var vbaClsid = new Guid();
-            foreach (var entry in doc.Storage.AllEntries)
+            if (entry.Path.StartsWith("\\Macros\\VBA"))
             {
-                if (entry.Path == "\\Macros")
-                {
-                    macroClsid = entry.ClsId;
-                }
-                else if(entry.Path == "\\Macros\\VBA")
-                {
-                    vbaClsid = entry.ClsId;
-                }
+                vba.AddStreamDirectoryEntry(entry.Name, doc.Storage.GetStream(entry.Path));
             }
-
-            //create a new storage
-            var storage = new StructuredStorageWriter();
-            storage.RootDirectoryEntry.setClsId(macroClsid);
-
-            //copy the VBA directory
-            var vba = storage.RootDirectoryEntry.AddStorageDirectoryEntry("VBA");
-            vba.setClsId(vbaClsid);
-            foreach (var entry in doc.Storage.AllStreamEntries)
-            {
-                if (entry.Path.StartsWith("\\Macros\\VBA"))
-                {
-                    vba.AddStreamDirectoryEntry(entry.Name, doc.Storage.GetStream(entry.Path));
-                }
-            }
-
-            //copy the project streams
-            storage.RootDirectoryEntry.AddStreamDirectoryEntry("PROJECT", doc.Storage.GetStream("\\Macros\\PROJECT"));
-            storage.RootDirectoryEntry.AddStreamDirectoryEntry("PROJECTwm", doc.Storage.GetStream("\\Macros\\PROJECTwm"));
-
-           //write the storage to the xml part
-            storage.write(this._targetPart.GetStream());
         }
+        
+        //copy the project streams
+        storage.RootDirectoryEntry.AddStreamDirectoryEntry("PROJECT", doc.Storage.GetStream("\\Macros\\PROJECT"));
+        storage.RootDirectoryEntry.AddStreamDirectoryEntry("PROJECTwm", doc.Storage.GetStream("\\Macros\\PROJECTwm"));
+        
+        //write the storage to the xml part
+        storage.write(_targetPart.GetStream());
     }
 }

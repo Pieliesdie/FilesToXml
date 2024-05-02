@@ -1,16 +1,15 @@
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+/// <summary>
+///     interim solution<br />
+///     OOX uses an additional attribute: arcsize
+/// </summary>
+[OfficeShapeType(2)]
+public class RoundedRectangleType : RectangleType
 {
-    /// <summary>
-    /// interim solution<br/>
-    /// OOX uses an additional attribute: arcsize
-    /// </summary>
-    [OfficeShapeType(2)]
-    public class RoundedRectangleType : RectangleType
+    public RoundedRectangleType()
     {
-        public RoundedRectangleType() : base()
-        {
-            this.Joins = JoinStyle.round;
-            this.AdjustmentValues = "5400";
-        }
+        Joins = JoinStyle.round;
+        AdjustmentValues = "5400";
     }
 }

@@ -17,17 +17,20 @@ public class DocxToXml : IConvertable
         stream.Position = 0;
         return new XStreamingElement("DATASET", rootContent, ReadLines(stream));
     }
+    
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         using var fs = File.OpenRead(path);
         return new XElement(Convert(fs, rootContent));
     }
+    
     private static XStreamingElement GetNewRow(int rowIndex, params string[] values)
     {
         return new XStreamingElement("R",
             new XAttribute("id", rowIndex),
             values.Select((x, index) => new XAttribute($"C{index + 1}", x)).Where(x => !string.IsNullOrEmpty(x.Value)));
     }
+    
     /// <summary>
     ///     Расстановка простых параграфов
     /// </summary>
@@ -35,6 +38,7 @@ public class DocxToXml : IConvertable
     {
         return GetNewRow(rowIndex, p.InnerText);
     }
+    
     /// <summary>
     ///     Обработка элементов списка
     /// </summary>
@@ -50,6 +54,7 @@ public class DocxToXml : IConvertable
         row.Add(new XAttribute("li", id ?? 0), new XAttribute("level", level ?? 0));
         return row;
     }
+    
     /// <summary>
     ///     Обработка таблицы
     /// </summary>
@@ -65,26 +70,30 @@ public class DocxToXml : IConvertable
             maxColumnNumber = Math.Max(maxColumnNumber, cells.Length);
             root.Add(row);
         }
-
+        
         var metadata = new XElement("METADATA",
             new XAttribute("columns", maxColumnNumber),
             new XAttribute("rows", rowIndex - 1));
         root.Add(metadata);
         return root;
     }
+    
     private static IEnumerable<XElement> ReadLines(Stream stream)
     {
         using var doc = WordprocessingDocument.Open(stream, false);
         var docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
-        if (docBody == null) yield break;
-
+        if (docBody == null)
+        {
+            yield break;
+        }
+        
         XElement? textNode = null;
         var index = 0;
         var rowIndex = 1;
         foreach (var element in docBody.ChildElements)
         {
             var type = element.GetType().ToString();
-
+            
             switch (type)
             {
                 case "DocumentFormat.OpenXml.Wordprocessing.Paragraph":
@@ -95,14 +104,14 @@ public class DocxToXml : IConvertable
                         textNode.Add(new XAttribute("id", index++));
                         yield return textNode;
                     }
-
+                    
                     if (element.GetFirstChild<ParagraphProperties>()?.GetFirstChild<NumberingProperties>() !=
                         null) // список / не список
                     {
                         textNode.Add(ListParagraph((Paragraph)element, rowIndex++));
                         continue;
                     }
-
+                    
                     // не список
                     textNode.Add(SimpleParagraph((Paragraph)element, rowIndex++));
                     continue;

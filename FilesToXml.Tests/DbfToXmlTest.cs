@@ -11,39 +11,39 @@ public class DbfToXmlTest
     public void DbfToXmlByFileTestNotNull()
     {
         var converter = new DbfToXml();
-        string path = "./Files/dbf.dbf";
-
-        string result = converter.ConvertByFile(path).ToString();
+        var path = "./Files/dbf.dbf";
+        
+        var result = converter.ConvertByFile(path).ToString();
         Assert.NotNull(result);
     }
-
+    
     [Fact]
     public void DbfConvertToXmlNotNull()
     {
         var converter = new DbfToXml();
-        string path = "./Files/dbf.dbf";
+        var path = "./Files/dbf.dbf";
         using var fs = File.OpenRead(path);
-        string result = converter.Convert(fs).ToString();
+        var result = converter.Convert(fs).ToString();
         Assert.NotNull(result);
     }
-
+    
     [Fact]
     public void DbfToXmlTestReadFirstLine()
     {
         var converter = new DbfToXml();
-        string path = "./Files/dbf.dbf";
-
+        var path = "./Files/dbf.dbf";
+        
         var result = converter.ConvertByFile(path);
-        Assert.Equal("LSHET", Enumerable.First(result.Elements()).Elements().First().Attribute("C1").Value);
+        Assert.Equal("LSHET", result.Elements().First().Elements().First().Attribute("C1").Value);
     }
-
+    
     [Fact]
     public void DbfToXmlTestReadLastLine()
     {
         var converter = new DbfToXml();
-        string path = "./Files/dbf.dbf";
-
+        var path = "./Files/dbf.dbf";
+        
         var result = converter.ConvertByFile(path);
-        Assert.Equal("Ашарина", Enumerable.First(result.Elements()).Elements("R").Last().Attribute("C2").Value);
+        Assert.Equal("Ашарина", result.Elements().First().Elements("R").Last().Attribute("C2").Value);
     }
 }

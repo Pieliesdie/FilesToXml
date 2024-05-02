@@ -14,28 +14,37 @@ public class XmlToXml : IEncodingConvertable
     {
         return Convert(stream, Encoding.UTF8, rootContent);
     }
+    
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         return ConvertByFile(path, Encoding.UTF8, rootContent);
     }
+    
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
         return new XStreamingElement("DATASET", rootContent, Read(stream, encoding));
     }
+    
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         return new XElement(Convert(fs, encoding, rootContent));
     }
+    
     private static IEnumerable<object> Read(Stream stream, Encoding encoding)
     {
         using var sr = new StreamReader(stream, encoding);
         using var reader = XmlReader.Create(sr);
-        foreach (var obj in ParseXml(reader)) yield return obj;
+        foreach (var obj in ParseXml(reader))
+        {
+            yield return obj;
+        }
     }
+    
     private static IEnumerable<object> ParseXml(XmlReader reader)
     {
         while (reader.Read())
+        {
             switch (reader.NodeType)
             {
                 case XmlNodeType.Element:
@@ -55,15 +64,21 @@ public class XmlToXml : IEncodingConvertable
                 default:
                     continue;
             }
+        }
     }
+    
     private static IEnumerable<XAttribute> ReadAttributes(XmlReader reader)
     {
-        if (!reader.MoveToFirstAttribute()) yield break;
+        if (!reader.MoveToFirstAttribute())
+        {
+            yield break;
+        }
+        
         do
         {
             yield return new XAttribute(reader.Name, reader.Value);
         } while (reader.MoveToNextAttribute());
-
+        
         reader.MoveToElement();
     }
 }

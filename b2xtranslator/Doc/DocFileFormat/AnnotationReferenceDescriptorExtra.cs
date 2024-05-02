@@ -1,26 +1,23 @@
 using b2xtranslator.StructuredStorage.Reader;
 
-namespace b2xtranslator.doc.DocFileFormat
+namespace b2xtranslator.doc.DocFileFormat;
+
+public class AnnotationReferenceDescriptorExtra : ByteStructure
 {
-    public class AnnotationReferenceDescriptorExtra : ByteStructure
+    public int CommentDepth;
+    public DateAndTime Date;
+    public int ParentOffset;
+    
+    public AnnotationReferenceDescriptorExtra(VirtualStreamReader reader, int length)
+        : base(reader, length)
     {
-        public DateAndTime Date;
-
-        public int CommentDepth;
-
-        public int ParentOffset;
-
-        public AnnotationReferenceDescriptorExtra(VirtualStreamReader reader, int length)
-            : base(reader, length)
+        Date = new DateAndTime(_reader.ReadBytes(4));
+        _reader.ReadBytes(2);
+        CommentDepth = _reader.ReadInt32();
+        ParentOffset = _reader.ReadInt32();
+        if (length > 16)
         {
-            this.Date = new DateAndTime(this._reader.ReadBytes(4));
-            this._reader.ReadBytes(2);
-            this.CommentDepth = this._reader.ReadInt32();
-            this.ParentOffset = this._reader.ReadInt32();
-            if (length > 16)
-            {
-                int flag = this._reader.ReadInt32();
-            }
+            var flag = _reader.ReadInt32();
         }
     }
 }

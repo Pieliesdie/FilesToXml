@@ -1,7 +1,6 @@
-namespace b2xtranslator.CommonTranslatorLib
+namespace b2xtranslator.CommonTranslatorLib;
+
+public interface IVisitable
 {
-    public interface IVisitable
-    {
-        void Convert<T>(T mapping);
-    }
+    void Convert<T>(T mapping);
 }

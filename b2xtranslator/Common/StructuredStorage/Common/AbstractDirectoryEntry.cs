@@ -1,161 +1,109 @@
 using System;
 
-namespace b2xtranslator.StructuredStorage.Common
+namespace b2xtranslator.StructuredStorage.Common;
+
+/// <summary>
+///     Abstract class for a directory entry in a structured storage.
+///     Athor: math
+/// </summary>
+public abstract class AbstractDirectoryEntry
 {
-
-    /// <summary>
-    /// Abstract class for a directory entry in a structured storage.
-    /// Athor: math
-    /// </summary>
-    abstract public class AbstractDirectoryEntry
+    // Child sibling sid
+    
+    //CLSID
+    
+    // Color
+    private DirectoryEntryColor _color;
+    
+    // Left sibling sid
+    private ushort _lengthOfName;
+    
+    // Name
+    protected string _name;
+    protected string _path;
+    
+    // Right sibling sid
+    
+    // Size of stream in bytes
+    
+    // Start sector
+    
+    // Type
+    private DirectoryEntryType _type;
+    
+    // User flags
+    internal AbstractDirectoryEntry() : this(0x0) { }
+    
+    internal AbstractDirectoryEntry(uint sid)
     {
-        uint _sid;
-        public uint Sid
+        Sid = sid;
+    }
+    
+    public uint Sid { get; internal set; }
+    public string Path => _path + Name;
+    
+    public string Name
+    {
+        get => MaskingHandler.Mask(_name);
+        protected set
         {
-            get { return this._sid; }
-            internal set { this._sid = value; }
-        }
-
-        protected string _path;
-        public string Path
-        {
-            get { return this._path + this.Name; }
-        }
-
-
-        // Name
-        protected string _name;
-        public string Name
-        {
-            get { return MaskingHandler.Mask(this._name); }
-            protected set {
-                this._name = value;
-                if (this._name.Length >= 32)
-                {
-                    throw new InvalidValueInDirectoryEntryException("_ab");                    
-                }
-            }
-        }
-
-        ushort _lengthOfName;
-        public ushort LengthOfName
-        {
-            get
+            _name = value;
+            if (_name.Length >= 32)
             {
-                if (this._name.Length == 0)
-                {
-                    this._lengthOfName = 0;
-                    return 0;
-                }
-
-                // length of name in bytes including unicode 0;
-                this._lengthOfName = (ushort)((this._name.Length + 1)*2);              
-                return this._lengthOfName;
+                throw new InvalidValueInDirectoryEntryException("_ab");
             }
-        }
-
-
-
-        // Type
-        DirectoryEntryType _type;
-        public DirectoryEntryType Type
-        {
-            get { return this._type; }
-            protected set
-            {
-                if ((int)value < 0 || (int)value > 5)
-                {
-                    throw new InvalidValueInDirectoryEntryException("_mse");
-                }
-                this._type = value;
-            }
-        }
-
-
-        // Color
-        DirectoryEntryColor _color;
-        public DirectoryEntryColor Color
-        {
-            get { return this._color; }
-            internal set
-            {
-                if ((int)value < 0 || (int)value > 1)
-                {
-                    throw new InvalidValueInDirectoryEntryException("_bflags");
-                }
-                this._color = value;
-            }
-        }
-
-
-        // Left sibling sid
-        uint _leftSiblingSid;
-        public uint LeftSiblingSid
-        {
-            get { return this._leftSiblingSid; }
-            internal set { this._leftSiblingSid = value; }
-        }
-
-
-        // Right sibling sid
-        uint _rightSiblingSid;
-        public uint RightSiblingSid
-        {
-            get { return this._rightSiblingSid; }
-            internal set { this._rightSiblingSid = value; }
-        }
-
-
-        // Child sibling sid
-        uint _childSiblingSid;
-        public uint ChildSiblingSid
-        {
-            get { return this._childSiblingSid; }
-            protected set { this._childSiblingSid = value; }
-        }
-
-
-        //CLSID
-        Guid _clsId;
-        public Guid ClsId
-        {
-            get { return this._clsId; }
-            protected set { this._clsId = value; }
-        }
-
-
-        // User flags
-        uint _userFlags;
-        public uint UserFlags
-        {
-            get { return this._userFlags; }
-            protected set { this._userFlags = value; }
-        }
-
-
-        // Start sector
-        uint _startSector;
-        public uint StartSector
-        {
-            get { return this._startSector; }
-            protected set { this._startSector = value; }
-        }
-
-
-        // Size of stream in bytes
-        ulong _sizeOfStream;
-        public ulong SizeOfStream
-        {
-            get { return this._sizeOfStream; }
-            protected set { this._sizeOfStream = value; }
-        }
-
-        internal AbstractDirectoryEntry() : this(0x0)
-        {}
-
-        internal AbstractDirectoryEntry(uint sid)
-        {
-            this._sid = sid;
         }
     }
+    
+    public ushort LengthOfName
+    {
+        get
+        {
+            if (_name.Length == 0)
+            {
+                _lengthOfName = 0;
+                return 0;
+            }
+            
+            // length of name in bytes including unicode 0;
+            _lengthOfName = (ushort)((_name.Length + 1) * 2);
+            return _lengthOfName;
+        }
+    }
+    
+    public DirectoryEntryType Type
+    {
+        get => _type;
+        protected set
+        {
+            if ((int)value < 0 || (int)value > 5)
+            {
+                throw new InvalidValueInDirectoryEntryException("_mse");
+            }
+            
+            _type = value;
+        }
+    }
+    
+    public DirectoryEntryColor Color
+    {
+        get => _color;
+        internal set
+        {
+            if ((int)value < 0 || (int)value > 1)
+            {
+                throw new InvalidValueInDirectoryEntryException("_bflags");
+            }
+            
+            _color = value;
+        }
+    }
+    
+    public uint LeftSiblingSid { get; internal set; }
+    public uint RightSiblingSid { get; internal set; }
+    public uint ChildSiblingSid { get; protected set; }
+    public Guid ClsId { get; protected set; }
+    public uint UserFlags { get; protected set; }
+    public uint StartSector { get; protected set; }
+    public ulong SizeOfStream { get; protected set; }
 }

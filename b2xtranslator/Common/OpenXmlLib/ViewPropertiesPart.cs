@@ -1,24 +1,12 @@
-namespace b2xtranslator.OpenXmlLib
+namespace b2xtranslator.OpenXmlLib;
+
+public class ViewPropertiesPart : OpenXmlPart
 {
-    public class ViewPropertiesPart : OpenXmlPart
-    {
-        internal ViewPropertiesPart(OpenXmlPartContainer parent)
-            : base(parent, 0)
-        {
-        }
-
-        public override string ContentType
-        {
-            get { return PresentationMLContentTypes.ViewProps; }
-        }
-
-        public override string RelationshipType
-        {
-            get { return OpenXmlNamespaces.viewProps; }
-        }
-
-        public override string TargetName { get { return "viewProps"; } }
-        public override string TargetDirectory { get { return ""; } }
-        
-    }
+    internal ViewPropertiesPart(OpenXmlPartContainer parent)
+        : base(parent, 0) { }
+    
+    public override string ContentType => PresentationMLContentTypes.ViewProps;
+    public override string RelationshipType => OpenXmlNamespaces.viewProps;
+    public override string TargetName => "viewProps";
+    public override string TargetDirectory => "";
 }

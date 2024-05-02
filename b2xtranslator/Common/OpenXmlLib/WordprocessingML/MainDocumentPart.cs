@@ -1,175 +1,182 @@
-﻿namespace b2xtranslator.OpenXmlLib.WordprocessingML
+﻿namespace b2xtranslator.OpenXmlLib.WordprocessingML;
+
+public class MainDocumentPart : ContentPart
 {
-    public class MainDocumentPart : ContentPart
+    protected CommentsPart _commentsPart;
+    private readonly string _contentType = WordprocessingMLContentTypes.MainDocument;
+    protected KeyMapCustomizationsPart _customizationsPart;
+    protected EndnotesPart _endnotesPart;
+    protected FontTablePart _fontTablePart;
+    protected int _footerPartCount;
+    protected FootnotesPart _footnotesPart;
+    protected GlossaryPart _glossaryPart;
+    protected int _headerPartCount;
+    protected NumberingDefinitionsPart _numberingDefinitionsPart;
+    protected SettingsPart _settingsPart;
+    protected StyleDefinitionsPart _styleDefinitionsPart;
+    protected VbaProjectPart _vbaProjectPart;
+    
+    public MainDocumentPart(OpenXmlPartContainer parent, string contentType)
+        : base(parent)
     {
-        protected StyleDefinitionsPart _styleDefinitionsPart;
-        protected FontTablePart _fontTablePart;
-        protected NumberingDefinitionsPart _numberingDefinitionsPart;
-        protected SettingsPart _settingsPart;
-        protected FootnotesPart _footnotesPart;
-        protected EndnotesPart _endnotesPart;
-        protected CommentsPart _commentsPart;
-        protected VbaProjectPart _vbaProjectPart;
-        protected GlossaryPart _glossaryPart;
-        protected KeyMapCustomizationsPart _customizationsPart;
-
-        protected int _headerPartCount = 0;
-        protected int _footerPartCount = 0;
-
-        private string _contentType = WordprocessingMLContentTypes.MainDocument;
-        
-        public MainDocumentPart(OpenXmlPartContainer parent, string contentType)
-            : base(parent)
+        _contentType = contentType;
+    }
+    
+    public override string ContentType => _contentType;
+    public override string RelationshipType => OpenXmlRelationshipTypes.OfficeDocument;
+    public override string TargetName => "document";
+    public override string TargetDirectory => "word";
+    
+    // unique parts
+    
+    public KeyMapCustomizationsPart CustomizationsPart
+    {
+        get
         {
-            this._contentType = contentType;
-        }
-
-        public override string ContentType { get { return this._contentType; } }
-        public override string RelationshipType { get { return OpenXmlRelationshipTypes.OfficeDocument; } }
-        public override string TargetName { get { return "document"; } }
-        public override string TargetDirectory { get { return "word"; } }
-
-        // unique parts
-
-        public KeyMapCustomizationsPart CustomizationsPart
-        {
-            get
+            if (_customizationsPart == null)
             {
-                if (this._customizationsPart == null)
-                {
-                    this._customizationsPart = new KeyMapCustomizationsPart(this);
-                    this.AddPart(this._customizationsPart);
-                }
-                return this._customizationsPart;
+                _customizationsPart = new KeyMapCustomizationsPart(this);
+                AddPart(_customizationsPart);
             }
+            
+            return _customizationsPart;
         }
-
-        public GlossaryPart GlossaryPart
+    }
+    
+    public GlossaryPart GlossaryPart
+    {
+        get
         {
-            get
+            if (_glossaryPart == null)
             {
-                if (this._glossaryPart == null)
-                {
-                    this._glossaryPart = new GlossaryPart(this, WordprocessingMLContentTypes.Glossary);
-                    this.AddPart(this._glossaryPart);
-                }
-                return this._glossaryPart;
+                _glossaryPart = new GlossaryPart(this, WordprocessingMLContentTypes.Glossary);
+                AddPart(_glossaryPart);
             }
+            
+            return _glossaryPart;
         }
-
-        public StyleDefinitionsPart StyleDefinitionsPart
+    }
+    
+    public StyleDefinitionsPart StyleDefinitionsPart
+    {
+        get
         {
-            get
+            if (_styleDefinitionsPart == null)
             {
-                if (this._styleDefinitionsPart == null)
-                {
-                    this._styleDefinitionsPart = new StyleDefinitionsPart(this);
-                    this.AddPart(this._styleDefinitionsPart);
-                }
-                return this._styleDefinitionsPart;
+                _styleDefinitionsPart = new StyleDefinitionsPart(this);
+                AddPart(_styleDefinitionsPart);
             }
+            
+            return _styleDefinitionsPart;
         }
-
-        public SettingsPart SettingsPart
+    }
+    
+    public SettingsPart SettingsPart
+    {
+        get
         {
-            get
+            if (_settingsPart == null)
             {
-                if (this._settingsPart == null)
-                {
-                    this._settingsPart = new SettingsPart(this);
-                    this.AddPart(this._settingsPart);
-                }
-                return this._settingsPart;
+                _settingsPart = new SettingsPart(this);
+                AddPart(_settingsPart);
             }
+            
+            return _settingsPart;
         }
-
-        public NumberingDefinitionsPart NumberingDefinitionsPart
+    }
+    
+    public NumberingDefinitionsPart NumberingDefinitionsPart
+    {
+        get
         {
-            get
+            if (_numberingDefinitionsPart == null)
             {
-                if (this._numberingDefinitionsPart == null)
-                {
-                    this._numberingDefinitionsPart = new NumberingDefinitionsPart(this);
-                    this.AddPart(this._numberingDefinitionsPart);
-                }
-                return this._numberingDefinitionsPart;
+                _numberingDefinitionsPart = new NumberingDefinitionsPart(this);
+                AddPart(_numberingDefinitionsPart);
             }
+            
+            return _numberingDefinitionsPart;
         }
-
-        public FontTablePart FontTablePart
+    }
+    
+    public FontTablePart FontTablePart
+    {
+        get
         {
-            get
+            if (_fontTablePart == null)
             {
-                if (this._fontTablePart == null)
-                {
-                    this._fontTablePart = new FontTablePart(this);
-                    this.AddPart(this._fontTablePart);
-                }
-                return this._fontTablePart;
+                _fontTablePart = new FontTablePart(this);
+                AddPart(_fontTablePart);
             }
+            
+            return _fontTablePart;
         }
-
-        public EndnotesPart EndnotesPart
+    }
+    
+    public EndnotesPart EndnotesPart
+    {
+        get
         {
-            get
+            if (_endnotesPart == null)
             {
-                if (this._endnotesPart == null)
-                {
-                    this._endnotesPart = new EndnotesPart(this);
-                    this.AddPart(this._endnotesPart);
-                }
-                return this._endnotesPart;
+                _endnotesPart = new EndnotesPart(this);
+                AddPart(_endnotesPart);
             }
+            
+            return _endnotesPart;
         }
-
-        public FootnotesPart FootnotesPart
+    }
+    
+    public FootnotesPart FootnotesPart
+    {
+        get
         {
-            get
+            if (_footnotesPart == null)
             {
-                if (this._footnotesPart == null)
-                {
-                    this._footnotesPart = new FootnotesPart(this);
-                    this.AddPart(this._footnotesPart);
-                }
-                return this._footnotesPart;
+                _footnotesPart = new FootnotesPart(this);
+                AddPart(_footnotesPart);
             }
+            
+            return _footnotesPart;
         }
-
-        public CommentsPart CommentsPart
+    }
+    
+    public CommentsPart CommentsPart
+    {
+        get
         {
-            get 
+            if (_commentsPart == null)
             {
-                if (this._commentsPart == null)
-                {
-                    this._commentsPart = new CommentsPart(this);
-                    this.AddPart(this._commentsPart);
-                }
-                return this._commentsPart;
+                _commentsPart = new CommentsPart(this);
+                AddPart(_commentsPart);
             }
+            
+            return _commentsPart;
         }
-
-        public VbaProjectPart VbaProjectPart
+    }
+    
+    public VbaProjectPart VbaProjectPart
+    {
+        get
         {
-            get 
+            if (_vbaProjectPart == null)
             {
-                if(this._vbaProjectPart == null)
-                {
-                    this._vbaProjectPart = this.AddPart(new VbaProjectPart(this));
-                }
-                return this._vbaProjectPart;
+                _vbaProjectPart = AddPart(new VbaProjectPart(this));
             }
+            
+            return _vbaProjectPart;
         }
-
-        // non unique parts
-
-        public HeaderPart AddHeaderPart()
-        {
-            return this.AddPart(new HeaderPart(this, ++this._headerPartCount));
-        }
-
-        public FooterPart AddFooterPart()
-        {
-            return this.AddPart(new FooterPart(this, ++this._footerPartCount));
-        }
+    }
+    
+    // non unique parts
+    
+    public HeaderPart AddHeaderPart()
+    {
+        return AddPart(new HeaderPart(this, ++_headerPartCount));
+    }
+    
+    public FooterPart AddFooterPart()
+    {
+        return AddPart(new FooterPart(this, ++_footerPartCount));
     }
 }

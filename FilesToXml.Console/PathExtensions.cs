@@ -11,7 +11,7 @@ public static class PathExtensions
         {
             yield return path;
         }
-
+        
         var pathInfo = File.GetAttributes(path);
         if (pathInfo.HasFlag(FileAttributes.Directory))
         {
@@ -26,9 +26,14 @@ public static class PathExtensions
             yield return path;
         }
     }
+    
     public static string ToAbsolutePath(this string path)
     {
-        if (!Path.IsPathFullyQualified(path)) path = Path.Combine(Directory.GetCurrentDirectory(), path);
+        if (!Path.IsPathFullyQualified(path))
+        {
+            path = Path.Combine(Directory.GetCurrentDirectory(), path);
+        }
+        
         return Path.GetFullPath(path);
     }
 }

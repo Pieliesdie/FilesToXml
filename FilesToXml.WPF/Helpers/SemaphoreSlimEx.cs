@@ -6,10 +6,11 @@ public static class SemaphoreSlimEx
     {
         return semaphoreSlim.UseSemaphoreAsync(() =>
         {
-             action();
-             return 0;
+            action();
+            return 0;
         });
     }
+    
     public static async Task<T> UseSemaphoreAsync<T>(this SemaphoreSlim semaphoreSlim, Func<T> action)
     {
         await semaphoreSlim.WaitAsync();

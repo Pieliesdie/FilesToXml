@@ -1,40 +1,36 @@
-﻿namespace b2xtranslator.OpenXmlLib.PresentationML
+﻿namespace b2xtranslator.OpenXmlLib.PresentationML;
+
+public class PresentationDocument : OpenXmlPackage
 {
-    public class PresentationDocument : OpenXmlPackage
+    protected DocumentType _documentType;
+    protected PresentationPart _presentationPart;
+    
+    protected PresentationDocument(string fileName, DocumentType type)
+        : base(fileName)
     {
-        protected PresentationPart _presentationPart;
-        protected OpenXmlPackage.DocumentType _documentType;
-
-        protected PresentationDocument(string fileName, OpenXmlPackage.DocumentType type)
-            : base(fileName)
+        switch (type)
         {
-            switch (type)
-            {
-                case OpenXmlPackage.DocumentType.Document:
-                    this._presentationPart = new PresentationPart(this, PresentationMLContentTypes.Presentation);
-                    break;
-                case OpenXmlPackage.DocumentType.MacroEnabledDocument:
-                    this._presentationPart = new PresentationPart(this, PresentationMLContentTypes.PresentationMacro);
-                    break;
-                case OpenXmlPackage.DocumentType.Template:
-                    break;
-                case OpenXmlPackage.DocumentType.MacroEnabledTemplate:
-                    break;
-            }
-
-            this.AddPart(this._presentationPart);
+            case DocumentType.Document:
+                _presentationPart = new PresentationPart(this, PresentationMLContentTypes.Presentation);
+                break;
+            case DocumentType.MacroEnabledDocument:
+                _presentationPart = new PresentationPart(this, PresentationMLContentTypes.PresentationMacro);
+                break;
+            case DocumentType.Template:
+                break;
+            case DocumentType.MacroEnabledTemplate:
+                break;
         }
-
-        public static PresentationDocument Create(string fileName, OpenXmlPackage.DocumentType type)
-        {
-            var presentation = new PresentationDocument(fileName, type);
-
-            return presentation;
-        }
-
-        public PresentationPart PresentationPart
-        {
-            get { return this._presentationPart; }
-        }
+        
+        AddPart(_presentationPart);
+    }
+    
+    public PresentationPart PresentationPart => _presentationPart;
+    
+    public static PresentationDocument Create(string fileName, DocumentType type)
+    {
+        var presentation = new PresentationDocument(fileName, type);
+        
+        return presentation;
     }
 }

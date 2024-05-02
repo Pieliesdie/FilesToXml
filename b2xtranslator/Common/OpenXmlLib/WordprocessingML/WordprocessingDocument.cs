@@ -1,50 +1,47 @@
-﻿namespace b2xtranslator.OpenXmlLib.WordprocessingML
+﻿namespace b2xtranslator.OpenXmlLib.WordprocessingML;
+
+public class WordprocessingDocument : OpenXmlPackage
 {
-
-
-    public class WordprocessingDocument : OpenXmlPackage
+    protected CustomXmlPropertiesPart _customFilePropertiesPart;
+    protected DocumentType _documentType;
+    protected MainDocumentPart _mainDocumentPart;
+    
+    protected WordprocessingDocument(string fileName, DocumentType type)
+        : base(fileName)
     {
-        protected OpenXmlPackage.DocumentType _documentType;
-        protected CustomXmlPropertiesPart _customFilePropertiesPart;
-        protected MainDocumentPart _mainDocumentPart;
-
-        protected WordprocessingDocument(string fileName, OpenXmlPackage.DocumentType type)
-            : base(fileName)
+        switch (type)
         {
-            switch (type)
-            {
-                case OpenXmlPackage.DocumentType.Document:
-                    this._mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocument);
-                    break;
-                case OpenXmlPackage.DocumentType.MacroEnabledDocument:
-                    this._mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentMacro);
-                    break;
-                case OpenXmlPackage.DocumentType.Template:
-                    this._mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentTemplate);
-                    break;
-                case OpenXmlPackage.DocumentType.MacroEnabledTemplate:
-                    this._mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentMacroTemplate);
-                    break;
-            }
-
-            this._documentType = type;
-            this.AddPart(this._mainDocumentPart);
+            case DocumentType.Document:
+                _mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocument);
+                break;
+            case DocumentType.MacroEnabledDocument:
+                _mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentMacro);
+                break;
+            case DocumentType.Template:
+                _mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentTemplate);
+                break;
+            case DocumentType.MacroEnabledTemplate:
+                _mainDocumentPart = new MainDocumentPart(this, WordprocessingMLContentTypes.MainDocumentMacroTemplate);
+                break;
         }
-
-        public static WordprocessingDocument Create(string fileName, OpenXmlPackage.DocumentType type)
-        {
-            var doc = new WordprocessingDocument(fileName, type);
-            
-            return doc;
-        }
-
-        public new OpenXmlPackage.DocumentType DocumentType
-        {
-            get => _documentType;
-            set => _documentType = value;
-        }
-
-        public CustomXmlPropertiesPart CustomFilePropertiesPart => this._customFilePropertiesPart;
-        public MainDocumentPart MainDocumentPart => this._mainDocumentPart;
+        
+        _documentType = type;
+        AddPart(_mainDocumentPart);
+    }
+    
+    public DocumentType DocumentType
+    {
+        get => _documentType;
+        set => _documentType = value;
+    }
+    
+    public CustomXmlPropertiesPart CustomFilePropertiesPart => _customFilePropertiesPart;
+    public MainDocumentPart MainDocumentPart => _mainDocumentPart;
+    
+    public static WordprocessingDocument Create(string fileName, DocumentType type)
+    {
+        var doc = new WordprocessingDocument(fileName, type);
+        
+        return doc;
     }
 }

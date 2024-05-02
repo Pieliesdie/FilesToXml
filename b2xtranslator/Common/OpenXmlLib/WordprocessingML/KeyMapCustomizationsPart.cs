@@ -1,38 +1,28 @@
-namespace b2xtranslator.OpenXmlLib.WordprocessingML
+namespace b2xtranslator.OpenXmlLib.WordprocessingML;
+
+public class KeyMapCustomizationsPart : ContentPart
 {
-    public class KeyMapCustomizationsPart : ContentPart
+    private ToolbarsPart _toolbars;
+    
+    public KeyMapCustomizationsPart(OpenXmlPartContainer parent)
+        : base(parent, 0) { }
+    
+    public override string ContentType => MicrosoftWordContentTypes.KeyMapCustomization;
+    public override string RelationshipType => MicrosoftWordRelationshipTypes.KeyMapCustomizations;
+    public override string TargetName => "customizations";
+    public override string TargetDirectory => "";
+    
+    public ToolbarsPart ToolbarsPart
     {
-        private ToolbarsPart _toolbars;
-
-        public KeyMapCustomizationsPart(OpenXmlPartContainer parent)
-            : base(parent, 0)
+        get
         {
-        }
-
-        public override string ContentType
-        {
-            get { return MicrosoftWordContentTypes.KeyMapCustomization; }
-        }
-
-        public override string RelationshipType
-        {
-            get { return MicrosoftWordRelationshipTypes.KeyMapCustomizations; }
-        }
-
-        public override string TargetName { get { return "customizations"; } }
-        public override string TargetDirectory { get { return ""; } }
-
-        public ToolbarsPart ToolbarsPart
-        {   
-            get {
-                if (this._toolbars == null)
-                {
-                    this._toolbars = new ToolbarsPart(this);
-                    this.AddPart(this._toolbars);
-                }
-                return this._toolbars; 
+            if (_toolbars == null)
+            {
+                _toolbars = new ToolbarsPart(this);
+                AddPart(_toolbars);
             }
+            
+            return _toolbars;
         }
-	
     }
 }

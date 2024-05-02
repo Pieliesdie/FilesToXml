@@ -1,205 +1,255 @@
 ﻿using System;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Xml;
-using System.IO;
-using System.IO.Compression; // Replaces using b2xtranslator.ZipUtils;
 
-namespace b2xtranslator.OpenXmlLib
+// Replaces using b2xtranslator.ZipUtils;
+
+namespace b2xtranslator.OpenXmlLib;
+
+public sealed class OpenXmlWriter : IDisposable
 {
-    public sealed class OpenXmlWriter : IDisposable
+    /// <summary>Hold the settings required in Open XML ZIP files.</summary>
+    private static readonly XmlWriterSettings xmlWriterSettings = new()
     {
-        /// <summary>Hold the settings required in Open XML ZIP files.</summary>
-        readonly static XmlWriterSettings xmlWriterSettings = new XmlWriterSettings
+        OmitXmlDeclaration = false,
+        CloseOutput = false,
+        Encoding = Encoding.UTF8,
+        Indent = true,
+        ConformanceLevel = ConformanceLevel.Document
+    };
+    /// <summary>Holds the current ZIP entry, created by <see cref="AddPart" />.</summary>
+    private ZipArchiveEntry currentEntry;
+    /// <summary>Holds the open stream to write to <see cref="currentEntry" /></summary>
+    private Stream entryStream;
+    /// <summary>Hold an optional file output stream, only populated if opened on a file.</summary>
+    private FileStream fileOutputStream;
+    /// <summary>Holds the ZIP archive the XML is being written to.</summary>
+    private ZipArchive outputArchive;
+    /// <summary>Hold the XML writer to populate the current ZIP entry.</summary>
+    private XmlWriter xmlEntryWriter;
+    
+    /// <summary>Get or create an XML writer for the current ZIP entry.</summary>
+    private XmlWriter XmlWriter =>
+        xmlEntryWriter ?? (xmlEntryWriter = XmlWriter.Create(entryStream, xmlWriterSettings));
+    
+    public WriteState WriteState =>
+        XmlWriter.WriteState;
+    
+    public void Dispose()
+    {
+        Close();
+    }
+    
+    public void Open(string fileName)
+    {
+        Close();
+        fileOutputStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+        outputArchive = new ZipArchive(fileOutputStream, ZipArchiveMode.Update);
+    }
+    
+    public void Open(Stream output)
+    {
+        Close();
+        outputArchive = new ZipArchive(output, ZipArchiveMode.Update);
+    }
+    
+    public void Close()
+    {
+        // close streams
+        if (xmlEntryWriter != null)
         {
-            OmitXmlDeclaration = false,
-            CloseOutput = false,
-            Encoding = Encoding.UTF8,
-            Indent = true,
-            ConformanceLevel = ConformanceLevel.Document
-        };
-
-        /// <summary>Hold the XML writer to populate the current ZIP entry.</summary>
-        XmlWriter xmlEntryWriter;
-
-        /// <summary>Hold an optional file output stream, only populated if opened on a file.</summary>
-        FileStream fileOutputStream;
-
-        /// <summary>Holds the ZIP archive the XML is being written to.</summary>
-        ZipArchive outputArchive;
-
-        /// <summary>Holds the current ZIP entry, created by <see cref="AddPart"/>.</summary>
-        ZipArchiveEntry currentEntry;
-
-        /// <summary>Holds the open stream to write to <see cref="currentEntry"/></summary>
-        Stream entryStream;
-
-
-        public OpenXmlWriter()
-        {
+            xmlEntryWriter.Close();
+            xmlEntryWriter = null;
         }
-
-        public void Dispose() => this.Close();
-
-        public void Open(string fileName)
+        
+        if (entryStream != null)
         {
-            this.Close();
-            this.fileOutputStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            this.outputArchive = new ZipArchive(this.fileOutputStream, ZipArchiveMode.Update);
+            entryStream.Close();
+            entryStream = null;
         }
-
-        public void Open(Stream output)
+        
+        currentEntry = null;
+        
+        if (outputArchive != null)
         {
-            this.Close();
-            this.outputArchive = new ZipArchive(output, ZipArchiveMode.Update);
+            outputArchive.Dispose();
+            outputArchive = null;
         }
-
-        public void Close()
+        
+        if (fileOutputStream != null)
         {
-            // close streams
-            if (this.xmlEntryWriter != null)
-            {
-                this.xmlEntryWriter.Close();
-                this.xmlEntryWriter = null;
-            }
-
-            if (this.entryStream != null)
-            {
-                this.entryStream.Close();
-                this.entryStream = null;
-            }
-
-            this.currentEntry = null;
-
-            if (this.outputArchive != null)
-            {
-                this.outputArchive.Dispose();
-                this.outputArchive = null;
-            }
-
-            if (this.fileOutputStream != null)
-            {
-                this.fileOutputStream.Close();
-                this.fileOutputStream.Dispose();
-                this.fileOutputStream = null;
-            }
+            fileOutputStream.Close();
+            fileOutputStream.Dispose();
+            fileOutputStream = null;
         }
-
-        public void AddPart(string fullName)
+    }
+    
+    public void AddPart(string fullName)
+    {
+        if (xmlEntryWriter != null)
         {
-            if (this.xmlEntryWriter != null)
-            {
-                this.xmlEntryWriter.Close();
-                this.xmlEntryWriter = null;
-            }
-
-            if (this.entryStream != null)
-            {
-                this.entryStream.Close();
-                this.entryStream = null;
-            }
-
-            // the path separator in the package should be a forward slash
-            this.currentEntry = this.outputArchive.CreateEntry(fullName.Replace('\\', '/'));
-
-            // Create the stream for the current entry
-            this.entryStream = this.currentEntry.Open();
+            xmlEntryWriter.Close();
+            xmlEntryWriter = null;
         }
-
-        /// <summary>Get or create an XML writer for the current ZIP entry.</summary>
-        XmlWriter XmlWriter =>
-            this.xmlEntryWriter ?? (this.xmlEntryWriter = XmlWriter.Create(this.entryStream, xmlWriterSettings));
-
-        public void WriteRawBytes(byte[] buffer, int index, int count) =>
-            this.entryStream.Write(buffer, index, count);
-
-        public void Write(Stream stream)
+        
+        if (entryStream != null)
         {
-            const int blockSize = 4096;
-            var buffer = new byte[blockSize];
-            int bytesRead;
-            while ((bytesRead = stream.Read(buffer, 0, blockSize)) > 0)
-                this.entryStream.Write(buffer, 0, bytesRead);
+            entryStream.Close();
+            entryStream = null;
         }
-
-        public void WriteStartElement(string prefix, string localName, string ns) =>
-            this.XmlWriter.WriteStartElement(prefix, localName, ns);
-
-        public void WriteStartElement(string localName, string ns) =>
-            this.XmlWriter.WriteStartElement(localName, ns);
-
-        public void WriteEndElement() =>
-            this.XmlWriter.WriteEndElement();
-
-        public void WriteStartAttribute(string prefix, string localName, string ns) =>
-            this.XmlWriter.WriteStartAttribute(prefix, localName, ns);
-
-        public void WriteAttributeValue(string prefix, string localName, string ns, string value) =>
-            this.XmlWriter.WriteAttributeString(prefix, localName, ns, value);
-
-        public void WriteAttributeString(string localName, string value) =>
-            this.XmlWriter.WriteAttributeString(localName, value);
-
-        public void WriteEndAttribute() =>
-            this.XmlWriter.WriteEndAttribute();
-
-        public void WriteString(string text) =>
-            this.XmlWriter.WriteString(text);
-
-        public void WriteFullEndElement() =>
-            this.XmlWriter.WriteFullEndElement();
-
-        public void WriteCData(string s) =>
-            this.XmlWriter.WriteCData(s);
-
-        public void WriteComment(string s) =>
-            this.XmlWriter.WriteComment(s);
-
-        public void WriteProcessingInstruction(string name, string text) =>
-            this.XmlWriter.WriteProcessingInstruction(name, text);
-
-        public void WriteEntityRef(string name) =>
-            this.XmlWriter.WriteEntityRef(name);
-
-        public void WriteCharEntity(char c) =>
-            this.XmlWriter.WriteCharEntity(c);
-
-        public void WriteWhitespace(string s) =>
-            this.XmlWriter.WriteWhitespace(s);
-
-        public void WriteSurrogateCharEntity(char lowChar, char highChar) =>
-            this.XmlWriter.WriteSurrogateCharEntity(lowChar, highChar);
-
-        public void WriteChars(char[] buffer, int index, int count) =>
-            this.XmlWriter.WriteChars(buffer, index, count);
-
-        public void WriteRaw(char[] buffer, int index, int count) =>
-            this.XmlWriter.WriteRaw(buffer, index, count);
-
-        public void WriteRaw(string data) =>
-            this.XmlWriter.WriteRaw(data);
-
-        public void WriteBase64(byte[] buffer, int index, int count) =>
-            this.XmlWriter.WriteBase64(buffer, index, count);
-
-        public WriteState WriteState =>
-            this.XmlWriter.WriteState;
-
-        public void Flush() =>
-            this.XmlWriter.Flush();
-
-        public string LookupPrefix(string ns) =>
-            this.XmlWriter.LookupPrefix(ns);
-
-        public void WriteDocType(string name, string pubid, string sysid, string subset) =>
-            throw new NotImplementedException();
-
-        public void WriteEndDocument() =>
-            this.XmlWriter.WriteEndDocument();
-
-        public void WriteStartDocument(bool standalone) =>
-            this.XmlWriter.WriteStartDocument(standalone);
-
-        public void WriteStartDocument() =>
-            this.XmlWriter.WriteStartDocument();
+        
+        // the path separator in the package should be a forward slash
+        currentEntry = outputArchive.CreateEntry(fullName.Replace('\\', '/'));
+        
+        // Create the stream for the current entry
+        entryStream = currentEntry.Open();
+    }
+    
+    public void WriteRawBytes(byte[] buffer, int index, int count)
+    {
+        entryStream.Write(buffer, index, count);
+    }
+    
+    public void Write(Stream stream)
+    {
+        const int blockSize = 4096;
+        var buffer = new byte[blockSize];
+        int bytesRead;
+        while ((bytesRead = stream.Read(buffer, 0, blockSize)) > 0)
+        {
+            entryStream.Write(buffer, 0, bytesRead);
+        }
+    }
+    
+    public void WriteStartElement(string prefix, string localName, string ns)
+    {
+        XmlWriter.WriteStartElement(prefix, localName, ns);
+    }
+    
+    public void WriteStartElement(string localName, string ns)
+    {
+        XmlWriter.WriteStartElement(localName, ns);
+    }
+    
+    public void WriteEndElement()
+    {
+        XmlWriter.WriteEndElement();
+    }
+    
+    public void WriteStartAttribute(string prefix, string localName, string ns)
+    {
+        XmlWriter.WriteStartAttribute(prefix, localName, ns);
+    }
+    
+    public void WriteAttributeValue(string prefix, string localName, string ns, string value)
+    {
+        XmlWriter.WriteAttributeString(prefix, localName, ns, value);
+    }
+    
+    public void WriteAttributeString(string localName, string value)
+    {
+        XmlWriter.WriteAttributeString(localName, value);
+    }
+    
+    public void WriteEndAttribute()
+    {
+        XmlWriter.WriteEndAttribute();
+    }
+    
+    public void WriteString(string text)
+    {
+        XmlWriter.WriteString(text);
+    }
+    
+    public void WriteFullEndElement()
+    {
+        XmlWriter.WriteFullEndElement();
+    }
+    
+    public void WriteCData(string s)
+    {
+        XmlWriter.WriteCData(s);
+    }
+    
+    public void WriteComment(string s)
+    {
+        XmlWriter.WriteComment(s);
+    }
+    
+    public void WriteProcessingInstruction(string name, string text)
+    {
+        XmlWriter.WriteProcessingInstruction(name, text);
+    }
+    
+    public void WriteEntityRef(string name)
+    {
+        XmlWriter.WriteEntityRef(name);
+    }
+    
+    public void WriteCharEntity(char c)
+    {
+        XmlWriter.WriteCharEntity(c);
+    }
+    
+    public void WriteWhitespace(string s)
+    {
+        XmlWriter.WriteWhitespace(s);
+    }
+    
+    public void WriteSurrogateCharEntity(char lowChar, char highChar)
+    {
+        XmlWriter.WriteSurrogateCharEntity(lowChar, highChar);
+    }
+    
+    public void WriteChars(char[] buffer, int index, int count)
+    {
+        XmlWriter.WriteChars(buffer, index, count);
+    }
+    
+    public void WriteRaw(char[] buffer, int index, int count)
+    {
+        XmlWriter.WriteRaw(buffer, index, count);
+    }
+    
+    public void WriteRaw(string data)
+    {
+        XmlWriter.WriteRaw(data);
+    }
+    
+    public void WriteBase64(byte[] buffer, int index, int count)
+    {
+        XmlWriter.WriteBase64(buffer, index, count);
+    }
+    
+    public void Flush()
+    {
+        XmlWriter.Flush();
+    }
+    
+    public string LookupPrefix(string ns)
+    {
+        return XmlWriter.LookupPrefix(ns);
+    }
+    
+    public void WriteDocType(string name, string pubid, string sysid, string subset)
+    {
+        throw new NotImplementedException();
+    }
+    
+    public void WriteEndDocument()
+    {
+        XmlWriter.WriteEndDocument();
+    }
+    
+    public void WriteStartDocument(bool standalone)
+    {
+        XmlWriter.WriteStartDocument(standalone);
+    }
+    
+    public void WriteStartDocument()
+    {
+        XmlWriter.WriteStartDocument();
     }
 }

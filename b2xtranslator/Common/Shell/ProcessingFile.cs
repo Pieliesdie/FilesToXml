@@ -1,18 +1,16 @@
-
 using System.IO;
 
-namespace b2xtranslator.Shell
+namespace b2xtranslator.Shell;
+
+public class ProcessingFile
 {
-    public class ProcessingFile
+    public FileInfo File;
+    
+    public ProcessingFile(string inputFile)
     {
-        public FileInfo File;
-
-        public ProcessingFile(string inputFile)
-        {
-            var inFile = new FileInfo(inputFile);
-
-            this.File = inFile.CopyTo(System.IO.Path.GetTempFileName(), true);
-            this.File.IsReadOnly = false;
-        }
+        var inFile = new FileInfo(inputFile);
+        
+        File = inFile.CopyTo(Path.GetTempFileName(), true);
+        File.IsReadOnly = false;
     }
 }

@@ -3,98 +3,96 @@ using b2xtranslator.CommonTranslatorLib;
 using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.OpenXmlLib;
 
-namespace b2xtranslator.doc.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping;
+
+public class FontTableMapping : AbstractOpenXmlMapping,
+    IMapping<StringTable>
 {
-    public class FontTableMapping : AbstractOpenXmlMapping,
-        IMapping<StringTable>
+    public FontTableMapping(ConversionContext ctx, OpenXmlPart targetPart)
+        : base(XmlWriter.Create(targetPart.GetStream(), ctx.WriterSettings)) { }
+    
+    public void Apply(StringTable table)
     {
-        protected enum FontFamily
+        _writer.WriteStartElement("w", "fonts", OpenXmlNamespaces.WordprocessingML);
+        
+        foreach (FontFamilyName font in table.Data)
         {
-            auto,
-            decorative,
-            modern,
-            roman,
-            script,
-            swiss
-        }
-
-        public FontTableMapping(ConversionContext ctx, OpenXmlPart targetPart)
-            : base(XmlWriter.Create(targetPart.GetStream(), ctx.WriterSettings))
-        {
-        }
-
-        public void Apply(StringTable table)
-        {
-            this._writer.WriteStartElement("w", "fonts", OpenXmlNamespaces.WordprocessingML);
-
-            foreach (FontFamilyName font in table.Data)
+            _writer.WriteStartElement("w", "font", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteAttributeString("w", "name", OpenXmlNamespaces.WordprocessingML, font.xszFtn);
+            
+            //alternative name
+            if (font.xszAlt != null && font.xszAlt.Length > 0)
             {
-                this._writer.WriteStartElement("w", "font", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "name", OpenXmlNamespaces.WordprocessingML, font.xszFtn);
-
-                //alternative name
-                if (font.xszAlt!= null && font.xszAlt.Length > 0)
-                {
-                    this._writer.WriteStartElement("w", "altName", OpenXmlNamespaces.WordprocessingML);
-                    this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, font.xszAlt);
-                    this._writer.WriteEndElement();
-                }
-
-                //charset
-                this._writer.WriteStartElement("w", "charset", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, $"{font.chs:x2}");
-                this._writer.WriteEndElement();
-
-                //font family
-                this._writer.WriteStartElement("w", "family", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, ((FontFamily)font.ff).ToString());
-                this._writer.WriteEndElement();
-
-                //panose
-                this._writer.WriteStartElement("w", "panose1", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteStartAttribute("w", "val", OpenXmlNamespaces.WordprocessingML);
-                foreach (byte b in font.panose)
-                {
-                    this._writer.WriteString($"{b:x2}");
-                }
-                this._writer.WriteEndAttribute();
-                this._writer.WriteEndElement();
-
-                //pitch
-                this._writer.WriteStartElement("w", "pitch", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, font.prq.ToString());
-                this._writer.WriteEndElement();
-
-                //truetype
-                if (!font.fTrueType)
-                {
-                    this._writer.WriteStartElement("w", "notTrueType", OpenXmlNamespaces.WordprocessingML);
-                    this._writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, "true");
-                    this._writer.WriteEndElement();
-                }
-
-                //font signature
-                this._writer.WriteStartElement("w", "sig", OpenXmlNamespaces.WordprocessingML);
-                this._writer.WriteAttributeString("w", "usb0", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.UnicodeSubsetBitfield0:x8}");
-                this._writer.WriteAttributeString("w", "usb1", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.UnicodeSubsetBitfield1:x8}");
-                this._writer.WriteAttributeString("w", "usb2", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.UnicodeSubsetBitfield2:x8}");
-                this._writer.WriteAttributeString("w", "usb3", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.UnicodeSubsetBitfield3:x8}");
-                this._writer.WriteAttributeString("w", "csb0", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.CodePageBitfield0:x8}");
-                this._writer.WriteAttributeString("w", "csb1", OpenXmlNamespaces.WordprocessingML,
-                    $"{font.fs.CodePageBitfield1:x8}");
-                this._writer.WriteEndElement();
-
-                this._writer.WriteEndElement();
+                _writer.WriteStartElement("w", "altName", OpenXmlNamespaces.WordprocessingML);
+                _writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, font.xszAlt);
+                _writer.WriteEndElement();
             }
-
-            this._writer.WriteEndElement();
-
-            this._writer.Flush();
+            
+            //charset
+            _writer.WriteStartElement("w", "charset", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, $"{font.chs:x2}");
+            _writer.WriteEndElement();
+            
+            //font family
+            _writer.WriteStartElement("w", "family", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, ((FontFamily)font.ff).ToString());
+            _writer.WriteEndElement();
+            
+            //panose
+            _writer.WriteStartElement("w", "panose1", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteStartAttribute("w", "val", OpenXmlNamespaces.WordprocessingML);
+            foreach (var b in font.panose)
+            {
+                _writer.WriteString($"{b:x2}");
+            }
+            
+            _writer.WriteEndAttribute();
+            _writer.WriteEndElement();
+            
+            //pitch
+            _writer.WriteStartElement("w", "pitch", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, font.prq.ToString());
+            _writer.WriteEndElement();
+            
+            //truetype
+            if (!font.fTrueType)
+            {
+                _writer.WriteStartElement("w", "notTrueType", OpenXmlNamespaces.WordprocessingML);
+                _writer.WriteAttributeString("w", "val", OpenXmlNamespaces.WordprocessingML, "true");
+                _writer.WriteEndElement();
+            }
+            
+            //font signature
+            _writer.WriteStartElement("w", "sig", OpenXmlNamespaces.WordprocessingML);
+            _writer.WriteAttributeString("w", "usb0", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.UnicodeSubsetBitfield0:x8}");
+            _writer.WriteAttributeString("w", "usb1", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.UnicodeSubsetBitfield1:x8}");
+            _writer.WriteAttributeString("w", "usb2", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.UnicodeSubsetBitfield2:x8}");
+            _writer.WriteAttributeString("w", "usb3", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.UnicodeSubsetBitfield3:x8}");
+            _writer.WriteAttributeString("w", "csb0", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.CodePageBitfield0:x8}");
+            _writer.WriteAttributeString("w", "csb1", OpenXmlNamespaces.WordprocessingML,
+                $"{font.fs.CodePageBitfield1:x8}");
+            _writer.WriteEndElement();
+            
+            _writer.WriteEndElement();
         }
+        
+        _writer.WriteEndElement();
+        
+        _writer.Flush();
+    }
+    
+    protected enum FontFamily
+    {
+        auto,
+        decorative,
+        modern,
+        roman,
+        script,
+        swiss
     }
 }

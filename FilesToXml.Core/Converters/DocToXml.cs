@@ -13,6 +13,7 @@ public class DocToXml : IConvertable
         ms.Position = 0;
         return new DocxToXml().Convert(ms, rootContent);
     }
+    
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

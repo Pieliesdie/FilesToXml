@@ -12,15 +12,18 @@ public class TxtToXml : IEncodingConvertable
     {
         return Convert(stream, Encoding.UTF8, rootContent);
     }
+    
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
         return new XStreamingElement("DATASET", rootContent,
             new XStreamingElement("TEXT", stream.ReadAllLinesWithNewLine(encoding)));
     }
+    
     public XElement ConvertByFile(string path, params object?[] rootContent)
     {
         return ConvertByFile(path, Encoding.UTF8, rootContent);
     }
+    
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)
     {
         using var fs = File.OpenRead(path);

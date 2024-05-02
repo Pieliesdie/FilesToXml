@@ -1,14 +1,12 @@
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+[OfficeShapeType(3)]
+public class OvalType : ShapeType
 {
-    [OfficeShapeType(3)]
-    public class OvalType : ShapeType
+    public OvalType()
     {
-        public OvalType()
-        {
-            this.ShapeConcentricFill = true;
-
-            this.Joins = JoinStyle.round;
-
-        }
+        ShapeConcentricFill = true;
+        
+        Joins = JoinStyle.round;
     }
 }

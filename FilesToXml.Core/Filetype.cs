@@ -12,7 +12,8 @@ public enum Filetype
     Xml,
     Json,
     Tsv,
-    Dbf
+    Dbf,
+    Log
     /*    ,
     rtf = 8,
     ods = 9,

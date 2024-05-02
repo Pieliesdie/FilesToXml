@@ -1,30 +1,12 @@
-﻿namespace b2xtranslator.OpenXmlLib
+﻿namespace b2xtranslator.OpenXmlLib;
+
+public class ThemePart : OpenXmlPart
 {
-    public class ThemePart : OpenXmlPart
-    {
-        public ThemePart(OpenXmlPartContainer parent, int partIndex)
-            : base(parent, partIndex)
-        {
-        }
-
-        public override string ContentType
-        {
-            get { return OpenXmlContentTypes.Theme; }
-        }
-
-        public override string RelationshipType
-        {
-            get { return OpenXmlRelationshipTypes.Theme; }
-        }
-
-        public override string TargetName
-        {
-            get { return "theme" + this.PartIndex; }
-        }
-
-        public override string TargetDirectory
-        {
-            get { return "theme"; }
-        }
-    }
+    public ThemePart(OpenXmlPartContainer parent, int partIndex)
+        : base(parent, partIndex) { }
+    
+    public override string ContentType => OpenXmlContentTypes.Theme;
+    public override string RelationshipType => OpenXmlRelationshipTypes.Theme;
+    public override string TargetName => "theme" + PartIndex;
+    public override string TargetDirectory => "theme";
 }

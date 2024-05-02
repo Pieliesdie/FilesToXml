@@ -10,10 +10,10 @@ public static class StyleEx
         {
             return string.Empty;
         }
-
+        
         var regex = new Regex(@$"{name}:\s*([\d.]+.+?)\s*;?");
         var match = regex.Match(style);
-
+        
         return match.Success ? match.Groups[1].Value : string.Empty;
     }
 }

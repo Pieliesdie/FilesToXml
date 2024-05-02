@@ -1,7 +1,6 @@
-namespace b2xtranslator.CommonTranslatorLib
+namespace b2xtranslator.CommonTranslatorLib;
+
+public interface IMapping<T> where T : IVisitable
 {
-    public interface IMapping<T> where T : IVisitable
-    {
-        void Apply(T visited);
-    }
+    void Apply(T visited);
 }

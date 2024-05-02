@@ -1,14 +1,14 @@
 ﻿@page "/"
-@using FileInfo = System.IO.FileInfo
-@using Size = MudBlazor.Size
-@using FilesToXml.Core
-@using FilesToXml.WPF.Helpers
-@using FilesToXml.WPF.Model
-@using System.Text
-@using Microsoft.Win32
 @using System.IO
+@using System.Text
+@using FilesToXml.Core
 @using FilesToXml.Core.Extensions
 @using FilesToXml.WPF.Components.MudConsole
+@using FilesToXml.WPF.Helpers
+@using FilesToXml.WPF.Model
+@using Microsoft.Win32
+@using FileInfo = System.IO.FileInfo
+@using Size = MudBlazor.Size
 @inject ISnackbar Snackbar
 
 <div>
@@ -96,11 +96,11 @@
             Start
         </MudButton>
     </MudStack>
-
+    
     <MudExpansionPanels Style="flex:auto" Class="mt-5 mb-5">
         <MudExpansionPanel Text="Logs">
             <MudConsole @ref="LogConsole" Style="overflow:auto;max-height: 300px" Changed="StateHasChanged"/>
-            @if (LogConsole is {IsEmpty: false})
+            @if (LogConsole is { IsEmpty: false })
             {
                 <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
                     <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Checked="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
@@ -116,8 +116,9 @@
 @code {
     private MudConsole? LogConsole { get; set; }
     private OptionsViewModel ConvertOptions { get; } = new();
-    private bool IsBusy { get; set; } = false;
+    private bool IsBusy { get; set; }
     private readonly Encoding[] encodingInfo = Encoding.GetEncodings().Select(x => x.GetEncoding()).ToArray();
+    
     private void UploadFiles()
     {
         var ofd = new OpenFileDialog
@@ -126,10 +127,10 @@
             Filter = "all files|*.*|" + Enum.GetNames(typeof(Filetype)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
         };
         if (ofd.ShowDialog() != true) return;
-
+        
         var result = ofd.FileNames;
         if (!result.Any()) return;
-
+        
         foreach (var file in result)
         {
             if (file.ToFiletype() == Filetype.Unknown)
@@ -137,7 +138,7 @@
                 Snackbar.Add($"{file} not supported", Severity.Error);
                 continue;
             }
-
+            
             ConvertOptions.Input.Add(new FileUpload
             {
                 Path = file,
@@ -146,10 +147,12 @@
             });
         }
     }
+    
     private void RemoveUpload(FileUpload file)
     {
         ConvertOptions.Input.Remove(file);
     }
+    
     private void SelectFolder()
     {
         var sfd = new SaveFileDialog
@@ -159,17 +162,20 @@
         if (sfd.ShowDialog() != true) return;
         ConvertOptions.Output = sfd.FileName;
     }
+    
     private async Task CopyConsole()
     {
         if (LogConsole == null) return;
         await LogConsole.CopyToClipboard();
         Snackbar.Add("Copied to clipboard!", Severity.Success);
     }
+    
     private async Task ClearConsole()
     {
         if (LogConsole == null) return;
         await LogConsole.Clear();
     }
+    
     private async Task Convert()
     {
         if (LogConsole == null) return;
@@ -178,21 +184,21 @@
             IsBusy = true;
             if (!ConvertOptions.Input.Any())
             {
-                Snackbar.Add($"Select files", Severity.Error);
+                Snackbar.Add("Select files", Severity.Error);
                 return;
             }
-
+            
             await LogConsole.Clear();
-
+            
             await using var resultStream = new LineStream(ConvertOptions.OutputEncoding);
             await using var errorStream = new LineStream(ConvertOptions.OutputEncoding);
-            resultStream.OnWriteLines += async (lines) => await LogConsole.Write(lines);
-            errorStream.OnWriteLines += async (lines) => await LogConsole.WriteToBegin(lines, Color.Error);
+            resultStream.OnWriteLines += async lines => await LogConsole.Write(lines);
+            errorStream.OnWriteLines += async lines => await LogConsole.WriteToBegin(lines, Color.Error);
             if (string.IsNullOrWhiteSpace(ConvertOptions.Output))
             {
-                Snackbar.Add($"Output folder is empty, print to logs", Severity.Warning);
+                Snackbar.Add("Output folder is empty, print to logs", Severity.Warning);
             }
-
+            
             var isConverted = await Task.Run(() => ConverterToXml.Convert(ConvertOptions.MapToOptions(), resultStream, errorStream));
             if (isConverted)
             {
@@ -212,4 +218,5 @@
             IsBusy = false;
         }
     }
+    
 }

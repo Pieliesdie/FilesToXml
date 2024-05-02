@@ -1,14 +1,13 @@
-namespace b2xtranslator.doc.DocFileFormat
-{
-    public class CharacterRange
-    {
-        public int CharacterPosition;
-        public int CharacterCount;
+namespace b2xtranslator.doc.DocFileFormat;
 
-        public CharacterRange(int cp, int ccp)
-        {
-            this.CharacterPosition = cp;
-            this.CharacterCount = ccp;
-        }
+public class CharacterRange
+{
+    public int CharacterCount;
+    public int CharacterPosition;
+    
+    public CharacterRange(int cp, int ccp)
+    {
+        CharacterPosition = cp;
+        CharacterCount = ccp;
     }
 }

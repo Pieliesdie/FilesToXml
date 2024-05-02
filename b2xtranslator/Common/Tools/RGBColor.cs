@@ -1,59 +1,57 @@
 using System;
 
-namespace b2xtranslator.Tools
+namespace b2xtranslator.Tools;
+
+public class RGBColor
 {
-    public class RGBColor
+    public enum ByteOrder
     {
-        public enum ByteOrder 
+        RedFirst,
+        RedLast
+    }
+    
+    public byte Alpha;
+    public byte Blue;
+    public string EightDigitHexCode;
+    public byte Green;
+    public byte Red;
+    public string SixDigitHexCode;
+    
+    public RGBColor(int cv, ByteOrder order)
+    {
+        var bytes = BitConverter.GetBytes(cv);
+        
+        if (order == ByteOrder.RedFirst)
         {
-            RedFirst,
-            RedLast
+            //R
+            Red = bytes[0];
+            SixDigitHexCode = $"{Red:x2}";
+            //G
+            Green = bytes[1];
+            SixDigitHexCode += $"{Green:x2}";
+            //B
+            Blue = bytes[2];
+            SixDigitHexCode += $"{Blue:x2}";
+            EightDigitHexCode = SixDigitHexCode;
+            //Alpha
+            Alpha = bytes[3];
+            EightDigitHexCode += $"{Alpha:x2}";
         }
-
-        public byte Red;
-        public byte Green;
-        public byte Blue;
-        public byte Alpha;
-        public string SixDigitHexCode;
-        public string EightDigitHexCode;
-
-        public RGBColor(int cv, ByteOrder order)
+        else if (order == ByteOrder.RedLast)
         {
-            var bytes = System.BitConverter.GetBytes(cv);
-
-            if(order == ByteOrder.RedFirst)
-            {
-                //R
-                this.Red = bytes[0];
-                this.SixDigitHexCode = $"{this.Red:x2}";
-                //G
-                this.Green = bytes[1];
-                this.SixDigitHexCode += $"{this.Green:x2}";
-                //B
-                this.Blue = bytes[2];
-                this.SixDigitHexCode += $"{this.Blue:x2}";
-                this.EightDigitHexCode = this.SixDigitHexCode;
-                //Alpha
-                this.Alpha = bytes[3];
-                this.EightDigitHexCode += $"{this.Alpha:x2}";
-            }
-            else if (order == ByteOrder.RedLast)
-            {
-                //R
-                this.Red = bytes[2];
-                this.SixDigitHexCode = $"{this.Red:x2}";
-                //G
-                this.Green = bytes[1];
-                this.SixDigitHexCode += $"{this.Green:x2}";
-                //B
-                this.Blue = bytes[0];
-                this.SixDigitHexCode += $"{this.Blue:x2}";
-                this.EightDigitHexCode = this.SixDigitHexCode;
-                //Alpha
-                this.Alpha = bytes[3];
-                this.EightDigitHexCode += $"{this.Alpha:x2}";
-            }
-
+            //R
+            Red = bytes[2];
+            SixDigitHexCode = $"{Red:x2}";
+            //G
+            Green = bytes[1];
+            SixDigitHexCode += $"{Green:x2}";
+            //B
+            Blue = bytes[0];
+            SixDigitHexCode += $"{Blue:x2}";
+            EightDigitHexCode = SixDigitHexCode;
+            //Alpha
+            Alpha = bytes[3];
+            EightDigitHexCode += $"{Alpha:x2}";
         }
     }
 }

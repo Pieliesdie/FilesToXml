@@ -30,11 +30,11 @@ public static class OptionsEx
                     fileInfo.Delimiter = delimiters.Count > 1 ? delimiters.Dequeue() : delimiters.Peek();
                     fileInfo.SearchingDelimiters = options.SearchingDelimiters?.ToArray() ?? DefaultValue.SearchingDelimiters;
                 }
-
+                
                 files.Add(fileInfo);
             }
         }
-
+        
         return new DefaultOptions
         {
             DisableFormat = options.DisableFormat,

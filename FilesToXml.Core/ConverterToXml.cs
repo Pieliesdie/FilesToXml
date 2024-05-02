@@ -25,7 +25,7 @@ public static class ConverterToXml
                 $"Using default encoding for output: {DefaultValue.Encoding.CodePage} ({DefaultValue.Encoding.WebName})");
             return false;
         }
-
+        
         var outputPath = options.Output;
         using var errorSw = CreateDefaulStreamWriter(error, encoding);
         if (options is { Output: not null, ForceSave: false } && File.Exists(outputPath))
@@ -33,7 +33,7 @@ public static class ConverterToXml
             errorSw.WriteLine("Output file already exists and ForceSave is false");
             return false;
         }
-
+        
         var writeResultToStream = string.IsNullOrWhiteSpace(outputPath);
         using var outputSw = writeResultToStream
             ? CreateDefaulStreamWriter(output, encoding)
@@ -41,17 +41,18 @@ public static class ConverterToXml
         using var logSw = writeResultToStream
             ? CreateDefaulStreamWriter(Stream.Null, encoding)
             : CreateDefaulStreamWriter(output, encoding);
-
-        IEnumerable<IFile> files = options.Files;
+        
+        var files = options.Files;
         var result = Convert(files, options, outputSw, errorSw, logSw);
         return result;
     }
+    
     public static bool Convert(IEnumerable<IFile> files, IResultOptions options, StreamWriter output, StreamWriter err, StreamWriter log)
     {
         try
         {
-            List<IFile> inputFiles = files.ToList();
-            IEnumerable<XStreamingElement?> datasets = ProcessFiles(inputFiles, err, log);
+            var inputFiles = files.ToList();
+            var datasets = ProcessFiles(inputFiles, err, log);
             Save(output, datasets, options.DisableFormat);
             inputFiles.ForEach(x => x.Dispose());
             log.WriteLine("All files converted to output");
@@ -61,16 +62,18 @@ public static class ConverterToXml
             err.WriteLine($"Failed to convert result document: {e}");
             return false;
         }
-
+        
         StreamExtensions.ResetStream(output, log, err);
         return true;
     }
+    
     private static void Save(TextWriter outputSw, IEnumerable<XStreamingElement?> content, bool disableFormat)
     {
         var xDoc = new XStreamingElement("DATA", content);
         var saveOptions = disableFormat ? SaveOptions.DisableFormatting : SaveOptions.None;
         xDoc.Save(outputSw, saveOptions);
     }
+    
     private static IEnumerable<XStreamingElement?> ProcessFiles(IEnumerable<IFile> files, TextWriter err, TextWriter log)
     {
         return files
@@ -78,6 +81,7 @@ public static class ConverterToXml
             .AsUnordered()
             .Select(file => ProcessFile(file, err, log));
     }
+    
     private static XStreamingElement? ProcessFile(IFile file, TextWriter err, TextWriter log)
     {
         var filename = Path.GetFileName(file.Path);
@@ -90,11 +94,14 @@ public static class ConverterToXml
                     $"Using default encoding for '{filename}': {DefaultValue.Encoding.CodePage} ({DefaultValue.Encoding.WebName})");
                 encoding = DefaultValue.Encoding;
             }
-
-            if (!file.TryGetStream(err, out var stream)) return null;
-
+            
+            if (!file.TryGetStream(err, out var stream))
+            {
+                return null;
+            }
+            
             var converter = FindConverter(file.Path.ToFiletype());
-            IEnumerable<XObject> additionalInfo = CreateAdditionalInfo(file);
+            var additionalInfo = CreateAdditionalInfo(file);
             var xml = converter switch
             {
                 IDelimiterConvertable c when file.Delimiter == "auto"
@@ -105,7 +112,7 @@ public static class ConverterToXml
                     => c.Convert(stream, encoding, additionalInfo),
                 _ => converter.Convert(stream, additionalInfo)
             };
-
+            
             log.WriteLine($"Successfully start converting file: {filename}");
             return xml;
         }
@@ -115,15 +122,19 @@ public static class ConverterToXml
             return null;
         }
     }
+    
     private static IEnumerable<XObject> CreateAdditionalInfo(IFileOptions file)
     {
         yield return new XAttribute("ext", file.Path.ToFiletype().ToString().ToLower());
         yield return new XAttribute("name", Path.GetFileName(file.Path));
         yield return new XAttribute("path", file.Path);
-
+        
         if (!string.IsNullOrEmpty(file.Label))
+        {
             yield return new XAttribute("label", file.Label);
+        }
     }
+    
     private static IConvertable FindConverter(Filetype type)
     {
         IConvertable converter = type switch
@@ -138,6 +149,7 @@ public static class ConverterToXml
             Filetype.Json => new JsonToXml(),
             Filetype.Tsv => new TsvToXml(),
             Filetype.Dbf => new DbfToXml(),
+            Filetype.Log => new LogToXml(),
             /*SupportedFileExt.rtf => new RtfToXml(),
             SupportedFileExt.odt => new OdsToXml(),
             SupportedFileExt.ods => new OdsToXml(),*/
@@ -146,10 +158,12 @@ public static class ConverterToXml
         };
         return converter;
     }
+    
     private static StreamWriter CreateDefaulStreamWriter(string path, Encoding encoding)
     {
         return new StreamWriter(path, false, encoding) { AutoFlush = true };
     }
+    
     private static StreamWriter CreateDefaulStreamWriter(Stream stream, Encoding encoding)
     {
         return new StreamWriter(stream, encoding, -1, true) { AutoFlush = true };

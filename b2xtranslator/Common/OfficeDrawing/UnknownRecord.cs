@@ -1,23 +1,19 @@
-
-
 using System.IO;
 
-namespace b2xtranslator.OfficeDrawing
+namespace b2xtranslator.OfficeDrawing;
+
+public class UnknownRecord : Record
 {
-    public class UnknownRecord : Record
+    public UnknownRecord(BinaryReader _reader, uint size, uint typeCode, uint version, uint instance)
+        : base(_reader, size, typeCode, version, instance)
     {
-        public UnknownRecord(BinaryReader _reader, uint size, uint typeCode, uint version, uint instance)
-            : base(_reader, size, typeCode, version, instance)
+        if (Reader.BaseStream.Length - Reader.BaseStream.Position >= size)
         {
-            if (this.Reader.BaseStream.Length - this.Reader.BaseStream.Position >= size)
-            {
-                this.Reader.ReadBytes((int)size);
-            }
-            else
-            {
-                this.Reader.ReadBytes((int)(this.Reader.BaseStream.Length - this.Reader.BaseStream.Position));
-            }
+            Reader.ReadBytes((int)size);
+        }
+        else
+        {
+            Reader.ReadBytes((int)(Reader.BaseStream.Length - Reader.BaseStream.Position));
         }
     }
-
 }

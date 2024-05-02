@@ -1,11 +1,9 @@
 using System;
 
-namespace b2xtranslator.doc.WordprocessingMLMapping
+namespace b2xtranslator.doc.WordprocessingMLMapping;
+
+public class MappingException : Exception
 {
-    public class MappingException : Exception
-    {
-        public MappingException(string message)
-            : base(message)
-        { }
-    }
+    public MappingException(string message)
+        : base(message) { }
 }

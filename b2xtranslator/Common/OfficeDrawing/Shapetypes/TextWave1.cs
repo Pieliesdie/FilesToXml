@@ -1,74 +1,73 @@
 ﻿using System.Collections.Generic;
 
-namespace b2xtranslator.OfficeDrawing.Shapetypes
+namespace b2xtranslator.OfficeDrawing.Shapetypes;
+
+[OfficeShapeType(156)]
+public class TextWave1 : ShapeType
 {
-    [OfficeShapeType(156)]
-    public class TextWave1 : ShapeType
+    public TextWave1()
     {
-        public TextWave1()
+        TextPath = true;
+        AdjustmentValues = "2809,10800";
+        Path = "m@25@0c@26@3@27@1@28@0m@21@4c@22@5@23@6@24@4e";
+        ConnectorLocations = "@35,@0;@38,10800;@37,@4;@36,10800";
+        ConnectorAngles = "270,180,90,0";
+        
+        Handles = new List<Handle>();
+        var h1 = new Handle
         {
-            this.TextPath = true;
-            this.AdjustmentValues = "2809,10800";
-            this.Path = "m@25@0c@26@3@27@1@28@0m@21@4c@22@5@23@6@24@4e";
-            this.ConnectorLocations = "@35,@0;@38,10800;@37,@4;@36,10800";
-            this.ConnectorAngles = "270,180,90,0";
-
-            this.Handles = new List<Handle>();
-            var h1 = new Handle
-            {
-                position = "topLeft,#0",
-                yrange = "0,4459"
-            };
-            var h2 = new Handle
-            {
-                position = "#1,bottomRight",
-                xrange = "8640,12960"
-            };
-            this.Handles.Add(h1);
-            this.Handles.Add(h2);
-
-            this.Formulas = new List<string>
-            {
-                "val #0",
-                "prod @0 41 9",
-                "prod @0 23 9",
-                "sum 0 0 @2",
-                "sum 21600 0 #0",
-                "sum 21600 0 @1",
-                "sum 21600 0 @3",
-                "sum #1 0 10800",
-                "sum 21600 0 #1",
-                "prod @8 2 3",
-                "prod @8 4 3",
-                "prod @8 2 1",
-                "sum 21600 0 @9",
-                "sum 21600 0 @10",
-                "sum 21600 0 @11",
-                "prod #1 2 3",
-                "prod #1 4 3",
-                "prod #1 2 1",
-                "sum 21600 0 @15",
-                "sum 21600 0 @16",
-                "sum 21600 0 @17",
-                "if @7 @14 0",
-                "if @7 @13 @15",
-                "if @7 @12 @16",
-                "if @7 21600 @17",
-                "if @7 0 @20",
-                "if @7 @9 @19",
-                "if @7 @10 @18",
-                "if @7 @11 21600",
-                "sum @24 0 @21",
-                "sum @4 0 @0",
-                "max @21 @25",
-                "min @24 @28",
-                "prod @0 2 1",
-                "sum 21600 0 @33",
-                "mid @26 @27",
-                "mid @24 @28",
-                "mid @22 @23",
-                "mid @21 @25"
-            };
-        }      
+            position = "topLeft,#0",
+            yrange = "0,4459"
+        };
+        var h2 = new Handle
+        {
+            position = "#1,bottomRight",
+            xrange = "8640,12960"
+        };
+        Handles.Add(h1);
+        Handles.Add(h2);
+        
+        Formulas = new List<string>
+        {
+            "val #0",
+            "prod @0 41 9",
+            "prod @0 23 9",
+            "sum 0 0 @2",
+            "sum 21600 0 #0",
+            "sum 21600 0 @1",
+            "sum 21600 0 @3",
+            "sum #1 0 10800",
+            "sum 21600 0 #1",
+            "prod @8 2 3",
+            "prod @8 4 3",
+            "prod @8 2 1",
+            "sum 21600 0 @9",
+            "sum 21600 0 @10",
+            "sum 21600 0 @11",
+            "prod #1 2 3",
+            "prod #1 4 3",
+            "prod #1 2 1",
+            "sum 21600 0 @15",
+            "sum 21600 0 @16",
+            "sum 21600 0 @17",
+            "if @7 @14 0",
+            "if @7 @13 @15",
+            "if @7 @12 @16",
+            "if @7 21600 @17",
+            "if @7 0 @20",
+            "if @7 @9 @19",
+            "if @7 @10 @18",
+            "if @7 @11 21600",
+            "sum @24 0 @21",
+            "sum @4 0 @0",
+            "max @21 @25",
+            "min @24 @28",
+            "prod @0 2 1",
+            "sum 21600 0 @33",
+            "mid @26 @27",
+            "mid @24 @28",
+            "mid @22 @23",
+            "mid @21 @25"
+        };
     }
 }
