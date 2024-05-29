@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FilesToXml.Core.Helpers;
+﻿namespace FilesToXml.Core.Helpers;
 
 public static class Disposable
 {

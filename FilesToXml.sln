@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "b2xtranslator", "b2xtransla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "b2xtranslator.doc", "b2xtranslator\Doc\b2xtranslator.doc.csproj", "{2C551CBC-07E1-404E-8E04-38949BC6BE68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "Benchmark\Benchmark.csproj", "{816B26E6-BD1A-4812-B66B-63743772C5F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Benchmark", "FilesToXml.Benchmark\FilesToXml.Benchmark.csproj", "{816B26E6-BD1A-4812-B66B-63743772C5F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA600FC7-B1F5-4174-B900-5BF9764723AE}"
 	ProjectSection(SolutionItems) = preProject
@@ -107,5 +107,6 @@ Global
 		File = FilesToXml.Console\Properties\PublishProfiles\linux-x64 publish.run.xml
 		File = FilesToXml.Console\Properties\PublishProfiles\osx-x64 publish.run.xml
 		File = FilesToXml.Console\Properties\PublishProfiles\windows-x64 publish.run.xml
+		File = FilesToXml.Console\Properties\PublishProfiles\WPF app windows-x64 publish.run.xml
 	EndGlobalSection
 EndGlobal

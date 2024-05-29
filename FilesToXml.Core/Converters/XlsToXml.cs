@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Converters.OfficeConverters;
 

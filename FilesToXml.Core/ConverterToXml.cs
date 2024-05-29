@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
+using FilesToXml.Core.Helpers;
 using FilesToXml.Core.Interfaces;
 using EncodingExtensions = FilesToXml.Core.Extensions.EncodingExtensions;
 
@@ -51,10 +48,9 @@ public static class ConverterToXml
     {
         try
         {
-            var inputFiles = files.ToList();
+            using var inputFiles = files.ToDisposableList();
             var datasets = ProcessFiles(inputFiles, err, log);
             Save(output, datasets, options.DisableFormat);
-            inputFiles.ForEach(x => x.Dispose());
             log.WriteLine("All files converted to output");
         }
         catch (Exception e)
@@ -62,8 +58,10 @@ public static class ConverterToXml
             err.WriteLine($"Failed to convert result document: {e}");
             return false;
         }
-        
-        StreamExtensions.ResetStream(output, log, err);
+        finally
+        {
+            StreamExtensions.ResetStream(output, log, err);
+        }
         return true;
     }
     

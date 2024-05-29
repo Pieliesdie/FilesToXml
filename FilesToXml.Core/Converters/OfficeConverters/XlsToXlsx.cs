@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -20,7 +17,8 @@ public class XlsToXlsx
     {
         var result = Convert(stream);
         using var fs = new FileStream(path, FileMode.OpenOrCreate);
-        fs.Write(result.ToArray());
+        var resultArray = result.ToArray();
+        fs.Write(resultArray, 0, resultArray.Length);
     }
     
     /// <summary>
@@ -33,7 +31,8 @@ public class XlsToXlsx
         using var fsSrc = new FileStream(xlsPath, FileMode.Open);
         using var result = Convert(fsSrc);
         using var fs = new FileStream(destPath, FileMode.OpenOrCreate);
-        fs.Write(result.ToArray());
+        var resultArray = result.ToArray();
+        fs.Write(resultArray, 0, resultArray.Length);
     }
     
     /// <summary>

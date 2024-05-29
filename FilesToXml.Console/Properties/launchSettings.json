@@ -1,5 +1,8 @@
 {
   "profiles": {
+    "Console": {
+      "commandName": "Project"
+    },
     "Convertor": {
       "commandName": "Project",
       "commandLineArgs": "-i \"C:\\Users\\haket\\Downloads\\import_ЦПО_Шаблон_импорта_EXCEL_2023_12_от_16_02_2024_ПТО_ПЭО.xlsx\" -e 1251 -E 866"

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using b2xtranslator.doc.DocFileFormat;
+﻿using b2xtranslator.doc.DocFileFormat;
 using b2xtranslator.doc.WordprocessingMLMapping;
 using b2xtranslator.OpenXmlLib.WordprocessingML;
 using b2xtranslator.StructuredStorage.Reader;
@@ -14,7 +13,9 @@ public class DocToDocx
         using var fs = new FileStream(docPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         using var docxMemoryStream = ConvertFromStreamToDocxMemoryStream(fs);
         using var docxFileStream = new FileStream(docxPath, FileMode.OpenOrCreate);
-        docxFileStream.Write(docxMemoryStream.ToArray());
+        
+        var resultArray = docxMemoryStream.ToArray();
+        docxFileStream.Write(resultArray, 0, resultArray.Length);
     }
     
     public static MemoryStream ConvertFromStreamToDocxMemoryStream(Stream stream)

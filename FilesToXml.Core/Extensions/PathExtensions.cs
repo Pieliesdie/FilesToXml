@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace FilesToXml.Core.Extensions;
+﻿namespace FilesToXml.Core.Extensions;
 
 public static class PathExtensions
 {

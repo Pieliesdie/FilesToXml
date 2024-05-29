@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FilesToXml.Core.Interfaces;
+﻿namespace FilesToXml.Core.Interfaces;
 
 public interface IOptions : IOutputOptions, IResultOptions
 {
