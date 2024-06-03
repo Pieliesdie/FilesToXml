@@ -24,6 +24,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.Wasm", "FilesToX
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesToXml.WPF", "FilesToXml.WPF\FilesToXml.WPF.csproj", "{D2F594F8-DE55-4074-BFA6-D529E62C2F3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "b2xtranslator.xls", "b2xtranslator\Xls\b2xtranslator.xls.csproj", "{E99B5F67-C100-4CCC-8770-96AFCAB7624A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "b2xtranslator", "b2xtranslator", "{A2ADB8FC-E3EE-4040-8137-2AE780543C69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +100,14 @@ Global
 		{D2F594F8-DE55-4074-BFA6-D529E62C2F3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2F594F8-DE55-4074-BFA6-D529E62C2F3A}.Release|x64.ActiveCfg = Release|Any CPU
 		{D2F594F8-DE55-4074-BFA6-D529E62C2F3A}.Release|x64.Build.0 = Release|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Debug|x64.Build.0 = Debug|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +120,10 @@ Global
 		File = FilesToXml.Console\Properties\PublishProfiles\osx-x64 publish.run.xml
 		File = FilesToXml.Console\Properties\PublishProfiles\windows-x64 publish.run.xml
 		File = FilesToXml.Console\Properties\PublishProfiles\WPF app windows-x64 publish.run.xml
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2F937E73-E06C-4785-8576-F2E37A99A867} = {A2ADB8FC-E3EE-4040-8137-2AE780543C69}
+		{2C551CBC-07E1-404E-8E04-38949BC6BE68} = {A2ADB8FC-E3EE-4040-8137-2AE780543C69}
+		{E99B5F67-C100-4CCC-8770-96AFCAB7624A} = {A2ADB8FC-E3EE-4040-8137-2AE780543C69}
 	EndGlobalSection
 EndGlobal

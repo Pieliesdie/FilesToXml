@@ -25,7 +25,7 @@
     },
     "xls": {
       "commandName": "Project",
-      "commandLineArgs": "-i xls.xls -e 1251 -E 866 -s -o .\\test.xml"
+      "commandLineArgs": "-i ..\\..\\..\\..\\FilesToXml.Tests\\Files\\xls.xls -e 1251 -E 866 -s"
     },
     "txt": {
       "commandName": "Project",

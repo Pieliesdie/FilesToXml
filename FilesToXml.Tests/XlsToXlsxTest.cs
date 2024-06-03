@@ -11,10 +11,9 @@ public class XlsToXlsxTest
     [Fact]
     public void XlsToXlsxConverterTestNotNull()
     {
-        var converter = new XlsToXlsx();
         var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         var path = curDir + @"/Files/xls.xls";
-        converter.ConvertToXlsxFile(path, curDir + @"/Files/Result.xlsx");
+        XlsToXlsx.Convert(path, curDir + @"/Files/Result.xlsx");
         Assert.True(File.Exists(curDir + @"/Files/Result.xlsx"));
     }
 }

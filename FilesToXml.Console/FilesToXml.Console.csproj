@@ -21,7 +21,6 @@
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <InvariantGlobalization>true</InvariantGlobalization>
         <DebuggerSupport>false</DebuggerSupport>
         <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
         <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>

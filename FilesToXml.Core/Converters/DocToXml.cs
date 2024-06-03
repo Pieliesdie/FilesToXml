@@ -8,7 +8,7 @@ public class DocToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        var ms = DocToDocx.ConvertFromStreamToDocxMemoryStream(stream);
+        var ms = DocToDocx.Convert(stream);
         ms.Position = 0;
         return new DocxToXml().Convert(ms, rootContent);
     }

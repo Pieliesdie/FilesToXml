@@ -10,9 +10,8 @@ public class DocToDocxTest
     [Fact]
     public void DocToDocxConvertToDocxNotNull()
     {
-        var converter = new DocToDocx();
         var path = "./Files/doc1.doc";
-        converter.ConvertFromFileToDocxFile(path, "./Files/Result.docx");
+        DocToDocx.Convert(path, "./Files/Result.docx");
         Assert.True(File.Exists("./Files/Result.docx"));
     }
 }

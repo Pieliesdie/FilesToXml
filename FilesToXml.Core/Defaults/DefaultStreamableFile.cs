@@ -8,10 +8,10 @@ public class DefaultStreamableFile : DefaultFileOptions, IFile
     public required Stream Stream { get; init; }
     
     [SetsRequiredMembers]
-    public DefaultStreamableFile(Stream stream, string fileName)
+    public DefaultStreamableFile(Stream stream, Filetype filetype)
     {
         Stream = stream;
-        Path = $"{fileName}";
+        Path = $"{filetype}.{filetype}";
     }
     
     public bool TryGetStream(TextWriter err, [NotNullWhen(true)] out Stream? stream)
