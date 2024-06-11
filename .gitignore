@@ -37,3 +37,4 @@ packages/
 */obj/*
 /.idea
 /FilesToXml.Wasm.Client/node_modules
+/.nuget
