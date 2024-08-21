@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using DbfDataReader;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 
 namespace FilesToXml.Core.Converters;
 
@@ -8,7 +9,7 @@ public class DbfToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent,
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent,
             new XStreamingElement("TABLE", new XAttribute("id", 0), ReadLines(stream)));
     }
     

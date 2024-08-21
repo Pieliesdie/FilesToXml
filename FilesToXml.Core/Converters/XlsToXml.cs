@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
 using FilesToXml.Core.Converters.OfficeConverters;
+using FilesToXml.Core.Defaults;
 
 namespace FilesToXml.Core.Converters;
 
@@ -8,7 +9,7 @@ public class XlsToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent, Read(stream));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, Read(stream));
     }
     
     public XElement ConvertByFile(string path, params object?[] rootContent)

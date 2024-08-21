@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
@@ -15,7 +16,7 @@ public class XlsxToXml : IConvertable
     
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent, SpreadsheetProcess(stream));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, SpreadsheetProcess(stream));
     }
     
     public XElement ConvertByFile(string path, params object?[] rootContent)

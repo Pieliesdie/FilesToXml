@@ -8,6 +8,7 @@ using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+using Perfolizer.Metrology;
 
 var exporter = new CsvExporter(
     CsvSeparator.CurrentCulture,

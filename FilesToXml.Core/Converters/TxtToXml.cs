@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 using FilesToXml.Core.Extensions;
 
 namespace FilesToXml.Core.Converters;
@@ -14,7 +15,7 @@ public class TxtToXml : IEncodingConvertable
     
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent,
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent,
             new XStreamingElement("TEXT", stream.ReadAllLinesWithNewLine(encoding)));
     }
     

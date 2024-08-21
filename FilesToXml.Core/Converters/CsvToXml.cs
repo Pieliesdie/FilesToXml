@@ -11,7 +11,7 @@ public class CsvToXml : IDelimiterConvertable
 {
     public XStreamingElement Convert(Stream stream, string delimiter, Encoding encoding, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent,
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent,
             new XStreamingElement("TABLE", new XAttribute("id", 0), ReadLines(stream, delimiter, encoding)));
     }
     

@@ -34,7 +34,7 @@ public class JsonToXmlTest
         var path = "./Files/json.json";
         using var fs = File.OpenRead(path);
         var ds = new XElement(converter.Convert(fs));
-        var result = ds.Element("ROOT").Element("items").Element("address").Element("region").Attribute("guid").Value;
+        var result = ds.Element("items").Element("address").Element("region").Attribute("guid").Value;
         Assert.Equal("5f77834b-6351-4bcd-95af-a9ff7f6b511c", result);
     }
 }

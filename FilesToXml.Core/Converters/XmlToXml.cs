@@ -2,6 +2,7 @@
 using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 
 namespace FilesToXml.Core.Converters;
 
@@ -19,7 +20,7 @@ public class XmlToXml : IEncodingConvertable
     
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
-        return new XStreamingElement("DATASET", rootContent, Read(stream, encoding));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, Read(stream, encoding));
     }
     
     public XElement ConvertByFile(string path, Encoding encoding, params object?[] rootContent)

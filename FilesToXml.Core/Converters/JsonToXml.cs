@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -9,8 +9,6 @@ namespace FilesToXml.Core.Converters;
 
 public class JsonToXml : IEncodingConvertable
 {
-    private string lastProcessedNode = string.Empty;
-    
     //How to read line by line if we can get json like this?
     //  {
     //      "atr1" : 123,
@@ -21,15 +19,15 @@ public class JsonToXml : IEncodingConvertable
     //  }
     public XStreamingElement Convert(Stream stream, Encoding encoding, params object?[] rootContent)
     {
+        using var reader = new JsonTextReader(new StreamReader(stream, encoding)) { SupportMultipleContent = true };
         try
         {
-            using var reader = new JsonTextReader(new StreamReader(stream, encoding)) { SupportMultipleContent = true };
             var ds = JToken.ReadFrom(reader);
-            return new XStreamingElement("DATASET", rootContent, new XElement("ROOT", ParseJson(ds)));
+            return new XStreamingElement(DefaultStructure.DatasetName, rootContent, ParseJson(ds));
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error while processing '{lastProcessedNode}': {ex.Message}");
+            throw new Exception($"Error while processing '{reader.Path}': {ex.Message}");
         }
     }
     
@@ -49,13 +47,13 @@ public class JsonToXml : IEncodingConvertable
         return ConvertByFile(path, Encoding.UTF8, rootContent);
     }
     
-    private IEnumerable<XObject> ParseJson(
+    private IEnumerable<object> ParseJson(
         JToken reader,
         string nodeName = "ROOT",
-        JTokenType parentType = JTokenType.Object
+        JTokenType parentType = JTokenType.Object,
+        Dictionary<string, XNamespace>? namespaces = null
     )
     {
-        lastProcessedNode = reader.Path;
         foreach (var token in reader.OrderByDescending(x => x.Type))
         {
             switch (token.Type)
@@ -70,36 +68,51 @@ public class JsonToXml : IEncodingConvertable
                 case JTokenType.TimeSpan:
                     if (token is JValue { Value: not null } jValue)
                     {
-                        if (nodeName.Contains('$'))
+                        if (nodeName.StartsWith("xmlns") && nodeName.Split(':').ElementAtOrDefault(1) is { } xmlNamespace)
                         {
-                            yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
+                            if (namespaces is not null && !namespaces.ContainsKey(xmlNamespace))
+                            {
+                                namespaces.Add(xmlNamespace, jValue.Value.ToString() ?? XNamespace.None);
+                            }
+                            
+                            yield return new XAttribute(XNamespace.Xmlns + xmlNamespace, jValue.Value.ToString() ?? XNamespace.None);
+                        }
+                        else if (nodeName.Contains('$'))
+                        {
+                            yield return new XElement(EncodeXmlName(nodeName, namespaces), jValue.Value);
                         }
                         else
                         {
                             if (parentType != JTokenType.Array)
                             {
-                                yield return new XAttribute(EncodeXmlName(nodeName), jValue.Value);
+                                yield return new XAttribute(EncodeXmlName(nodeName, namespaces), jValue.Value);
                             }
                             else
                             {
-                                yield return new XElement(EncodeXmlName(nodeName), jValue.Value);
+                                yield return new XElement(EncodeXmlName(nodeName, namespaces), jValue.Value);
                             }
                         }
                     }
                     
                     break;
                 case JTokenType.Object:
-                    yield return new XElement(EncodeXmlName(nodeName), ParseJson(token, nodeName, token.Type).ToList());
+                    namespaces ??= [];
+                    var originalNamespaces = new Dictionary<string, XNamespace>(namespaces);
+                    var content = ParseJson(token, nodeName, token.Type, namespaces).ToList();
+                    yield return new XElement(
+                        EncodeXmlName(nodeName, namespaces),
+                        content);
+                    namespaces = originalNamespaces;
                     break;
                 case JTokenType.Array:
-                    foreach (var xobj in ParseJson(token, nodeName, token.Type))
+                    foreach (var xobj in ParseJson(token, nodeName, token.Type, namespaces))
                     {
                         yield return xobj;
                     }
                     
                     break;
                 case JTokenType.Property:
-                    foreach (var xobj in ParseJson(token, (token as JProperty)?.Name ?? "ROOT", token.Type))
+                    foreach (var xobj in ParseJson(token, (token as JProperty)?.Name ?? "ROOT", token.Type, namespaces))
                     {
                         yield return xobj;
                     }
@@ -109,8 +122,26 @@ public class JsonToXml : IEncodingConvertable
         }
     }
     
-    private static string EncodeXmlName(string name)
+    private XName EncodeXmlName(string name, Dictionary<string, XNamespace>? namespaces)
     {
-        return XmlConvert.EncodeName(name.Replace("@", "").Replace("$", "")) ?? string.Empty;
+        name = name.Replace("@", "").Replace("$", "");
+        // Split by the colon to handle namespace prefix
+        var parts = name.Split(':');
+        
+        // If the input contains a namespace prefix, use it
+        if (parts.Length == 2)
+        {
+            string namespacePrefix = parts[0];
+            string localName = parts[1];
+            if (namespaces != null && namespaces.TryGetValue(namespacePrefix, out var ns))
+            {
+                return XName.Get(localName, ns.NamespaceName);
+            }
+            
+            return XName.Get(localName, namespacePrefix);
+        }
+        
+        // If there's no colon, treat the whole string as the local name
+        return XName.Get(name);
     }
 }

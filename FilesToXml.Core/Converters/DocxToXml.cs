@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FilesToXml.Core.Converters.Interfaces;
+using FilesToXml.Core.Defaults;
 
 namespace FilesToXml.Core.Converters;
 
@@ -11,7 +12,7 @@ public class DocxToXml : IConvertable
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
         stream.Position = 0;
-        return new XStreamingElement("DATASET", rootContent, ReadLines(stream));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, ReadLines(stream));
     }
     
     public XElement ConvertByFile(string path, params object?[] rootContent)

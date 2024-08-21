@@ -121,30 +121,37 @@
     
     private void UploadFiles()
     {
-        var ofd = new OpenFileDialog
+        try
         {
-            Multiselect = true,
-            Filter = "all files|*.*|" + Enum.GetNames(typeof(Filetype)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
-        };
-        if (ofd.ShowDialog() != true) return;
-        
-        var result = ofd.FileNames;
-        if (!result.Any()) return;
-        
-        foreach (var file in result)
-        {
-            if (file.ToFiletype() == Filetype.Unknown)
+            var ofd = new OpenFileDialog
             {
-                Snackbar.Add($"{file} not supported", Severity.Error);
-                continue;
-            }
+                Multiselect = true,
+                Filter = "all files|*.*|" + Enum.GetNames(typeof(Filetype)).Select(x => $"{x} files|*.{x}").Aggregate((x, y) => $"{x}|{y}")
+            };
+            if (ofd.ShowDialog() != true) return;
             
-            ConvertOptions.Input.Add(new FileUpload
+            var result = ofd.FileNames;
+            if (!result.Any()) return;
+            
+            foreach (var file in result)
             {
-                Path = file,
-                Name = Path.GetFileNameWithoutExtension(file),
-                Size = new FileInfo(file).Length
-            });
+                if (file.ToFiletype() == Filetype.Unknown)
+                {
+                    Snackbar.Add($"{file} not supported", Severity.Error);
+                    continue;
+                }
+                
+                ConvertOptions.Input.Add(new FileUpload
+                {
+                    Path = file,
+                    Name = Path.GetFileNameWithoutExtension(file),
+                    Size = new FileInfo(file).Length
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"{ex}", Severity.Error);
         }
     }
     
