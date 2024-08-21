@@ -13,9 +13,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="6.9.2" />
+        <PackageReference Include="CodeBeam.MudBlazor.Extensions" Version="7.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.80" />
-        <PackageReference Include="MudBlazor" Version="6.20.0" />
+        <PackageReference Include="MudBlazor" Version="7.6.0" />
     </ItemGroup>
 
     <ItemGroup>

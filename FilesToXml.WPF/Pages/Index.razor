@@ -68,8 +68,8 @@
     <MudExpansionPanels Class="mt-5">
         <MudExpansionPanel Text="Settings">
             <MudStack>
-                <MudCheckBox @bind-Checked="@ConvertOptions.DisableFormat">Disable output file formatting</MudCheckBox>
-                <MudCheckBox @bind-Checked="@ConvertOptions.ForceSave">Override output file</MudCheckBox>
+                <MudCheckBox @bind-Value="@ConvertOptions.DisableFormat">Disable output file formatting</MudCheckBox>
+                <MudCheckBox @bind-Value="@ConvertOptions.ForceSave">Override output file</MudCheckBox>
                 <MudSelectExtended SearchBox="true" ItemCollection="encodingInfo" @bind-Value="ConvertOptions.OutputEncoding"
                                    T="Encoding" ToStringFunc="@EncodingTools.EncodingToFriendlyString"
                                    Label="Output Encoding"/>
@@ -103,7 +103,7 @@
             @if (LogConsole is { IsEmpty: false })
             {
                 <MudStack Row="true" Class="mt-3" Style="max-height: 100px;" AlignItems="AlignItems.Center">
-                    <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Checked="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
+                    <MudCheckBox Class="mr-3" Style="height: 40px" @bind-Value="@LogConsole.ScrollToBottomOnUpdate">Scroll to bottom on update</MudCheckBox>
                     <MudSpacer/>
                     <MudButton Style="width: 90px; height: 30px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="CopyConsole">Copy</MudButton>
                     <MudButton Style="width: 90px; height: 30px" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="ClearConsole">Clear</MudButton>
