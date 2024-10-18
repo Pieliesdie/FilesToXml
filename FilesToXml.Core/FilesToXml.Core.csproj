@@ -6,7 +6,7 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <PackageId>FilesToXml.Core</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>pov</Authors>
         <Description>Convert files to xml</Description>
     </PropertyGroup>
