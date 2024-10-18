@@ -20,7 +20,7 @@
                 Color="Color.Primary"
                 Size="Size.Small"
                 Class="mr-3"
-                Title="Add"
+                title="Add"
                 Variant="Variant.Outlined"
                 Icon="@Icons.Material.Filled.Add"
                 OnClick="UploadFiles">
@@ -29,7 +29,7 @@
                            Color="Color.Primary"
                            Variant="Variant.Outlined"
                            Size="Size.Small"
-                           Title="Clear all"
+                           title="Clear all"
                            Icon="@Icons.Material.Filled.ClearAll"
                            OnClick="() => ConvertOptions.Input.Clear()">
             </MudIconButton>
@@ -86,7 +86,7 @@
         </MudButton>
         <MudTextField FullWidth="true" T="string" @bind-Value="@ConvertOptions.Output" Label="Output file" Clearable="true"/>
         <MudSpacer/>
-        <MudButton @bind-Disabled="@IsBusy"
+        <MudButton @bind-disabled="@IsBusy"
                    Variant="Variant.Filled"
                    Class="pa-5"
                    Style="height: 40px;min-width: 160px"
