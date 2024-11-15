@@ -2,7 +2,7 @@
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net8.0;</TargetFrameworks>
+        <TargetFrameworks>net9.0;</TargetFrameworks>
         <Description>Converts files to xml</Description>
         <Company>Infostandart</Company>
         <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
