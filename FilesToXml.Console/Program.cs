@@ -10,7 +10,7 @@ var isSupportCommand = args.Any(x => x == "--support");
 if (isSupportCommand)
 {
     Console.WriteLine("Supported types:");
-    Enum.GetNames<Filetype>().ForEach(Console.WriteLine);
+    Enum.GetNames(typeof(Filetype)).ForEach(Console.WriteLine);
     return;
 }
 

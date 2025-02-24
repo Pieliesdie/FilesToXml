@@ -237,7 +237,7 @@ public partial class XlsxToXml : IConvertable
     [GeneratedRegex("MM.yyyy")]
     private static partial Regex ShortDateRegex();
 #else
-    private static readonly Regex _shortDateRegex = new Regex("MM\\.yyyy", RegexOptions.Compiled);
-    private static Regex ShortDateRegex() => _shortDateRegex;
+    private static readonly Regex shortDateRegex = new Regex("MM\\.yyyy", RegexOptions.Compiled);
+    private static Regex ShortDateRegex() => shortDateRegex;
 #endif
 }
