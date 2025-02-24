@@ -12,6 +12,11 @@ namespace FilesToXml.Core;
 
 public static class ConverterToXml
 {
+    static ConverterToXml()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+    
     public static bool Convert(IOptions options, Stream output, Stream error)
     {
         if (!EncodingExtensions.TryGetEncoding(options.CodePage, out var encoding, out var encodingError))

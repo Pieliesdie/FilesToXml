@@ -3,9 +3,9 @@
     "Console": {
       "commandName": "Project"
     },
-    "Convertor": {
+    "Converter": {
       "commandName": "Project",
-      "commandLineArgs": "-i \"C:\\Users\\haket\\Downloads\\import_ЦПО_Шаблон_импорта_EXCEL_2023_12_от_16_02_2024_ПТО_ПЭО.xlsx\" -e 1251 -E 866"
+      "commandLineArgs": "-i \"C:\\Users\\haket\\Downloads\\РК ТОиР2023-2027.xls\" -e 1252 -E 866"
     },
     "null": {
       "commandName": "Project",

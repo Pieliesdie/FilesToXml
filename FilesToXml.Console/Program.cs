@@ -14,7 +14,6 @@ if (isSupportCommand)
     return;
 }
 
-Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 var isPrintCodepages = args.Any(x => x == "--codepages");
 if (isPrintCodepages)
 {
