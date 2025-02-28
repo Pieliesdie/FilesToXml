@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml;
@@ -16,7 +17,7 @@ public partial class XlsxToXml : IConvertable
 
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, SpreadsheetProcess(stream));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, Process(stream));
     }
 
     public XElement ConvertByFile(string path, params object?[] rootContent)
@@ -25,41 +26,128 @@ public partial class XlsxToXml : IConvertable
         return new XElement(Convert(fs, rootContent));
     }
 
-    /// <summary>
-    ///     Method of processing xlsx document
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <returns></returns>
-    internal static IEnumerable<XStreamingElement> SpreadsheetProcess(Stream stream)
+    private static IEnumerable<XStreamingElement> Process(Stream stream)
     {
-        using var doc = SpreadsheetDocument.Open(stream, false);
-        var sharedStringTable =
-            (doc.WorkbookPart?.SharedStringTablePart?.SharedStringTable).ToArrayOrEmpty();
-        var cellFormats = (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.CellFormats?.OfType<CellFormat>())
-            .ToArrayOrEmpty();
-        var numberingFormats =
-            (doc.WorkbookPart?.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>())
-            .ToArrayOrEmpty();
+        var doc = SpreadsheetDocument.Open(stream, false);
+        Stream? repairedStream = null;
+        try
+        {
+            WorkbookPartModel? workbookPart;
+            try
+            {
+                workbookPart = GetWorkbookPartData(doc);
+            }
+            catch (OpenXmlPackageException)
+            {
+                doc.Dispose();
+                repairedStream = RepairInvalidXlsx(stream);
 
-        var sheets = doc.WorkbookPart?
+                doc = SpreadsheetDocument.Open(repairedStream, false);
+                workbookPart = GetWorkbookPartData(doc);
+            }
+
+            if (workbookPart is null) { yield break; }
+
+            foreach (var obj in WorkbookPartProcess(workbookPart))
+            {
+                yield return obj;
+            }
+        }
+        finally
+        {
+            repairedStream?.Dispose();
+            doc.Dispose();
+        }
+
+        yield break;
+
+        WorkbookPartModel? GetWorkbookPartData(SpreadsheetDocument document)
+        {
+            var part = document.WorkbookPart;
+            if (part is null) { return null; }
+
+            OpenXmlElement[] sharedStringTable = (part.SharedStringTablePart?.SharedStringTable).ToArrayOrEmpty();
+            CellFormat[] cellFormats = (part.WorkbookStylesPart?.Stylesheet.CellFormats?.OfType<CellFormat>()).ToArrayOrEmpty();
+            NumberingFormat[] numberingFormats = (part.WorkbookStylesPart?.Stylesheet.NumberingFormats?.OfType<NumberingFormat>()).ToArrayOrEmpty();
+            return new WorkbookPartModel
+            {
+                WorkbookPart = part,
+                SharedStringTable = sharedStringTable,
+                CellFormats = cellFormats,
+                NumberingFormats = numberingFormats
+            };
+        }
+
+        Stream RepairInvalidXlsx(Stream invalidStream)
+        {
+            var ms = new MemoryStream();
+            invalidStream.Position = 0;
+            invalidStream.WriteTo(ms, leaveOpen: true);
+
+            using var archive = new ZipArchive(ms, ZipArchiveMode.Update, true);
+            var contentTypesEntry = archive.GetEntry("[Content_Types].xml");
+            if (contentTypesEntry == null)
+            {
+                return ms;
+            }
+
+            using var entryStream = contentTypesEntry.Open();
+            var contentTypesXml = XDocument.Load(entryStream);
+            var overrideEntries = contentTypesXml.Root?.Elements().Where(x => x.Name.LocalName == "Override").ToList() ?? [];
+            if (!overrideEntries.Any())
+            {
+                return ms;
+            }
+
+            foreach (var overridePart in overrideEntries)
+            {
+                if (overridePart.Attribute("ContentType") is null
+                    || overridePart.Attribute("PartName") is not { } partNameAttribute)
+                {
+                    continue;
+                }
+
+                var partName = partNameAttribute.Value;
+                var partPath = partName.TrimStart('/');
+                var partEntry = archive.GetEntry(partPath);
+                if (partEntry is not null)
+                {
+                    continue;
+                }
+
+                var foundedEntry = archive.Entries.FirstOrDefault(
+                    x => Path.GetFileName(partPath).Equals(x.Name, StringComparison.OrdinalIgnoreCase)
+                        && Path.GetDirectoryName(partPath) == Path.GetDirectoryName(x.FullName)
+                );
+                if (foundedEntry != null)
+                {
+                    partNameAttribute.SetValue($"/{foundedEntry.FullName}");
+                }
+            }
+
+            entryStream.SetLength(0);
+            contentTypesXml.Save(entryStream);
+            return ms;
+        }
+    }
+
+    private static IEnumerable<XStreamingElement> WorkbookPartProcess(WorkbookPartModel workbookPart)
+    {
+        var sheets = workbookPart
             .Workbook
             .Descendants<Sheet>()
             .Select((sheet, index) => new SheetModel
             {
                 Id = index,
                 Name = sheet.Name?.Value ?? string.Empty,
-                SheetData = (WorksheetPart)doc.WorkbookPart.GetPartById(sheet.Id!),
-                NumberingFormats = numberingFormats,
-                CellFormats = cellFormats,
-                SharedStringTable = sharedStringTable
+                SheetData = (WorksheetPart)workbookPart.WorkbookPart.GetPartById(sheet.Id),
+                NumberingFormats = workbookPart.NumberingFormats,
+                CellFormats = workbookPart.CellFormats,
+                SharedStringTable = workbookPart.SharedStringTable
             })
             .Select(WorkSheetProcess)
-            .Where(sheet => sheet != null);
-
-        foreach (var sheet in sheets ?? [])
-        {
-            yield return sheet!;
-        }
+            .WhereNotNull();
+        return sheets;
     }
 
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
@@ -103,9 +191,9 @@ public partial class XlsxToXml : IConvertable
             : cell.CellValue?.InnerText ?? cell.CellFormula.InnerText;
         var dataType = cell.DataType?.Value;
 
-        if (dataType == CellValues.SharedString)
+        if (dataType == CellValues.SharedString && int.TryParse(cellValue, out var sharedStringIndex))
         {
-            cellValue = sheet.SharedStringTable[int.Parse(cellValue)].InnerText;
+            cellValue = sheet.SharedStringTable.ElementAtOrDefault(sharedStringIndex)?.InnerText;
         }
         else if (dataType == CellValues.Boolean)
         {
@@ -223,9 +311,17 @@ public partial class XlsxToXml : IConvertable
         }
     }
 
-    private readonly struct SheetModel
+    private record WorkbookPartModel
     {
-        public SheetModel() { }
+        public required WorkbookPart WorkbookPart { get; init; }
+        public Workbook Workbook => WorkbookPart.Workbook;
+        public required OpenXmlElement[] SharedStringTable { get; init; }
+        public required CellFormat[] CellFormats { get; init; }
+        public required NumberingFormat[] NumberingFormats { get; init; }
+    }
+
+    private record SheetModel
+    {
         public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
         public required WorksheetPart SheetData { get; init; }
@@ -233,6 +329,7 @@ public partial class XlsxToXml : IConvertable
         public required CellFormat[] CellFormats { get; init; }
         public required NumberingFormat[] NumberingFormats { get; init; }
     }
+
 #if NET8_0_OR_GREATER
     [GeneratedRegex("MM.yyyy")]
     private static partial Regex ShortDateRegex();

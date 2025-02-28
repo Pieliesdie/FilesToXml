@@ -9,7 +9,7 @@ public class XlsToXml : IConvertable
 {
     public XStreamingElement Convert(Stream stream, params object?[] rootContent)
     {
-        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, Read(stream));
+        return new XStreamingElement(DefaultStructure.DatasetName, rootContent, LazyConvert(stream));
     }
     
     public XElement ConvertByFile(string path, params object?[] rootContent)
@@ -18,13 +18,11 @@ public class XlsToXml : IConvertable
         return new XElement(Convert(fs, rootContent));
     }
     
-    private static IEnumerable<object> Read(Stream stream)
+    private static IEnumerable<XStreamingElement> LazyConvert(Stream stream)
     {
         using var xlsx = XlsToXlsx.Convert(stream);
         xlsx.Position = 0;
-        foreach (var obj in XlsxToXml.SpreadsheetProcess(xlsx))
-        {
-            yield return obj;
-        }
+        var converter = new XlsxToXml();
+        yield return converter.Convert(xlsx);
     }
 }
