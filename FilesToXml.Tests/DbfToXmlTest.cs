@@ -5,7 +5,7 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class DbfToXmlTest
+public class DbfToXmlTest : TestBase
 {
     [Fact]
     public void DbfToXmlByFileTestNotNull()

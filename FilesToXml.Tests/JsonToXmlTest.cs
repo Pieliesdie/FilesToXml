@@ -5,7 +5,7 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class JsonToXmlTest
+public class JsonToXmlTest : TestBase
 {
     [Fact]
     public void JsonToXmlTestNotNull()

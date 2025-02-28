@@ -6,10 +6,10 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class CsvToXmlTest
+public class CsvToXmlTest : TestBase
 {
     private readonly CsvToXml converter = new();
-    
+
     [Fact]
     public void CsvToXmlByFileTestNotNull()
     {
@@ -17,7 +17,7 @@ public class CsvToXmlTest
         var result = converter.ConvertByFile(path).ToString();
         Assert.NotNull(result);
     }
-    
+
     [Fact]
     public void CsvConvertToXmlNotNull()
     {
@@ -26,7 +26,7 @@ public class CsvToXmlTest
         var result = converter.Convert(fs).ToString();
         Assert.NotNull(result);
     }
-    
+
     [Fact]
     public void CsvToXmlTestReadFirstLine()
     {
@@ -35,7 +35,7 @@ public class CsvToXmlTest
         var result = converter.ConvertByFile(path, Encoding.GetEncoding(1251));
         Assert.Equal("первый", result.Elements().First().Elements().First().Attribute("C1").Value);
     }
-    
+
     [Fact]
     public void CsvToXmlTestAutoDetectDelimiter()
     {
@@ -44,7 +44,7 @@ public class CsvToXmlTest
         var result = converter.ConvertByFile(path, new[] { ';', '|', '\t', ',' }, Encoding.GetEncoding(1251));
         Assert.Equal("step_id", result.Elements().First().Elements().First().Attribute("C1").Value);
     }
-    
+
     [Fact]
     public void CsvToXmlTest2AutoDetectDelimiter()
     {

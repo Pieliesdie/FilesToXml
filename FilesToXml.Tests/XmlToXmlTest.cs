@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class XmlToXmlTest
+public class XmlToXmlTest : TestBase
 {
     [Fact]
     public void XmlToXmlTestNotNull()

@@ -2,7 +2,7 @@
 
 namespace FilesToXml.Tests;
 
-public class OdsToXmlTest
+public class OdsToXmlTest : TestBase
 {
     [Fact]
     public void OdsToXmlTestNotNull()

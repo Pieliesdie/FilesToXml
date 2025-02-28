@@ -2,7 +2,7 @@
 
 namespace FilesToXml.Tests;
 
-public class RtfToXmlTest
+public class RtfToXmlTest : TestBase
 {
     [Fact]
     public void RtfConverterTestNotNull()

@@ -6,7 +6,7 @@ using Xunit;
 namespace FilesToXml.Tests;
 
 [Collection("XlsToXml")]
-public class XlsToXlsxTest
+public class XlsToXlsxTest : TestBase
 {
     [Fact]
     public void XlsToXlsxConverterTestNotNull()

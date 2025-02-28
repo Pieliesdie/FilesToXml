@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class LogToXmlTest
+public class LogToXmlTest : TestBase
 {
     private readonly LogToXml converter = new();
     

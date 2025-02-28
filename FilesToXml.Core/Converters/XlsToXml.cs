@@ -22,7 +22,9 @@ public class XlsToXml : IConvertable
     {
         using var xlsx = XlsToXlsx.Convert(stream);
         xlsx.Position = 0;
-        var converter = new XlsxToXml();
-        yield return converter.Convert(xlsx);
+        foreach (var node in XlsxToXml.Process(xlsx))
+        {
+            yield return node;
+        }
     }
 }

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FilesToXml.Tests;
 
-public class TsvToXmlTest
+public class TsvToXmlTest : TestBase
 {
     private readonly TsvToXml converter = new();
     

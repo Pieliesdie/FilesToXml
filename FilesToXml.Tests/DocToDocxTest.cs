@@ -5,7 +5,7 @@ using Xunit;
 namespace FilesToXml.Tests;
 
 [Collection("DocToXml")]
-public class DocToDocxTest
+public class DocToDocxTest : TestBase
 {
     [Fact]
     public void DocToDocxConvertToDocxNotNull()

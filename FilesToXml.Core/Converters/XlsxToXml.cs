@@ -26,7 +26,7 @@ public partial class XlsxToXml : IConvertable
         return new XElement(Convert(fs, rootContent));
     }
 
-    private static IEnumerable<XStreamingElement> Process(Stream stream)
+    internal static IEnumerable<XStreamingElement> Process(Stream stream)
     {
         var doc = SpreadsheetDocument.Open(stream, false);
         Stream? repairedStream = null;

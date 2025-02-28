@@ -10,14 +10,14 @@ using Xunit;
 namespace FilesToXml.Tests;
 
 [CollectionDefinition("CoverterToXmlTests", DisableParallelization = true)]
-public class CoverterToXmlTests
+public class CoverterToXmlTests : TestBase
 {
     [Fact]
     public void Convert_WithOptionsAndStreams_WritesToFile()
     {
         var options = new Options
         {
-            Input = new[] { "./Files/csv.csv" },
+            Input = ["./Files/csv.csv"],
             Output = "output.xml",
             ForceSave = true,
             OutputEncoding = Encoding.UTF8.CodePage
@@ -48,7 +48,7 @@ public class CoverterToXmlTests
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var options = new Options
         {
-            Input = new[] { "./Files/csv.csv" },
+            Input = ["./Files/csv.csv"],
             InputEncoding = [1251],
             OutputEncoding = Encoding.UTF8.CodePage
         };
@@ -78,7 +78,7 @@ public class CoverterToXmlTests
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var options = new Options
         {
-            Input = new[] { "./Files/xlsx.xlsx", "./Files/xlsx2.xlsx" },
+            Input = ["./Files/xlsx.xlsx", "./Files/xlsx2.xlsx"],
             InputEncoding = [1251, 65001],
             OutputEncoding = Encoding.UTF8.CodePage,
             ForceSave = true,
