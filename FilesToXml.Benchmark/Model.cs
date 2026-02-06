@@ -2,12 +2,12 @@
 using BenchmarkDotNet.Attributes;
 using FilesToXml.Core.Converters;
 
-namespace Benchmark;
+namespace FilesToXml.Benchmark;
 
 public class Model
 {
     [Benchmark]
-    public void smallxlsx()
+    public void Smallxlsx()
     {
         var converter = new XlsxToXml();
         var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -19,7 +19,7 @@ public class Model
     }
     
     [Benchmark]
-    public void bigxlsx()
+    public void Bigxlsx()
     {
         var converter = new XlsxToXml();
         var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

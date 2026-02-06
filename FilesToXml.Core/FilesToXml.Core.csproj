@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net9.0;net8.0;net461;netstandard2.1;</TargetFrameworks>
+        <TargetFrameworks>net10.0;net9.0;net8.0;net461;netstandard2.1</TargetFrameworks>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -10,16 +10,16 @@
         <Authors>pov</Authors>
         <Description>Convert files to xml</Description>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="CsvTextFieldParser" Version="1.2.2"/>
-        <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1"/>
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.2"/>
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.2" />
     </ItemGroup>
     
-    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net8.0'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0' OR '$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net10.0'">
         <PackageReference Include="DbfDataReader" Version="0.9.0"/>
     </ItemGroup>
 

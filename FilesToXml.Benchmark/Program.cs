@@ -1,12 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Globalization;
-using Benchmark;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using FilesToXml.Benchmark;
 using Perfolizer.Horology;
 using Perfolizer.Metrology;
 

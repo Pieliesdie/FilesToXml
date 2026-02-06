@@ -38,3 +38,4 @@ packages/
 /.idea
 /FilesToXml.Wasm.Client/node_modules
 /.nuget
+/.artifacts

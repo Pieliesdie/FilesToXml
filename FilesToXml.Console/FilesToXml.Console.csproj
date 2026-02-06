@@ -2,7 +2,7 @@
     <PropertyGroup>
         <LangVersion>latest</LangVersion>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net9.0;</TargetFrameworks>
+        <TargetFramework>net10.0</TargetFramework>
         <Description>Converts files to xml</Description>
         <Company>Infostandart</Company>
         <Authors>Ponomarev Oleg pov@infostandart.com</Authors>
@@ -42,10 +42,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Properties\PublishProfiles\"/>
     </ItemGroup>
 
 </Project>

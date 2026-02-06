@@ -1,0 +1,18 @@
+<Solution>
+    <Folder Name="/SolutionFiles/">
+        <File Path=".editorconfig"/>
+        <File Path=".gitignore"/>
+        <File Path="README.md"/>
+    </Folder>
+    <Folder Name="/b2xtranslator/">
+        <Project Path="b2xtranslator/Common/b2xtranslator.csproj"/>
+        <Project Path="b2xtranslator/Doc/b2xtranslator.doc.csproj"/>
+        <Project Path="b2xtranslator/Xls/b2xtranslator.xls.csproj"/>
+    </Folder>
+    <Project Path="FilesToXml.Benchmark/FilesToXml.Benchmark.csproj"/>
+    <Project Path="FilesToXml.Console/FilesToXml.Console.csproj"/>
+    <Project Path="FilesToXml.Core/FilesToXml.Core.csproj"/>
+    <Project Path="FilesToXml.Tests/FilesToXml.Tests.csproj"/>
+    <Project Path="FilesToXml.Wasm/FilesToXml.Wasm.csproj"/>
+    <Project Path="FilesToXml.WPF/FilesToXml.WPF.csproj"/>
+</Solution>
