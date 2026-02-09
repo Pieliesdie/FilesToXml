@@ -78,7 +78,7 @@ public class DocxToXml : IConvertable
     private static IEnumerable<XElement> ReadLines(Stream stream)
     {
         using var doc = WordprocessingDocument.Open(stream, false);
-        var docBody = doc.MainDocumentPart?.Document.Body; // тело документа (размеченный текст без стилей)
+        var docBody = doc.MainDocumentPart?.Document?.Body; // тело документа (размеченный текст без стилей)
         if (docBody == null)
         {
             yield break;

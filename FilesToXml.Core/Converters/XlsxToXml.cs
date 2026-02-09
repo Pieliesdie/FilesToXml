@@ -67,8 +67,8 @@ public partial class XlsxToXml : IConvertable
             if (part is null) { return null; }
 
             OpenXmlElement[] sharedStringTable = (part.SharedStringTablePart?.SharedStringTable).ToArrayOrEmpty();
-            CellFormat[] cellFormats = (part.WorkbookStylesPart?.Stylesheet.CellFormats?.OfType<CellFormat>()).ToArrayOrEmpty();
-            NumberingFormat[] numberingFormats = (part.WorkbookStylesPart?.Stylesheet.NumberingFormats?.OfType<NumberingFormat>()).ToArrayOrEmpty();
+            CellFormat[] cellFormats = (part.WorkbookStylesPart?.Stylesheet?.CellFormats?.OfType<CellFormat>()).ToArrayOrEmpty();
+            NumberingFormat[] numberingFormats = (part.WorkbookStylesPart?.Stylesheet?.NumberingFormats?.OfType<NumberingFormat>()).ToArrayOrEmpty();
             return new WorkbookPartModel
             {
                 WorkbookPart = part,
@@ -134,20 +134,21 @@ public partial class XlsxToXml : IConvertable
     private static IEnumerable<XStreamingElement> WorkbookPartProcess(WorkbookPartModel workbookPart)
     {
         var sheets = workbookPart
-            .Workbook
+            .Workbook?
             .Descendants<Sheet>()
+            .Where(sheet => sheet.Id != null)
             .Select((sheet, index) => new SheetModel
             {
                 Id = index,
                 Name = sheet.Name?.Value ?? string.Empty,
-                SheetData = (WorksheetPart)workbookPart.WorkbookPart.GetPartById(sheet.Id),
+                SheetData = (WorksheetPart)workbookPart.WorkbookPart.GetPartById(sheet.Id!),
                 NumberingFormats = workbookPart.NumberingFormats,
                 CellFormats = workbookPart.CellFormats,
                 SharedStringTable = workbookPart.SharedStringTable
             })
             .Select(WorkSheetProcess)
             .WhereNotNull();
-        return sheets;
+        return sheets ?? [];
     }
 
     private static XStreamingElement? WorkSheetProcess(SheetModel sheet)
@@ -161,8 +162,9 @@ public partial class XlsxToXml : IConvertable
     private static IEnumerable<XElement> ReadRows(SheetModel sheet)
     {
         int rowCount = 0, cellCount = 0;
-        var rows = Read(sheet.SheetData).Select(row => row == null ? null : RowProcess(row, sheet))
-            .Where(row => row != null);
+        var rows = Read(sheet.SheetData)
+            .Select(row => row == null ? null : RowProcess(row, sheet))
+            .WhereNotNull();
         foreach (var row in rows)
         {
             rowCount++;
@@ -204,11 +206,13 @@ public partial class XlsxToXml : IConvertable
             cellValue = FormatNullTypeCell(
                 cellValue,
                 sheet.CellFormats[(int)cell.StyleIndex!.Value].NumberFormatId ?? 0,
-                sheet.NumberingFormats);
+                sheet.NumberingFormats
+            );
         }
-
-        var isEmptyCell = string.IsNullOrEmpty(cellValue);
-        return isEmptyCell ? null : new XAttribute($"C{ColumnIndex(cell.CellReference)}", cellValue);
+        
+        return string.IsNullOrEmpty(cellValue) 
+            ? null 
+            : new XAttribute($"C{ColumnIndex(cell.CellReference)}", cellValue);
 
         /*Тип Cell предоставляет свойство DataType, которое указывает тип данных в ячейке.
          * Значение свойства DataType равно NULL для числовых типов и дат.
@@ -262,7 +266,7 @@ public partial class XlsxToXml : IConvertable
             return false;
         }
 
-        var formatNode = numberingFormats.FirstOrDefault(x => x?.NumberFormatId?.Value == numFmt);
+        var formatNode = numberingFormats.FirstOrDefault(x => x.NumberFormatId?.Value == numFmt);
         if (formatNode?.FormatCode?.Value is null)
         {
             return false;
@@ -314,7 +318,7 @@ public partial class XlsxToXml : IConvertable
     private record WorkbookPartModel
     {
         public required WorkbookPart WorkbookPart { get; init; }
-        public Workbook Workbook => WorkbookPart.Workbook;
+        public Workbook? Workbook => WorkbookPart.Workbook;
         public required OpenXmlElement[] SharedStringTable { get; init; }
         public required CellFormat[] CellFormats { get; init; }
         public required NumberingFormat[] NumberingFormats { get; init; }

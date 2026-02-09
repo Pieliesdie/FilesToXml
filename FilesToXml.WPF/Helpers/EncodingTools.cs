@@ -33,7 +33,7 @@ internal static class EncodingTools
         // Read the BOM
         var bom = new byte[4];
         using var file = File.OpenRead(filename);
-        file.Read(bom, 0, 4);
+        file.ReadExactly(bom, 0, 4);
         
         // Analyze the BOM
         if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)

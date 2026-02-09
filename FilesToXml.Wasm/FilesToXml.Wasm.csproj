@@ -8,16 +8,16 @@
         <GenerateLibraryLayout>true</GenerateLibraryLayout>
         <Nullable>enable</Nullable>
         <!-- Disabling non-essential .NET features reduces minimal build size by ~35%. -->
-        <BootsharpAggressiveTrimming>true</BootsharpAggressiveTrimming>
+        <!--<BootsharpAggressiveTrimming>true</BootsharpAggressiveTrimming> -->
         <!-- Specify custom name for the generated JavaScript module. -->
         <BootsharpName>filesToXml</BootsharpName>
         <!-- Don't embed the C# solution binaries to the JavaScript module. -->
         <BootsharpEmbedBinaries>true</BootsharpEmbedBinaries>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Bootsharp" Version="0.2.0"/>
-        <PackageReference Include="Bootsharp.Inject" Version="0.2.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Bootsharp" Version="0.6.3"/>
+        <PackageReference Include="Bootsharp.Inject" Version="0.6.3"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\FilesToXml.Core\FilesToXml.Core.csproj"/>

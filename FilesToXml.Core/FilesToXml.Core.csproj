@@ -9,6 +9,7 @@
         <Version>1.0.7</Version>
         <Authors>pov</Authors>
         <Description>Convert files to xml</Description>
+        <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
     </PropertyGroup>
     
     <ItemGroup>

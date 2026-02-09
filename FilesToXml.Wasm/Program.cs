@@ -13,4 +13,5 @@ new ServiceCollection()
     .AddBootsharp() // inject generated interop handlers
     .BuildServiceProvider()
     .RunBootsharp(); // initialize interop services
-Console.WriteLine($".NET {Environment.Version} ready");
+
+Console.WriteLine($"FilesToXml Converter (.NET {Environment.Version}) is ready");

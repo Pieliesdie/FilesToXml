@@ -1,10 +1,46 @@
-﻿import fs from 'node:fs'
+﻿const {default: Engine, Converter} = await import('./bin/filesToXml/filesToXml.js');
+const fs = await import('node:fs');
 
-let csvPath = "E:/git/FilesToXml/FilesToXml.Tests/Files/csv.csv";
-let xlsxPath = "E:/git/FilesToXml/FilesToXml.Tests/Files/xlsx.xlsx";
+class FilesToXmlApi {
+    constructor(converter) {
+        this.converter = converter;
+    }
+
+    convert = options => this.converter.convert(options);
+    beautify = xml => this.converter.beautify(xml);
+}
+class FilesToXmlFactory {
+    static BootStatus = {
+        Standby: 0,
+        Booting: 1,
+        Booted: 2
+    };
+
+    static async #waitForBoot(engine) {
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        while (engine.getStatus() === this.BootStatus.Booting) {
+            await sleep(100);
+        }
+    }
+
+    static async create() {
+        const bootStatus = Engine.getStatus();
+
+        if (bootStatus === this.BootStatus.Standby) {
+            await Engine.boot();
+        } else if (bootStatus === this.BootStatus.Booting) {
+            await this.#waitForBoot(Engine);
+        }
+
+        return new FilesToXmlApi(Converter);
+    }
+}
+
+const csvPath = '../FilesToXml.Tests/Files/csv.csv';
+const xlsxPath = '../FilesToXml.Tests/Files/xlsx.xlsx';
 const options =
     {
-        disableFormat: false,
+        disableFormat: true,
         Files: [
             {
                 path: "csv.csv",
@@ -20,30 +56,9 @@ const options =
         ]
     }
 
-console.log(await convert(options));
-
-async function convert(options) {
-    let api = await loadApi();
-    return api.convert(options);
-
-    async function loadApi() {
-        const BootStatus = {
-            Standby: 0,
-            Booting: 1,
-            Booted: 2
-        };
-        const {default: filesToXml, Converter} = await import("./bin/filesToXml/index.mjs");
-        const bootStatus = filesToXml.getStatus();
-        if (bootStatus === BootStatus.Standby) {
-            await filesToXml.boot();
-        } else if (bootStatus === BootStatus.Booting) {
-            const sleep = ms => new Promise(r => setTimeout(r, ms));
-            while (filesToXml.getStatus() === BootStatus.Booting) {
-                await sleep(100);
-            }
-        } else if (bootStatus === BootStatus.Booted) {
-            // Already booted, no need to do anything
-        }
-        return Converter;
-    }
-}
+console.log('Creating converter...');
+let converter = await FilesToXmlFactory.create();
+console.log('Calling convert function...');
+let convertedContent = (await converter.convert(options)).result;
+let beautifyContent = await converter.beautify(convertedContent);
+console.log(beautifyContent);
