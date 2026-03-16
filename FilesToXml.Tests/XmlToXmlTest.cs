@@ -9,6 +9,17 @@ namespace FilesToXml.Tests;
 public class XmlToXmlTest : TestBase
 {
     [Fact]
+    public void XmlToXmlTestWithNamespaces()
+    {
+        var converter = new XmlToXml();
+        var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var path = curDir + @"/Files/xml2.xml";
+        
+        var result = converter.ConvertByFile(path).ToString();
+        Assert.NotNull(result);
+    }
+    
+    [Fact]
     public void XmlToXmlTestNotNull()
     {
         var converter = new XmlToXml();

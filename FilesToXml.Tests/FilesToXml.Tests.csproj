@@ -77,6 +77,9 @@
         <None Update="Files\xml.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Files\xml2.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Files\xls.xls">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
